@@ -2,12 +2,14 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+@Repository
 public class CityRepositoryJpa implements CityRepository {
     @PersistenceContext
     private EntityManager entityManager;

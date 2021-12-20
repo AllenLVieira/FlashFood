@@ -2,12 +2,14 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.PaymentMethod;
 import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+@Repository
 public class PaymentMethodRepositoryJpa implements PaymentMehodRepository {
     @PersistenceContext
     private EntityManager entityManager;

@@ -2,12 +2,14 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.StateRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+@Repository
 public class StateRepositoryJpa implements StateRepository {
     @PersistenceContext
     private EntityManager entityManager;
