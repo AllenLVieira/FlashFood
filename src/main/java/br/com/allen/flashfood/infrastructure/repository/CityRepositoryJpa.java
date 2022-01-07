@@ -27,7 +27,7 @@ public class CityRepositoryJpa implements CityRepository {
 
     @Transactional
     @Override
-    public City addCity(City city) {
+    public City saveCity(City city) {
         return entityManager.merge(city);
     }
 

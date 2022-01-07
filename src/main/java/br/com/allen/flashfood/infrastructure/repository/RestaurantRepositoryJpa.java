@@ -25,7 +25,7 @@ public class RestaurantRepositoryJpa implements RestaurantRepository {
     }
 
     @Override
-    public Restaurant addRestaurant(Restaurant restaurant) {
+    public Restaurant saveRestaurant(Restaurant restaurant) {
         return entityManager.merge(restaurant);
     }
 

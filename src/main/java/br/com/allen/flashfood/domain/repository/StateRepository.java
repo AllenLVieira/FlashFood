@@ -9,7 +9,7 @@ public interface StateRepository {
 
     State getStateById(Long id);
 
-    State addState(State state);
+    State saveState(State state);
 
     void removeState(State state);
 }

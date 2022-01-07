@@ -27,7 +27,7 @@ public class PermissionRepositoryJpa implements PermissionRepository {
 
     @Transactional
     @Override
-    public Permission addPermission(Permission permission) {
+    public Permission savePermission(Permission permission) {
         return entityManager.merge(permission);
     }
 

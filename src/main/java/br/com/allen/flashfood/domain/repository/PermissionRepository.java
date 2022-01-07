@@ -9,7 +9,7 @@ public interface PermissionRepository {
 
     Permission getPermissionById(Long id);
 
-    Permission addPermission(Permission permission);
+    Permission savePermission(Permission permission);
 
     void removePermission(Permission permission);
 

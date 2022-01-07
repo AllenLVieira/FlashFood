@@ -9,7 +9,7 @@ public interface PaymentMehodRepository {
 
     PaymentMethod getPaymentMethodById(Long id);
 
-    PaymentMethod addPaymentMethod(PaymentMethod paymentMethod);
+    PaymentMethod savePaymentMethod(PaymentMethod paymentMethod);
 
     void removePaymentMethod(PaymentMethod paymentMethod);
 }

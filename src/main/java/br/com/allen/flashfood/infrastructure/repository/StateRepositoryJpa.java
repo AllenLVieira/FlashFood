@@ -27,7 +27,7 @@ public class StateRepositoryJpa implements StateRepository {
 
     @Transactional
     @Override
-    public State addState(State state) {
+    public State saveState(State state) {
         return entityManager.merge(state);
     }
 

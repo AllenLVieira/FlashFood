@@ -9,7 +9,7 @@ public interface RestaurantRepository {
 
     Restaurant getRestaurantById(Long id);
 
-    Restaurant addRestaurant(Restaurant restaurant);
+    Restaurant saveRestaurant(Restaurant restaurant);
 
     void deleteRestaurant(Restaurant restaurant);
 }

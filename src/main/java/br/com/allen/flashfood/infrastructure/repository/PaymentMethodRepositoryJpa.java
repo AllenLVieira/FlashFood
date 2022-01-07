@@ -27,7 +27,7 @@ public class PaymentMethodRepositoryJpa implements PaymentMehodRepository {
 
     @Transactional
     @Override
-    public PaymentMethod addPaymentMethod(PaymentMethod paymentMethod) {
+    public PaymentMethod savePaymentMethod(PaymentMethod paymentMethod) {
         return entityManager.merge(paymentMethod);
     }
 
