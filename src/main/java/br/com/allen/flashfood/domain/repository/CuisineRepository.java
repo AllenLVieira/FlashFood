@@ -9,7 +9,7 @@ public interface CuisineRepository {
 
     Cuisine getCuisineById(Long id);
 
-    Cuisine addCuisine(Cuisine cuisine);
+    Cuisine saveCuisine(Cuisine cuisine);
 
-    void deleteCuisine(Cuisine cuisine);
+    void deleteCuisine(Long id);
 }

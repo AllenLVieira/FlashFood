@@ -2,6 +2,7 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,17 @@ public class CuisineRepositoryJpa implements CuisineRepository {
 
     @Transactional
     @Override
-    public Cuisine addCuisine(Cuisine cuisine) {
+    public Cuisine saveCuisine(Cuisine cuisine) {
         return entityManager.merge(cuisine);
     }
 
     @Transactional
     @Override
-    public void deleteCuisine(Cuisine cuisine) {
-        cuisine = getCuisineById(cuisine.getId());
+    public void deleteCuisine(Long id) {
+        Cuisine cuisine = getCuisineById(id);
+        if (cuisine == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         entityManager.remove(cuisine);
     }
 }
