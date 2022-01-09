@@ -2,6 +2,7 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,11 @@ public class CityRepositoryJpa implements CityRepository {
 
     @Transactional
     @Override
-    public void removeCity(City city) {
-        city = getCityById(city.getId());
+    public void removeCity(Long cityId) {
+        City city = getCityById(cityId);
+        if (city == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         entityManager.remove(city);
     }
 }

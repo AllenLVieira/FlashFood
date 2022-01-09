@@ -11,5 +11,5 @@ public interface StateRepository {
 
     State saveState(State state);
 
-    void removeState(State state);
+    void removeState(Long stateId);
 }

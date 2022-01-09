@@ -48,8 +48,8 @@ public class CuisineController {
         Cuisine actualCuisine = cuisineRepository.getCuisineById(cuisineId);
         if (actualCuisine != null) {
             BeanUtils.copyProperties(cuisine, actualCuisine, "id");
-            cuisineRegistration.saveCuisine(cuisine);
-            return ResponseEntity.ok(cuisine);
+            actualCuisine = cuisineRegistration.saveCuisine(actualCuisine);
+            return ResponseEntity.ok(actualCuisine);
         }
         return ResponseEntity.notFound().build();
     }

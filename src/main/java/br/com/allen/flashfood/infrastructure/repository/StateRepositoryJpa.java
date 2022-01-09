@@ -2,6 +2,7 @@ package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.StateRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,11 @@ public class StateRepositoryJpa implements StateRepository {
 
     @Transactional
     @Override
-    public void removeState(State state) {
-        state = getStateById(state.getId());
+    public void removeState(Long stateId) {
+        State state = getStateById(stateId);
+        if (state == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         entityManager.remove(state);
     }
 }
