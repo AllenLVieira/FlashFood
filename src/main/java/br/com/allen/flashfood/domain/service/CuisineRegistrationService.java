@@ -15,12 +15,12 @@ public class CuisineRegistrationService {
     private CuisineRepository cuisineRepository;
 
     public Cuisine saveCuisine(Cuisine cuisine) {
-        return cuisineRepository.saveCuisine(cuisine);
+        return cuisineRepository.save(cuisine);
     }
 
     public void deleteCuisine(Long cuisineId) {
         try {
-            cuisineRepository.deleteCuisine(cuisineId);
+            cuisineRepository.deleteById(cuisineId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundedException(
                     String.format("There is no cuisine register with code %d", cuisineId)

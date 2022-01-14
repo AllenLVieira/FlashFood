@@ -18,12 +18,10 @@ public class RestaurantRegistrationService {
 
     public Restaurant saveRestaurant(Restaurant restaurant) {
         Long cuisineId = restaurant.getCuisine().getId();
-        Cuisine cuisine = cuisineRepository.getCuisineById(cuisineId);
-        if (cuisine == null) {
-            throw new EntityNotFoundedException(
-                    String.format("There is no cuisine registration with code %d", cuisineId)
-            );
-        }
+        Cuisine cuisine = cuisineRepository.findById(cuisineId)
+                .orElseThrow(() -> new EntityNotFoundedException(
+                        String.format("There is no cuisine registration with code %d", cuisineId)
+                ));
         restaurant.setCuisine(cuisine);
         return restaurantRepository.saveRestaurant(restaurant);
     }
