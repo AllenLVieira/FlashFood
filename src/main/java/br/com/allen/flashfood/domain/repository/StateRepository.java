@@ -1,15 +1,9 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.State;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface StateRepository {
-    List<State> getAllStates();
-
-    State getStateById(Long id);
-
-    State saveState(State state);
-
-    void removeState(Long stateId);
+@Repository
+public interface StateRepository extends JpaRepository<State, Long> {
 }

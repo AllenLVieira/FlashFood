@@ -1,15 +1,9 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.City;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface CityRepository {
-    List<City> getAllCities();
-
-    City getCityById(Long id);
-
-    City saveCity(City city);
-
-    void removeCity(Long cityId);
+@Repository
+public interface CityRepository extends JpaRepository<City, Long> {
 }

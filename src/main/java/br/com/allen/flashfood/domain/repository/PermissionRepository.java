@@ -1,16 +1,10 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface PermissionRepository {
-    List<Permission> getAllPermissions();
-
-    Permission getPermissionById(Long id);
-
-    Permission savePermission(Permission permission);
-
-    void removePermission(Permission permission);
+@Repository
+public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/states")
@@ -24,16 +25,13 @@ public class StateController {
 
     @GetMapping
     public List<State> getAllStates() {
-        return stateRepository.getAllStates();
+        return stateRepository.findAll();
     }
 
     @GetMapping("/{stateId}")
     public ResponseEntity<State> getStateById(@PathVariable Long stateId) {
-        State state = stateRepository.getStateById(stateId);
-        if (state != null) {
-            return ResponseEntity.ok(state);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<State> state = stateRepository.findById(stateId);
+        return state.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -45,7 +43,7 @@ public class StateController {
     @PutMapping("/{stateId}")
     public ResponseEntity<State> updateRestaurant(@PathVariable Long stateId,
                                                   @RequestBody State state) {
-        State actualState = stateRepository.getStateById(stateId);
+        State actualState = stateRepository.findById(stateId).orElse(null);
         if (actualState != null) {
             BeanUtils.copyProperties(state, actualState, "id");
             actualState = stateRegistration.saveState(actualState);
@@ -60,7 +58,7 @@ public class StateController {
             stateRegistration.deleteState(stateId);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundedException e) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         } catch (EntityInUseException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(e.getMessage());

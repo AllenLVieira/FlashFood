@@ -1,15 +1,9 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.PaymentMethod;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface PaymentMehodRepository {
-    List<PaymentMethod> getAllPaymentsMethods();
-
-    PaymentMethod getPaymentMethodById(Long id);
-
-    PaymentMethod savePaymentMethod(PaymentMethod paymentMethod);
-
-    void removePaymentMethod(PaymentMethod paymentMethod);
+@Repository
+public interface PaymentMehodRepository extends JpaRepository<PaymentMethod, Long> {
 }

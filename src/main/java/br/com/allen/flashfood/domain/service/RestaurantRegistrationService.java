@@ -23,6 +23,6 @@ public class RestaurantRegistrationService {
                         String.format("There is no cuisine registration with code %d", cuisineId)
                 ));
         restaurant.setCuisine(cuisine);
-        return restaurantRepository.saveRestaurant(restaurant);
+        return restaurantRepository.save(restaurant);
     }
 }

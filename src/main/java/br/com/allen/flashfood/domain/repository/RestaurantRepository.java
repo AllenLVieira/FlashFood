@@ -1,15 +1,9 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface RestaurantRepository {
-    List<Restaurant> getAllRestaurants();
-
-    Restaurant getRestaurantById(Long id);
-
-    Restaurant saveRestaurant(Restaurant restaurant);
-
-    void deleteRestaurant(Restaurant restaurant);
+@Repository
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 }

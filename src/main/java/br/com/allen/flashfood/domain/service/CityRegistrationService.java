@@ -21,19 +21,17 @@ public class CityRegistrationService {
 
     public City saveCity(City city) {
         Long stateId = city.getState().getId();
-        State state = stateRepository.getStateById(stateId);
-        if (state == null) {
-            throw new EntityNotFoundedException(
-                    String.format("There is no state registration with code %d", stateId)
-            );
-        }
+        State state = stateRepository.findById(stateId)
+                .orElseThrow(() -> new EntityNotFoundedException(
+                        String.format("There is no state registration with code %d", stateId)
+                ));
         city.setState(state);
-        return cityRepository.saveCity(city);
+        return cityRepository.save(city);
     }
 
     public void deleteCity(Long cityId) {
         try {
-            cityRepository.removeCity(cityId);
+            cityRepository.deleteById(cityId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundedException(
                     String.format("There is no city register with code %d", cityId)

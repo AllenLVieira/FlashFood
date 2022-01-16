@@ -15,12 +15,12 @@ public class StateRegistrationService {
     private StateRepository stateRepository;
 
     public State saveState(State state) {
-        return stateRepository.saveState(state);
+        return stateRepository.save(state);
     }
 
     public void deleteState(Long stateId) {
         try {
-            stateRepository.removeState(stateId);
+            stateRepository.deleteById(stateId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundedException(
                     String.format("There is no state registration with code %d", stateId)

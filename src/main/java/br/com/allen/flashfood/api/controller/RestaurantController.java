@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -27,16 +28,13 @@ public class RestaurantController {
 
     @GetMapping
     public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.getAllRestaurants();
+        return restaurantRepository.findAll();
     }
 
     @GetMapping("/{restaurantId}")
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.getRestaurantById(restaurantId);
-        if (restaurant != null) {
-            return ResponseEntity.ok(restaurant);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
+        return restaurant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -54,7 +52,8 @@ public class RestaurantController {
     public ResponseEntity<?> updateRestaurant(@PathVariable Long restaurantId,
                                               @RequestBody Restaurant restaurant) {
         try {
-            Restaurant actualRestaurant = restaurantRepository.getRestaurantById(restaurantId);
+            Restaurant actualRestaurant = restaurantRepository.findById(restaurantId)
+                    .orElse(null);
             if (actualRestaurant != null) {
                 BeanUtils.copyProperties(restaurant, actualRestaurant, "id");
                 actualRestaurant = restaurantRegistration.saveRestaurant(actualRestaurant);
@@ -69,7 +68,8 @@ public class RestaurantController {
     @PatchMapping("/{restaurantId}")
     public ResponseEntity<?> partialUpdateRestaurant(@PathVariable Long restaurantId,
                                                      @RequestBody Map<String, Object> fields) {
-        Restaurant actualRestaurant = restaurantRepository.getRestaurantById(restaurantId);
+        Restaurant actualRestaurant = restaurantRepository.findById(restaurantId)
+                .orElse(null);
         if (actualRestaurant == null) {
             return ResponseEntity.notFound().build();
         }
