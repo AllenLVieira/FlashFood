@@ -5,9 +5,9 @@ insert into restaurant (name, freight_rate, cuisine_id) values ('Compadre', 30, 
 insert into state (id, name) values (1, 'Minas Gerais');
 insert into state (id, name) values (2, 'Bahia');
 insert into state (id, name) values (3, 'Pernambuco');
-insert into city (id, name, state_id) values (2, 'Belo Horizonte', 1);
-insert into city (id, name, state_id) values (3, 'Salvador', 2);
-insert into city (id, name, state_id) values (5, 'Recife', 3);
+insert into city (id, name, state_id) values (1, 'Belo Horizonte', 1);
+insert into city (id, name, state_id) values (2, 'Salvador', 2);
+insert into city (id, name, state_id) values (3, 'Recife', 3);
 insert into payment_method (id, description) values (1, 'Credit Card');
 insert into payment_method (id, description) values (2, 'Debit Card');
 insert into payment_method (id, description) values (3, 'Money');
