@@ -1,7 +1,10 @@
 package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.model.Restaurant;
+import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.repository.RestaurantRepositoryQueries;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -17,10 +20,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withFreeShipping;
+import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withSimilarName;
+
 @Repository
 public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    @Lazy
+    private RestaurantRepository restaurantRepository;
+
+    /**
+     * @param name
+     * @return restaurants with free shipping and by name
+     * obs: To avoid circular reference use the @Lazy annotation
+     */
+    @Override
+    public List<Restaurant> consultFreeShippingAndName(String name) {
+        return restaurantRepository.findAll(withFreeShipping()
+                .and(withSimilarName(name)));
+    }
 
     @Override
     public List<Restaurant> consultByNameAndBetweenFee(String name, BigDecimal initialFee,
