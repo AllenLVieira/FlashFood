@@ -1,9 +1,12 @@
 package br.com.allen.flashfood.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,4 +19,8 @@ public class Cuisine {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "cuisine")
+    @JsonIgnore
+    private List<Restaurant> restaurant = new ArrayList<>();
 }
