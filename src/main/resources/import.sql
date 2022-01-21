@@ -13,3 +13,4 @@ insert into payment_method (id, description) values (2, 'Debit Card');
 insert into payment_method (id, description) values (3, 'Money');
 insert into permission (id, name, description) values (1, 'CONSULT', 'Allows you consult cuisines');
 insert into permission (id, name, description) values (2, 'EDIT', 'Allows you to edit cuisines');
+insert into restaurant_payment_method (restaurant_id, payment_method_id) values (1,1), (1,2), (1,3), (2,3);
