@@ -24,6 +24,10 @@ public class Restaurant {
     @Column(nullable = false)
     private BigDecimal freightRate;
 
+    @Embedded
+    @JsonIgnore
+    private Address address;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Cuisine cuisine;
