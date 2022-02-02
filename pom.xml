@@ -13,7 +13,7 @@
     </parent>
     <groupId>br.com.allen</groupId>
     <artifactId>flashfood-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>flashfood-api</name>
     <description>Repository aimed at creating a REST API for a food delivery service.</description>
     <properties>
@@ -55,6 +55,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>8.4.3</version>
         </dependency>
     </dependencies>
     <build>
