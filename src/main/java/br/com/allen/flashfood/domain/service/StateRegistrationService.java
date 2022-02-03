@@ -9,8 +9,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import static br.com.allen.flashfood.domain.service.CuisineRegistrationService.CUISINE_NOT_FOUND;
+
 @Service
 public class StateRegistrationService {
+    public static final String STATE_NOT_FOUND = "There is no state register with code %d";
+    public static final String STATE_IN_USE = "State with %d code cannot be removed because it is in use.";
     @Autowired
     private StateRepository stateRepository;
 
@@ -23,12 +27,20 @@ public class StateRegistrationService {
             stateRepository.deleteById(stateId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundedException(
-                    String.format("There is no state registration with code %d", stateId)
+                    String.format(STATE_NOT_FOUND, stateId)
             );
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
-                    String.format("State with %d code cannot be removed because it is in use.", stateId)
+                    String.format(STATE_IN_USE, stateId)
             );
         }
     }
+
+    public State findStateOrElseThrow(Long stateId){
+        return stateRepository.findById(stateId)
+                .orElseThrow(() -> new EntityNotFoundedException(
+                        String.format(CUISINE_NOT_FOUND, stateId)
+                ));
+    }
+
 }

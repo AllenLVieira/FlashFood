@@ -32,48 +32,29 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long restaurantId) {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
-        return restaurant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Restaurant getRestaurantById(@PathVariable Long restaurantId) {
+        return restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
     }
 
     @PostMapping
-    public ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
-        try {
-            restaurant = restaurantRegistration.saveRestaurant(restaurant);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(restaurant);
-        } catch (EntityNotFoundedException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
+        return restaurantRegistration.saveRestaurant(restaurant);
     }
 
     @PutMapping("/{restaurantId}")
-    public ResponseEntity<?> updateRestaurant(@PathVariable Long restaurantId,
+    public Restaurant updateRestaurant(@PathVariable Long restaurantId,
                                               @RequestBody Restaurant restaurant) {
-        try {
-            Restaurant actualRestaurant = restaurantRepository.findById(restaurantId)
-                    .orElse(null);
-            if (actualRestaurant != null) {
-                BeanUtils.copyProperties(restaurant, actualRestaurant, "id",
-                        "paymentMethod", "address", "registrationDate", "products");
-                actualRestaurant = restaurantRegistration.saveRestaurant(actualRestaurant);
-                return ResponseEntity.ok(actualRestaurant);
-            }
-            return ResponseEntity.notFound().build();
-        } catch (EntityNotFoundedException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
+        BeanUtils.copyProperties(restaurant, actualRestaurant, "id",
+                "paymentMethod", "address", "registrationDate", "products");
+        return restaurantRegistration.saveRestaurant(actualRestaurant);
     }
 
     @PatchMapping("/{restaurantId}")
-    public ResponseEntity<?> partialUpdateRestaurant(@PathVariable Long restaurantId,
+    public Restaurant partialUpdateRestaurant(@PathVariable Long restaurantId,
                                                      @RequestBody Map<String, Object> fields) {
-        Restaurant actualRestaurant = restaurantRepository.findById(restaurantId)
-                .orElse(null);
-        if (actualRestaurant == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
         mergeFields(fields, actualRestaurant);
         return updateRestaurant(restaurantId, actualRestaurant);
     }
