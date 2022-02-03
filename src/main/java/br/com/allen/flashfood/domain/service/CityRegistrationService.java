@@ -5,7 +5,6 @@ import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.CityRepository;
-import br.com.allen.flashfood.domain.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;

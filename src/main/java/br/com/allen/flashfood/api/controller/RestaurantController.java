@@ -1,6 +1,5 @@
 package br.com.allen.flashfood.api.controller;
 
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
@@ -8,14 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurants")
