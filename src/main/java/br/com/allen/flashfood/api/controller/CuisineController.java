@@ -1,7 +1,5 @@
 package br.com.allen.flashfood.api.controller;
 
-import br.com.allen.flashfood.domain.exception.EntityInUseException;
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
@@ -29,9 +27,8 @@ public class CuisineController {
     }
 
     @GetMapping("/{cuisineId}")
-    public ResponseEntity<Cuisine> getCuisineById(@PathVariable Long cuisineId) {
-        Optional<Cuisine> cuisine = cuisineRepository.findById(cuisineId);
-        return cuisine.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Cuisine getCuisineById(@PathVariable Long cuisineId) {
+        return cuisineRegistration.findCuisineOrElseThrow(cuisineId);
     }
 
     @PostMapping
@@ -41,26 +38,16 @@ public class CuisineController {
     }
 
     @PutMapping("/{cuisineId}")
-    public ResponseEntity<Cuisine> updateCuisine(@PathVariable Long cuisineId,
+    public Cuisine updateCuisine(@PathVariable Long cuisineId,
                                                  @RequestBody Cuisine cuisine) {
-        Optional<Cuisine> actualCuisine = cuisineRepository.findById(cuisineId);
-        if (actualCuisine.isPresent()) {
-            BeanUtils.copyProperties(cuisine, actualCuisine.get(), "id");
-            Cuisine saveCuisine = cuisineRegistration.saveCuisine(actualCuisine.get());
-            return ResponseEntity.ok(saveCuisine);
-        }
-        return ResponseEntity.notFound().build();
+        Cuisine actualCuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
+        BeanUtils.copyProperties(cuisine, actualCuisine, "id");
+        return cuisineRegistration.saveCuisine(actualCuisine);
     }
 
     @DeleteMapping("/{cuisineId}")
-    public ResponseEntity<Cuisine> deleteCuisineById(@PathVariable Long cuisineId) {
-        try {
-            cuisineRegistration.deleteCuisine(cuisineId);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundedException e) {
-            return ResponseEntity.notFound().build();
-        } catch (EntityInUseException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCuisineById(@PathVariable Long cuisineId) {
+        cuisineRegistration.deleteCuisine(cuisineId);
     }
 }
