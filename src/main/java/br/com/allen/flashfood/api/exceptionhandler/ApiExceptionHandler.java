@@ -11,13 +11,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundedException.class)
     public ResponseEntity<?> handleEntityNotFoundedException(EntityNotFoundedException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorsType type = ErrorsType.ENTITY_NOT_FOUND;
+        String detail = ex.getMessage();
+        ApiError errors = apiErrorBuilder(status, type, detail).build();
+        /*ApiError errors = ApiError.builder()
+                .status(status.value())
+                .type("https://wwww.flashfood.com.br/entity-not-found")
+                .title("Entity not found")
+                .detail(ex.getMessage())
+                .build();*/
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntityInUseException.class)
@@ -34,13 +42,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (body == null) {
             body = ApiError.builder()
-                    .datetime(LocalDateTime.now())
-                    .message(status.getReasonPhrase()).build();
+                    .title(status.getReasonPhrase())
+                    .status(status.value())
+                    .build();
         } else if (body instanceof String) {
             body = ApiError.builder()
-                    .datetime(LocalDateTime.now())
-                    .message((String) body).build();
+                    .title((String) body)
+                    .status(status.value())
+                    .build();
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private ApiError.ApiErrorBuilder apiErrorBuilder(HttpStatus status,
+                                                     ErrorsType errorsType,
+                                                     String detail) {
+        return ApiError.builder()
+                .status(status.value())
+                .type(errorsType.getUri())
+                .title(errorsType.getTitle())
+                .detail(detail);
     }
 }
