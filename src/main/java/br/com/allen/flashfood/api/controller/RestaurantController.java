@@ -2,7 +2,6 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
@@ -48,7 +47,7 @@ public class RestaurantController {
 
     @PutMapping("/{restaurantId}")
     public Restaurant updateRestaurant(@PathVariable Long restaurantId,
-                                              @RequestBody Restaurant restaurant) {
+                                       @RequestBody Restaurant restaurant) {
         Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
         BeanUtils.copyProperties(restaurant, actualRestaurant, "id",
                 "paymentMethod", "address", "registrationDate", "products");
@@ -61,7 +60,7 @@ public class RestaurantController {
 
     @PatchMapping("/{restaurantId}")
     public Restaurant partialUpdateRestaurant(@PathVariable Long restaurantId,
-                                                     @RequestBody Map<String, Object> fields) {
+                                              @RequestBody Map<String, Object> fields) {
         Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
         mergeFields(fields, actualRestaurant);
         return updateRestaurant(restaurantId, actualRestaurant);

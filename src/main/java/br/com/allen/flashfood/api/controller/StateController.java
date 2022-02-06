@@ -37,7 +37,7 @@ public class StateController {
 
     @PutMapping("/{stateId}")
     public State updateRestaurant(@PathVariable Long stateId,
-                                                  @RequestBody State state) {
+                                  @RequestBody State state) {
         State actualState = stateRegistration.findStateOrElseThrow(stateId);
         BeanUtils.copyProperties(state, actualState, "id");
         return stateRegistration.saveState(actualState);

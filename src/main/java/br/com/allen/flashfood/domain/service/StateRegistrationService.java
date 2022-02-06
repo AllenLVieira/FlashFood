@@ -32,7 +32,7 @@ public class StateRegistrationService {
         }
     }
 
-    public State findStateOrElseThrow(Long stateId){
+    public State findStateOrElseThrow(Long stateId) {
         return stateRepository.findById(stateId)
                 .orElseThrow(() -> new StateNotFoundException(stateId));
     }

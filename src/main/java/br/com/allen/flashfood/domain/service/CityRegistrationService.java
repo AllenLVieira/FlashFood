@@ -38,7 +38,7 @@ public class CityRegistrationService {
         }
     }
 
-    public City findCityOrElseThrow(Long cityId){
+    public City findCityOrElseThrow(Long cityId) {
         return cityRepository.findById(cityId)
                 .orElseThrow(() -> new CityNotFoundException(cityId));
     }

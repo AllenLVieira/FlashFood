@@ -31,7 +31,7 @@ public class CuisineRegistrationService {
         }
     }
 
-    public Cuisine findCuisineOrElseThrow(Long cuisineId){
+    public Cuisine findCuisineOrElseThrow(Long cuisineId) {
         return cuisineRepository.findById(cuisineId)
                 .orElseThrow(() -> new CuisineNotFoundException(cuisineId));
     }
