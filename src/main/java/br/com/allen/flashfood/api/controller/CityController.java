@@ -1,5 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
+import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
@@ -32,7 +34,11 @@ public class CityController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public City addCity(@RequestBody City city) {
-        return cityRegistration.saveCity(city);
+        try {
+            return cityRegistration.saveCity(city);
+        } catch (EntityNotFoundedException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @PutMapping("/{cityId}")
@@ -40,7 +46,11 @@ public class CityController {
                            @RequestBody City city) {
         City actualCity = cityRegistration.findCityOrElseThrow(cityId);
         BeanUtils.copyProperties(city, actualCity, "id");
-        return cityRegistration.saveCity(actualCity);
+        try {
+            return cityRegistration.saveCity(actualCity);
+        } catch (EntityNotFoundedException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{cityId}")

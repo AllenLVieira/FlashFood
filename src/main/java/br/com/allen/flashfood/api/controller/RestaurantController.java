@@ -1,5 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
+import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
@@ -36,7 +38,11 @@ public class RestaurantController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantRegistration.saveRestaurant(restaurant);
+        try {
+            return restaurantRegistration.saveRestaurant(restaurant);
+        } catch (EntityNotFoundedException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @PutMapping("/{restaurantId}")
@@ -45,7 +51,11 @@ public class RestaurantController {
         Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
         BeanUtils.copyProperties(restaurant, actualRestaurant, "id",
                 "paymentMethod", "address", "registrationDate", "products");
-        return restaurantRegistration.saveRestaurant(actualRestaurant);
+        try {
+            return restaurantRegistration.saveRestaurant(actualRestaurant);
+        } catch (EntityNotFoundedException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @PatchMapping("/{restaurantId}")
