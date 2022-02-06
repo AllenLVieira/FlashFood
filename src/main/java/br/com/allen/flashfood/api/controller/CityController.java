@@ -1,7 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.domain.exception.BusinessException;
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
+import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
@@ -36,20 +36,20 @@ public class CityController {
     public City addCity(@RequestBody City city) {
         try {
             return cityRegistration.saveCity(city);
-        } catch (EntityNotFoundedException e) {
-            throw new BusinessException(e.getMessage());
+        } catch (StateNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{cityId}")
     public City updateCity(@PathVariable Long cityId,
                            @RequestBody City city) {
-        City actualCity = cityRegistration.findCityOrElseThrow(cityId);
-        BeanUtils.copyProperties(city, actualCity, "id");
         try {
+            City actualCity = cityRegistration.findCityOrElseThrow(cityId);
+            BeanUtils.copyProperties(city, actualCity, "id");
             return cityRegistration.saveCity(actualCity);
-        } catch (EntityNotFoundedException e) {
-            throw new BusinessException(e.getMessage());
+        } catch (StateNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
         }
     }
 

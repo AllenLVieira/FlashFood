@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
 import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
@@ -40,7 +41,7 @@ public class RestaurantController {
     public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
         try {
             return restaurantRegistration.saveRestaurant(restaurant);
-        } catch (EntityNotFoundedException e) {
+        } catch (CuisineNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
@@ -53,7 +54,7 @@ public class RestaurantController {
                 "paymentMethod", "address", "registrationDate", "products");
         try {
             return restaurantRegistration.saveRestaurant(actualRestaurant);
-        } catch (EntityNotFoundedException e) {
+        } catch (CuisineNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
