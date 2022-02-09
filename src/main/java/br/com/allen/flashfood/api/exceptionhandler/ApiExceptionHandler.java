@@ -6,6 +6,7 @@ import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -19,12 +20,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorsType type = ErrorsType.ENTITY_NOT_FOUND;
         String detail = ex.getMessage();
         ApiError errors = apiErrorBuilder(status, type, detail).build();
-        /*ApiError errors = ApiError.builder()
-                .status(status.value())
-                .type("https://wwww.flashfood.com.br/entity-not-found")
-                .title("Entity not found")
-                .detail(ex.getMessage())
-                .build();*/
         return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
     }
 
@@ -70,5 +65,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(errorsType.getUri())
                 .title(errorsType.getTitle())
                 .detail(detail);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ErrorsType type = ErrorsType.MESSAGE_NOT_READABLE;
+        String detail = "The body of the request is invalid. Please check for syntax errors.";
+        ApiError errors = apiErrorBuilder(status, type, detail).build();
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
     }
 }
