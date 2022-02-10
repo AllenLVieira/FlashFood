@@ -3,6 +3,9 @@ package br.com.allen.flashfood.api.exceptionhandler;
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.EntityInUseException;
 import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -69,9 +75,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Throwable rootCause = ExceptionUtils.getRootCause(ex);
+        if (rootCause instanceof PropertyBindingException) {
+            return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
+        }
         ErrorsType type = ErrorsType.MESSAGE_NOT_READABLE;
         String detail = "The body of the request is invalid. Please check for syntax errors.";
         ApiError errors = apiErrorBuilder(status, type, detail).build();
         return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
+    }
+
+    private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String path = joinPath(ex.getPath());
+        ErrorsType type = ErrorsType.MESSAGE_NOT_READABLE;
+        String detail = String.format("Property '%s' do not exists. Fix it or remove it and try again.", path);
+        ApiError errors = apiErrorBuilder(status, type, detail).build();
+        return handleExceptionInternal(ex, errors, headers, status, request);
+    }
+
+    private String joinPath(List<JsonMappingException.Reference> path) {
+        return path.stream()
+                .map(ref -> ref.getFieldName())
+                .collect(Collectors.joining("."));
     }
 }
