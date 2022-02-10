@@ -6,6 +6,7 @@ import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
@@ -97,5 +99,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return path.stream()
                 .map(ref -> ref.getFieldName())
                 .collect(Collectors.joining("."));
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        if (ex instanceof MethodArgumentTypeMismatchException) {
+            return handleMethodArgumentTypeMismatch(
+                    (MethodArgumentTypeMismatchException) ex, headers, status, request);
+        }
+        return super.handleTypeMismatch(ex, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpHeaders headers,
+                                                                    HttpStatus status, WebRequest request) {
+        ErrorsType type = ErrorsType.INVALID_PARAMETER;
+        String detail = String.format("The URL parameter '%s' received the value '%s', " +
+                "which is of an invalid type. Correct and try again.", ex.getName(), ex.getValue());
+        ApiError body = apiErrorBuilder(status, type, detail).build();
+        return handleExceptionInternal(ex, body, headers, status, request);
     }
 }
