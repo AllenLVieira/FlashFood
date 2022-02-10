@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorsType {
-    ENTITY_NOT_FOUND("/entity-not-found", "Entity not found"),
     ENTITY_IN_USE("/entity-in-use", "Entity in use"),
     BUSINESS_ERROR("/business-error", "Business rule violation"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
-    INVALID_PARAMETER("/invalid-parameter", "Invalid parameter");
+    INVALID_PARAMETER("/invalid-parameter", "Invalid parameter"),
+    RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found");
 
     private final String title;
     private final String uri;

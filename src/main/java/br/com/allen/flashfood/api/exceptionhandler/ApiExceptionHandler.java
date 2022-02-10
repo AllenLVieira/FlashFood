@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundedException.class)
     public ResponseEntity<?> handleEntityNotFoundedException(EntityNotFoundedException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorsType type = ErrorsType.ENTITY_NOT_FOUND;
+        ErrorsType type = ErrorsType.RESOURCE_NOT_FOUND;
         String detail = ex.getMessage();
         ApiError errors = apiErrorBuilder(status, type, detail).build();
         return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
@@ -117,5 +118,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 "which is of an invalid type. Correct and try again.", ex.getName(), ex.getValue());
         ApiError body = apiErrorBuilder(status, type, detail).build();
         return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ErrorsType type = ErrorsType.RESOURCE_NOT_FOUND;
+        String detail = String.format("The resource '%s' do not exists. Correct and try again.", ex.getRequestURL());
+        ApiError body = apiErrorBuilder(status, type, detail).build();
+        return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 }
