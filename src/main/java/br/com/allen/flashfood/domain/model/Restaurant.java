@@ -12,6 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,10 +29,10 @@ public class Restaurant {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(groups = Groups.RestaurantRegistrationGroup.class)
+    @NotBlank
     private String name;
 
-    @PositiveOrZero(groups = Groups.RestaurantRegistrationGroup.class)
+    @PositiveOrZero
     @Column(nullable = false)
     private BigDecimal freightRate;
 
@@ -48,8 +50,9 @@ public class Restaurant {
     @JsonIgnore
     private LocalDateTime updateDate;
 
+    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @Valid
-    @NotNull(groups = Groups.RestaurantRegistrationGroup.class)
+    @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     private Cuisine cuisine;
