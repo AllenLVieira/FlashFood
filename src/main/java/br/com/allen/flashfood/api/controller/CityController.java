@@ -1,18 +1,16 @@
 package br.com.allen.flashfood.api.controller;
 
-import br.com.allen.flashfood.domain.exception.EntityInUseException;
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
+import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cities")
@@ -29,39 +27,35 @@ public class CityController {
     }
 
     @GetMapping("/{cityId}")
-    public ResponseEntity<City> getCityById(@PathVariable Long cityId) {
-        Optional<City> city = cityRepository.findById(cityId);
-        return city.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public City getCityById(@PathVariable Long cityId) {
+        return cityRegistration.findCityOrElseThrow(cityId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public City addCity(@RequestBody City city) {
-        return cityRegistration.saveCity(city);
+        try {
+            return cityRegistration.saveCity(city);
+        } catch (StateNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{cityId}")
-    public ResponseEntity<City> updateCity(@PathVariable Long cityId,
-                                           @RequestBody City city) {
-        City actualCity = cityRepository.findById(cityId).orElse(null);
-        if (actualCity != null) {
+    public City updateCity(@PathVariable Long cityId,
+                           @RequestBody City city) {
+        try {
+            City actualCity = cityRegistration.findCityOrElseThrow(cityId);
             BeanUtils.copyProperties(city, actualCity, "id");
-            actualCity = cityRegistration.saveCity(actualCity);
-            return ResponseEntity.ok(actualCity);
+            return cityRegistration.saveCity(actualCity);
+        } catch (StateNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{cityId}")
-    public ResponseEntity<?> deleteCity(@PathVariable Long cityId) {
-        try {
-            cityRegistration.deleteCity(cityId);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundedException e) {
-            return ResponseEntity.notFound().build();
-        } catch (EntityInUseException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCity(@PathVariable Long cityId) {
+        cityRegistration.deleteCity(cityId);
     }
 }

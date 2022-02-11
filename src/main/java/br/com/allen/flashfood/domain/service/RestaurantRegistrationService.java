@@ -1,9 +1,8 @@
 package br.com.allen.flashfood.domain.service;
 
-import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
+import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.model.Restaurant;
-import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +13,17 @@ public class RestaurantRegistrationService {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private CuisineRepository cuisineRepository;
+    private CuisineRegistrationService cuisineRegistration;
 
     public Restaurant saveRestaurant(Restaurant restaurant) {
         Long cuisineId = restaurant.getCuisine().getId();
-        Cuisine cuisine = cuisineRepository.findById(cuisineId)
-                .orElseThrow(() -> new EntityNotFoundedException(
-                        String.format("There is no cuisine registration with code %d", cuisineId)
-                ));
+        Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
         restaurant.setCuisine(cuisine);
         return restaurantRepository.save(restaurant);
+    }
+
+    public Restaurant findRestaurantOrElseThrow(Long cuisineId) {
+        return restaurantRepository.findById(cuisineId)
+                .orElseThrow(() -> new RestaurantNotFoundException(cuisineId));
     }
 }

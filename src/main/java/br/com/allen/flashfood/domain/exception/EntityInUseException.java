@@ -1,6 +1,6 @@
 package br.com.allen.flashfood.domain.exception;
 
-public class EntityInUseException extends RuntimeException {
+public class EntityInUseException extends BusinessException {
     private static final long serialVersionUID = 1L;
 
     public EntityInUseException(String message) {
