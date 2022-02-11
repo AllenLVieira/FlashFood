@@ -8,7 +8,8 @@ public enum ErrorsType {
     BUSINESS_ERROR("/business-error", "Business rule violation"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
     INVALID_PARAMETER("/invalid-parameter", "Invalid parameter"),
-    RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found");
+    RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
+    SYSTEM_ERROR("/system-error", "System error");
 
     private final String title;
     private final String uri;
