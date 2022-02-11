@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -155,5 +156,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ex.printStackTrace();
         ApiError body = apiErrorBuilder(status, type, USER_MESSAGE).userMessage(USER_MESSAGE).build();
         return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+        ErrorsType type = ErrorsType.INVALID_DATA;
+        String detail = "One or more fields are invalid. Fill it correctly and try again.";
+        ApiError errors = apiErrorBuilder(status, type, detail)
+                .userMessage(detail)
+                .build();
+        return super.handleExceptionInternal(ex, errors, headers, status, request);
     }
 }
