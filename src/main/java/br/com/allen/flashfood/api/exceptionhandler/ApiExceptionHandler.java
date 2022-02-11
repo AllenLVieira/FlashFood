@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -165,8 +166,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         ErrorsType type = ErrorsType.INVALID_DATA;
         String detail = "One or more fields are invalid. Fill it correctly and try again.";
+        BindingResult bindingResult = ex.getBindingResult();
+        List<ApiError.Field> fields = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> ApiError.Field.builder()
+                        .name(fieldError.getField())
+                        .userMessage(fieldError.getDefaultMessage())
+                        .build())
+                .collect(Collectors.toList());
         ApiError errors = apiErrorBuilder(status, type, detail)
                 .userMessage(detail)
+                .fields(fields)
                 .build();
         return super.handleExceptionInternal(ex, errors, headers, status, request);
     }
