@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,13 +32,13 @@ public class StateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public State addState(@RequestBody State state) {
+    public State addState(@RequestBody @Valid State state) {
         return stateRegistration.saveState(state);
     }
 
     @PutMapping("/{stateId}")
     public State updateRestaurant(@PathVariable Long stateId,
-                                  @RequestBody State state) {
+                                  @RequestBody @Valid State state) {
         State actualState = stateRegistration.findStateOrElseThrow(stateId);
         BeanUtils.copyProperties(state, actualState, "id");
         return stateRegistration.saveState(actualState);

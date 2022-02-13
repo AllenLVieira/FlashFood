@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String USER_MESSAGE = "An unexpected internal error has occurred in the system. " +
             "Try again and if the problem persists, contact your system administrator.";
+
+    @Autowired
+    private MessageSource msgSource;
 
     @ExceptionHandler(EntityNotFoundedException.class)
     public ResponseEntity<?> handleEntityNotFoundedException(EntityNotFoundedException ex, WebRequest request) {
@@ -168,10 +174,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = "One or more fields are invalid. Fill it correctly and try again.";
         BindingResult bindingResult = ex.getBindingResult();
         List<ApiError.Field> fields = bindingResult.getFieldErrors().stream()
-                .map(fieldError -> ApiError.Field.builder()
-                        .name(fieldError.getField())
-                        .userMessage(fieldError.getDefaultMessage())
-                        .build())
+                .map(fieldError -> {
+                    String message = msgSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                    return ApiError.Field.builder()
+                            .name(fieldError.getField())
+                            .userMessage(message)
+                            .build();
+                })
                 .collect(Collectors.toList());
         ApiError errors = apiErrorBuilder(status, type, detail)
                 .userMessage(detail)

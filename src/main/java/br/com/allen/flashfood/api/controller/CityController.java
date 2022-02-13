@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class CityController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public City addCity(@RequestBody City city) {
+    public City addCity(@RequestBody @Valid City city) {
         try {
             return cityRegistration.saveCity(city);
         } catch (StateNotFoundException e) {
@@ -43,7 +44,7 @@ public class CityController {
 
     @PutMapping("/{cityId}")
     public City updateCity(@PathVariable Long cityId,
-                           @RequestBody City city) {
+                           @RequestBody @Valid City city) {
         try {
             City actualCity = cityRegistration.findCityOrElseThrow(cityId);
             BeanUtils.copyProperties(city, actualCity, "id");
