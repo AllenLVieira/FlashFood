@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.model;
 
+import br.com.allen.flashfood.core.validation.FreightRate;
 import br.com.allen.flashfood.core.validation.validationgroups.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -11,7 +12,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class Restaurant {
     @NotBlank
     private String name;
 
-    @PositiveOrZero
+    @FreightRate
     @NotNull
     @Column(nullable = false)
     private BigDecimal freightRate;
