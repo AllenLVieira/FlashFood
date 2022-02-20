@@ -1,6 +1,6 @@
 package br.com.allen.flashfood.domain.model;
 
-import br.com.allen.flashfood.api.validationgroups.Groups;
+import br.com.allen.flashfood.core.validation.validationgroups.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
