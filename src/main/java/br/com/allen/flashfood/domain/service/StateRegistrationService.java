@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -16,10 +17,12 @@ public class StateRegistrationService {
     @Autowired
     private StateRepository stateRepository;
 
+    @Transactional
     public State saveState(State state) {
         return stateRepository.save(state);
     }
 
+    @Transactional
     public void deleteState(Long stateId) {
         try {
             stateRepository.deleteById(stateId);

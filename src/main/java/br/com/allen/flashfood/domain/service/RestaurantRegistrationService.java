@@ -6,6 +6,7 @@ import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RestaurantRegistrationService {
@@ -15,6 +16,7 @@ public class RestaurantRegistrationService {
     @Autowired
     private CuisineRegistrationService cuisineRegistration;
 
+    @Transactional
     public Restaurant saveRestaurant(Restaurant restaurant) {
         Long cuisineId = restaurant.getCuisine().getId();
         Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);

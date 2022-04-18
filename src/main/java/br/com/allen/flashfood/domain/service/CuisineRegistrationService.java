@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CuisineRegistrationService {
@@ -15,10 +16,12 @@ public class CuisineRegistrationService {
     @Autowired
     private CuisineRepository cuisineRepository;
 
+    @Transactional
     public Cuisine saveCuisine(Cuisine cuisine) {
         return cuisineRepository.save(cuisine);
     }
 
+    @Transactional
     public void deleteCuisine(Long cuisineId) {
         try {
             cuisineRepository.deleteById(cuisineId);
