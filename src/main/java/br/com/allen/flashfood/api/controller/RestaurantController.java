@@ -9,7 +9,6 @@ import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -60,9 +59,7 @@ public class RestaurantController {
                                                @RequestBody @Valid RestaurantRequest restaurantRequest) {
         try {
             Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
-            Restaurant restaurant = requestDisassembler.toDomainObject(restaurantRequest);
-            BeanUtils.copyProperties(restaurant, actualRestaurant, "id",
-                    "paymentMethod", "address", "registrationDate", "products");
+            requestDisassembler.copyToDomainObject(restaurantRequest, actualRestaurant);
             return restaurantModelAssembler.toModel(restaurantRegistration.saveRestaurant(actualRestaurant));
         } catch (CuisineNotFoundException e) {
             throw new BusinessException(e.getMessage());
