@@ -70,7 +70,11 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>2.6.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -107,18 +111,18 @@
                                     <excludes>
                                         <exclude>*Test</exclude>
                                     </excludes>
-                                    <limits>
+                                    <!--<limits>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>80%</minimum>
                                         </limit>
-                                        <!--<limit>
+                                        <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>80%</minimum>
-                                        </limit>-->
-                                    </limits>
+                                        </limit>
+                                    </limits>-->
                                 </rule>
                             </rules>
                         </configuration>
