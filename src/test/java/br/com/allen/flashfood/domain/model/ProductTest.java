@@ -1,15 +1,11 @@
 package br.com.allen.flashfood.domain.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
     @Test
@@ -51,8 +47,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(3, 3, 3, 3, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(3, 3, 3, 3, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product1 = new Product();
         product1.setActive(true);
@@ -100,8 +96,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
         actualProduct.setRestaurant(restaurant);
         assertEquals("The characteristics of someone or something", actualProduct.getDescription());
         assertEquals(123L, actualProduct.getId());
@@ -115,8 +111,8 @@ class ProductTest {
                 "Product(id=123, name=Name, description=The characteristics of someone or something, price=42, active=true,"
                         + " restaurant=Restaurant(id=123, name=Name, freightRate=42, address=Address(zipCode=21654, street=Street,"
                         + " number=42, city=City(id=123, name=Name, state=State(id=123, name=Name)), district=District,"
-                        + " complement=Complement), registrationDate=0001-01-01T01:01, updateDate=0001-01-01T01:01, cuisine=Cuisine"
-                        + "(id=123, name=Name, restaurant=[]), products=[], paymentMethod=[]))",
+                        + " complement=Complement), registrationDate=null, updateDate=null, cuisine=Cuisine(id=123, name=Name,"
+                        + " restaurant=[]), products=[], paymentMethod=[]))",
                 actualProduct.toString());
     }
 
@@ -152,8 +148,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -197,8 +193,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -207,7 +203,7 @@ class ProductTest {
         product.setName("Name");
         product.setPrice(BigDecimal.valueOf(42L));
         product.setRestaurant(restaurant);
-        assertFalse(product.equals("Different type to Product"));
+        assertNotEquals("Different type to Product", product);
     }
 
     @Test
@@ -242,8 +238,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -252,7 +248,7 @@ class ProductTest {
         product.setName("Name");
         product.setPrice(BigDecimal.valueOf(42L));
         product.setRestaurant(restaurant);
-        assertTrue(product.equals(product));
+        assertEquals(product, product);
         int expectedHashCodeResult = product.hashCode();
         assertEquals(expectedHashCodeResult, product.hashCode());
     }
@@ -289,8 +285,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -330,8 +326,8 @@ class ProductTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product1 = new Product();
         product1.setActive(true);
@@ -340,7 +336,7 @@ class ProductTest {
         product1.setName("Name");
         product1.setPrice(BigDecimal.valueOf(42L));
         product1.setRestaurant(restaurant1);
-        assertTrue(product.equals(product1));
+        assertEquals(product, product1);
         int expectedHashCodeResult = product.hashCode();
         assertEquals(expectedHashCodeResult, product1.hashCode());
     }
@@ -377,8 +373,8 @@ class ProductTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -418,8 +414,8 @@ class ProductTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product1 = new Product();
         product1.setActive(true);
@@ -428,7 +424,7 @@ class ProductTest {
         product1.setName("Name");
         product1.setPrice(BigDecimal.valueOf(42L));
         product1.setRestaurant(restaurant1);
-        assertFalse(product.equals(product1));
+        assertNotEquals(product, product1);
     }
 }
 

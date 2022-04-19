@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +41,11 @@ public class Restaurant {
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime registrationDate;
+    private OffsetDateTime registrationDate;
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime updateDate;
+    private OffsetDateTime updateDate;
 
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @Valid

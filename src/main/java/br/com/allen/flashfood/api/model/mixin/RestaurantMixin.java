@@ -7,7 +7,7 @@ import br.com.allen.flashfood.domain.model.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public abstract class RestaurantMixin {
@@ -22,10 +22,10 @@ public abstract class RestaurantMixin {
     private Address address;
 
     @JsonIgnore
-    private LocalDateTime registrationDate;
+    private OffsetDateTime registrationDate;
 
     @JsonIgnore
-    private LocalDateTime updateDate;
+    private OffsetDateTime updateDate;
 
     @JsonIgnoreProperties(value = "name", allowGetters = true)
     private Cuisine cuisine;

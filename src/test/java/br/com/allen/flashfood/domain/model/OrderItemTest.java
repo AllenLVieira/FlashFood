@@ -1,15 +1,12 @@
 package br.com.allen.flashfood.domain.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OrderItemTest {
     @Test
@@ -76,8 +73,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(3, 3, 3, 3, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(3, 3, 3, 3, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         deliveryOrder.setAmount(BigDecimal.valueOf(42L));
@@ -121,8 +118,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(3, 3, 3, 3, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(3, 3, 3, 3, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -196,8 +193,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         BigDecimal valueOfResult1 = BigDecimal.valueOf(42L);
         deliveryOrder.setAmount(valueOfResult1);
@@ -241,8 +238,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
         Product product = new Product();
         product.setActive(true);
         product.setDescription("The characteristics of someone or something");
@@ -287,15 +284,14 @@ class OrderItemTest {
                 + "=0001-01-01T01:01, deliveryDate=0001-01-01T01:01, paymentMethod=PaymentMethod(id=123, description=The"
                 + " characteristics of someone or something), restaurant=Restaurant(id=123, name=Name, freightRate=42,"
                 + " address=Address(zipCode=21654, street=Street, number=42, city=City(id=123, name=Name, state=State(id=null,"
-                + " name=null)), district=District, complement=Complement), registrationDate=0001-01-01T01:01,"
-                + " updateDate=0001-01-01T01:01, cuisine=Cuisine(id=123, name=Name, restaurant=[]), products=[],"
-                + " paymentMethod=[]), cliente=User(id=123, name=Name, email=jane.doe@example.org, password=iloveyou,"
-                + " registrationDate=0001-01-01T01:01, groups=[]), items=[]), product=Product(id=123, name=Name,"
-                + " description=The characteristics of someone or something, price=42, active=true, restaurant=Restaurant"
-                + "(id=123, name=Name, freightRate=42, address=Address(zipCode=21654, street=Street, number=42,"
-                + " city=City(id=123, name=Name, state=State(id=null, name=null)), district=District, complement=Complement),"
-                + " registrationDate=0001-01-01T01:01, updateDate=0001-01-01T01:01, cuisine=Cuisine(id=123, name=Name,"
-                + " restaurant=[]), products=[], paymentMethod=[])))", actualOrderItem.toString());
+                + " name=null)), district=District, complement=Complement), registrationDate=null, updateDate=null,"
+                + " cuisine=Cuisine(id=123, name=Name, restaurant=[]), products=[], paymentMethod=[]), cliente=User(id=123,"
+                + " name=Name, email=jane.doe@example.org, password=iloveyou, registrationDate=0001-01-01T01:01, groups=[]),"
+                + " items=[]), product=Product(id=123, name=Name, description=The characteristics of someone or something,"
+                + " price=42, active=true, restaurant=Restaurant(id=123, name=Name, freightRate=42, address=Address(zipCode"
+                + "=21654, street=Street, number=42, city=City(id=123, name=Name, state=State(id=null, name=null)),"
+                + " district=District, complement=Complement), registrationDate=null, updateDate=null, cuisine=Cuisine(id=123,"
+                + " name=Name, restaurant=[]), products=[], paymentMethod=[])))", actualOrderItem.toString());
     }
 
     @Test
@@ -355,8 +351,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         deliveryOrder.setAmount(BigDecimal.valueOf(42L));
@@ -400,8 +396,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -419,7 +415,7 @@ class OrderItemTest {
         orderItem.setQuantity(1);
         orderItem.setTotalPrice(BigDecimal.valueOf(42L));
         orderItem.setUnitPrice(BigDecimal.valueOf(42L));
-        assertFalse(orderItem.equals(null));
+        assertNotEquals(null, orderItem);
     }
 
     @Test
@@ -479,8 +475,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         deliveryOrder.setAmount(BigDecimal.valueOf(42L));
@@ -524,8 +520,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -543,7 +539,7 @@ class OrderItemTest {
         orderItem.setQuantity(1);
         orderItem.setTotalPrice(BigDecimal.valueOf(42L));
         orderItem.setUnitPrice(BigDecimal.valueOf(42L));
-        assertFalse(orderItem.equals("Different type to OrderItem"));
+        assertNotEquals("Different type to OrderItem", orderItem);
     }
 
     @Test
@@ -603,8 +599,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         deliveryOrder.setAmount(BigDecimal.valueOf(42L));
@@ -648,8 +644,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -667,7 +663,7 @@ class OrderItemTest {
         orderItem.setQuantity(1);
         orderItem.setTotalPrice(BigDecimal.valueOf(42L));
         orderItem.setUnitPrice(BigDecimal.valueOf(42L));
-        assertTrue(orderItem.equals(orderItem));
+        assertEquals(orderItem, orderItem);
         int expectedHashCodeResult = orderItem.hashCode();
         assertEquals(expectedHashCodeResult, orderItem.hashCode());
     }
@@ -729,8 +725,8 @@ class OrderItemTest {
         restaurant.setName("Name");
         restaurant.setPaymentMethod(new ArrayList<>());
         restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant.setRegistrationDate(null);
+        restaurant.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         deliveryOrder.setAmount(BigDecimal.valueOf(42L));
@@ -774,8 +770,8 @@ class OrderItemTest {
         restaurant1.setName("Name");
         restaurant1.setPaymentMethod(new ArrayList<>());
         restaurant1.setProducts(new ArrayList<>());
-        restaurant1.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant1.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant1.setRegistrationDate(null);
+        restaurant1.setUpdateDate(null);
 
         Product product = new Product();
         product.setActive(true);
@@ -849,8 +845,8 @@ class OrderItemTest {
         restaurant2.setName("Name");
         restaurant2.setPaymentMethod(new ArrayList<>());
         restaurant2.setProducts(new ArrayList<>());
-        restaurant2.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant2.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant2.setRegistrationDate(null);
+        restaurant2.setUpdateDate(null);
 
         DeliveryOrder deliveryOrder1 = new DeliveryOrder();
         deliveryOrder1.setAmount(BigDecimal.valueOf(42L));
@@ -894,8 +890,8 @@ class OrderItemTest {
         restaurant3.setName("Name");
         restaurant3.setPaymentMethod(new ArrayList<>());
         restaurant3.setProducts(new ArrayList<>());
-        restaurant3.setRegistrationDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        restaurant3.setUpdateDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        restaurant3.setRegistrationDate(null);
+        restaurant3.setUpdateDate(null);
 
         Product product1 = new Product();
         product1.setActive(true);
@@ -913,7 +909,7 @@ class OrderItemTest {
         orderItem1.setQuantity(1);
         orderItem1.setTotalPrice(BigDecimal.valueOf(42L));
         orderItem1.setUnitPrice(BigDecimal.valueOf(42L));
-        assertTrue(orderItem.equals(orderItem1));
+        assertEquals(orderItem, orderItem1);
         int expectedHashCodeResult = orderItem.hashCode();
         assertEquals(expectedHashCodeResult, orderItem1.hashCode());
     }
