@@ -1,9 +1,12 @@
 package br.com.allen.flashfood.api.controller;
 
+import br.com.allen.flashfood.api.assembler.StateModelAssembler;
+import br.com.allen.flashfood.api.assembler.StateRequestDisassembler;
+import br.com.allen.flashfood.api.model.request.StateRequest;
+import br.com.allen.flashfood.api.model.response.StateResponse;
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.StateRepository;
 import br.com.allen.flashfood.domain.service.StateRegistrationService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +23,39 @@ public class StateController {
     @Autowired
     private StateRegistrationService stateRegistration;
 
+    @Autowired
+    private StateModelAssembler stateModelAssembler;
+
+    @Autowired
+    private StateRequestDisassembler stateRequestDisassembler;
+
     @GetMapping
-    public List<State> getAllStates() {
-        return stateRepository.findAll();
+    public List<StateResponse> getAllStates() {
+        List<State> allStates = stateRepository.findAll();
+        return stateModelAssembler.toCollectionModel(allStates);
     }
 
     @GetMapping("/{stateId}")
-    public State getStateById(@PathVariable Long stateId) {
-        return stateRegistration.findStateOrElseThrow(stateId);
+    public StateResponse getStateById(@PathVariable Long stateId) {
+        State state = stateRegistration.findStateOrElseThrow(stateId);
+        return stateModelAssembler.toModel(state);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public State addState(@RequestBody @Valid State state) {
-        return stateRegistration.saveState(state);
+    public StateResponse addState(@RequestBody @Valid StateRequest stateRequest) {
+        State state = stateRequestDisassembler.toDomainObject(stateRequest);
+        state = stateRegistration.saveState(state);
+        return stateModelAssembler.toModel(state);
     }
 
     @PutMapping("/{stateId}")
-    public State updateRestaurant(@PathVariable Long stateId,
-                                  @RequestBody @Valid State state) {
+    public StateResponse updateRestaurant(@PathVariable Long stateId,
+                                          @RequestBody @Valid StateRequest stateRequest) {
         State actualState = stateRegistration.findStateOrElseThrow(stateId);
-        BeanUtils.copyProperties(state, actualState, "id");
-        return stateRegistration.saveState(actualState);
+        stateRequestDisassembler.copyToDomainObject(stateRequest, actualState);
+        actualState = stateRegistration.saveState(actualState);
+        return stateModelAssembler.toModel(actualState);
     }
 
     @DeleteMapping("/{stateId}")
