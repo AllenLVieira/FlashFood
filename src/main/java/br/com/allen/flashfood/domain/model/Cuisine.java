@@ -1,7 +1,6 @@
 package br.com.allen.flashfood.domain.model;
 
 import br.com.allen.flashfood.core.validation.validationgroups.Groups;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -26,6 +25,5 @@ public class Cuisine {
     private String name;
 
     @OneToMany(mappedBy = "cuisine")
-    @JsonIgnore
     private List<Restaurant> restaurant = new ArrayList<>();
 }

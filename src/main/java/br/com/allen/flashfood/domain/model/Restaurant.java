@@ -2,8 +2,6 @@ package br.com.allen.flashfood.domain.model;
 
 import br.com.allen.flashfood.core.validation.FreightRate;
 import br.com.allen.flashfood.core.validation.validationgroups.Groups;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,20 +37,16 @@ public class Restaurant {
     private BigDecimal freightRate;
 
     @Embedded
-    @JsonIgnore
     private Address address;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    @JsonIgnore
     private LocalDateTime registrationDate;
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    @JsonIgnore
     private LocalDateTime updateDate;
 
-    @JsonIgnoreProperties(value = "name", allowGetters = true)
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @Valid
     @NotNull
@@ -61,13 +55,11 @@ public class Restaurant {
     private Cuisine cuisine;
 
     @OneToMany(mappedBy = "restaurant")
-    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "restaurant_payment_method",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
-    @JsonIgnore
     private List<PaymentMethod> paymentMethod = new ArrayList<>();
 }
