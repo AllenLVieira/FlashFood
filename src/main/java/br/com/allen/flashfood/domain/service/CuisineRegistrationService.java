@@ -25,6 +25,7 @@ public class CuisineRegistrationService {
     public void deleteCuisine(Long cuisineId) {
         try {
             cuisineRepository.deleteById(cuisineId);
+            cuisineRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new CuisineNotFoundException(cuisineId);
         } catch (DataIntegrityViolationException e) {
