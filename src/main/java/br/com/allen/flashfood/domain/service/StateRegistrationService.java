@@ -26,6 +26,7 @@ public class StateRegistrationService {
     public void deleteState(Long stateId) {
         try {
             stateRepository.deleteById(stateId);
+            stateRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new StateNotFoundException(stateId);
         } catch (DataIntegrityViolationException e) {
