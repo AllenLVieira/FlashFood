@@ -40,6 +40,8 @@ public class Restaurant {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Cuisine cuisine;
+    
+    private Boolean active = Boolean.TRUE;
 
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
