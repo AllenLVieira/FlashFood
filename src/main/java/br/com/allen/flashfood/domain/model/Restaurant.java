@@ -40,7 +40,7 @@ public class Restaurant {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Cuisine cuisine;
-    
+
     private Boolean active = Boolean.TRUE;
 
     @OneToMany(mappedBy = "restaurant")
@@ -51,4 +51,12 @@ public class Restaurant {
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     private List<PaymentMethod> paymentMethod = new ArrayList<>();
+
+    public void activate() {
+        setActive(true);
+    }
+
+    public void disable() {
+        setActive(false);
+    }
 }
