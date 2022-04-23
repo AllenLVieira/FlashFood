@@ -11,5 +11,5 @@ public class AddressResponse {
     private String number;
     private String district;
     private String complement;
-    private CityResponse city;
+    private CitySummaryResponse city;
 }
