@@ -43,3 +43,5 @@ INSERT INTO permission (id, name, description) VALUES (1, 'CONSULT', 'Allows you
 INSERT INTO permission (id, name, description) VALUES (2, 'EDIT', 'Allows you to edit cuisines');
 
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1),(1, 2),(1, 3),(2, 3);
+
+INSERT INTO family (name) values ('TESTE1'), ('TESTE2'), ('TESTE3'), ('TESTE4');
