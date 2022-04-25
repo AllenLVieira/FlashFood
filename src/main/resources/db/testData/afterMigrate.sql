@@ -45,3 +45,9 @@ INSERT INTO permission (id, name, description) VALUES (2, 'EDIT', 'Allows you to
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1),(1, 2),(1, 3),(2, 3);
 
 INSERT INTO family (name) values ('TESTE1'), ('TESTE2'), ('TESTE3'), ('TESTE4');
+
+INSERT INTO user (id, name, email, password, registration_date) values
+(1, 'João da Silva', 'joao.ger@gmail.com', '123', utc_timestamp),
+(2, 'Maria Joaquina', 'maria.vnd@gmail.com', '123', utc_timestamp),
+(3, 'José Souza', 'jose.aux@gmail.com', '123', utc_timestamp),
+(4, 'Sebastião Martins', 'sebastiao.cad@gmail.com', '123', utc_timestamp);

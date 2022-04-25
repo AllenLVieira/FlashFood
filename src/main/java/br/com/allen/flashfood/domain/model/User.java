@@ -38,4 +38,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Family> groups = new ArrayList<>();
 
+    public boolean passwordConfirmed(String password) {
+        return getPassword().equals(password);
+    }
+
+    public boolean passwordNotConfirmed(String password) {
+        return !passwordConfirmed(password);
+    }
 }
