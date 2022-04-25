@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     @Autowired
@@ -15,6 +17,12 @@ public class UserService {
 
     @Transactional
     public User saveUser(User user) {
+        userRepository.detach(user);
+        Optional<User> existentUser = userRepository.findByEmail(user.getEmail());
+        if (existentUser.isPresent() && !existentUser.get().equals(user)) {
+            throw new BusinessException(
+                    String.format("There is already a user registration with the email: %s", user.getEmail()));
+        }
         return userRepository.save(user);
     }
 
