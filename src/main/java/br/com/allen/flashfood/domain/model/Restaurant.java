@@ -59,4 +59,12 @@ public class Restaurant {
     public void disable() {
         setActive(false);
     }
+
+    public void removePaymentMethod(PaymentMethod paymentMethod) {
+        getPaymentMethod().remove(paymentMethod);
+    }
+
+    public void addPaymentMethod(PaymentMethod paymentMethod) {
+        getPaymentMethod().add(paymentMethod);
+    }
 }
