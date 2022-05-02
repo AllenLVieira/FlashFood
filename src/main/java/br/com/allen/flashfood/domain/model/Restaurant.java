@@ -9,7 +9,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -41,6 +43,8 @@ public class Restaurant {
     @JoinColumn(nullable = false)
     private Cuisine cuisine;
 
+    private Boolean active = Boolean.TRUE;
+
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
@@ -48,5 +52,21 @@ public class Restaurant {
     @JoinTable(name = "restaurant_payment_method",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
-    private List<PaymentMethod> paymentMethod = new ArrayList<>();
+    private Set<PaymentMethod> paymentMethod = new HashSet<>();
+
+    public void activate() {
+        setActive(true);
+    }
+
+    public void disable() {
+        setActive(false);
+    }
+
+    public void removePaymentMethod(PaymentMethod paymentMethod) {
+        getPaymentMethod().remove(paymentMethod);
+    }
+
+    public void addPaymentMethod(PaymentMethod paymentMethod) {
+        getPaymentMethod().add(paymentMethod);
+    }
 }

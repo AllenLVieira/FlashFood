@@ -5,6 +5,7 @@ import br.com.allen.flashfood.api.assembler.RestaurantRequestDisassembler;
 import br.com.allen.flashfood.api.model.request.RestaurantRequest;
 import br.com.allen.flashfood.api.model.response.RestaurantResponse;
 import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.CityNotFoundException;
 import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
@@ -61,8 +62,20 @@ public class RestaurantController {
             Restaurant actualRestaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
             requestDisassembler.copyToDomainObject(restaurantRequest, actualRestaurant);
             return restaurantModelAssembler.toModel(restaurantRegistration.saveRestaurant(actualRestaurant));
-        } catch (CuisineNotFoundException e) {
+        } catch (CuisineNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
+    }
+
+    @PutMapping("/{restaurantId}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void activateRestaurant(@PathVariable Long restaurantId) {
+        restaurantRegistration.activateRestaurant(restaurantId);
+    }
+
+    @DeleteMapping("/{restaurantId}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disableRestaurant(@PathVariable Long restaurantId) {
+        restaurantRegistration.disableRestaurant(restaurantId);
     }
 }
