@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class PaymentMethodModelAssembler {
         return modelMapper.map(paymentMethod, PaymentMethodResponse.class);
     }
 
-    public List<PaymentMethodResponse> toCollectionModel(List<PaymentMethod> paymentMethodList) {
+    public List<PaymentMethodResponse> toCollectionModel(Collection<PaymentMethod> paymentMethodList) {
         return paymentMethodList.stream()
                 .map(paymentMethod -> toModel(paymentMethod))
                 .collect(Collectors.toList());
