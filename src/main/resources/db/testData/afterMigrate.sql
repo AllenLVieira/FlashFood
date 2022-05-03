@@ -44,10 +44,20 @@ INSERT INTO permission (id, name, description) VALUES (2, 'EDIT', 'Allows you to
 
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1),(1, 2),(1, 3),(2, 3);
 
-INSERT INTO family (name) values ('TESTE1'), ('TESTE2'), ('TESTE3'), ('TESTE4');
+INSERT INTO family (name) VALUES ('TESTE1'), ('TESTE2'), ('TESTE3'), ('TESTE4');
 
-INSERT INTO user (id, name, email, password, registration_date) values
+INSERT INTO user (id, name, email, password, registration_date) VALUES
 (1, 'João da Silva', 'joao.ger@gmail.com', '123', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vnd@gmail.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@gmail.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@gmail.com', '123', utc_timestamp);
+
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 1 - Restaurant 1', 'A', 78.90, 1, 1);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 2 - Restaurant 1', 'B', 110, 1, 1);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 3 - Restaurant 1', 'C', 87.20, 1, 1);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 4 - Restaurant 1', 'D', 21, 1, 1);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 1 - Restaurant 2', 'A', 43, 1, 2);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 2 - Restaurant 2', 'B', 79, 1, 2);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 3 - Restaurant 2', 'C', 89, 1, 2);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 4 - Restaurant 2', 'D', 19, 1, 2);
+INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 5 - Restaurant 2', 'E', 8, 1, 2);
