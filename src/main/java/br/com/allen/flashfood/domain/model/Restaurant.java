@@ -45,6 +45,8 @@ public class Restaurant {
 
     private Boolean active = Boolean.TRUE;
 
+    private Boolean openStatus = Boolean.FALSE;
+
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
@@ -60,6 +62,14 @@ public class Restaurant {
 
     public void disable() {
         setActive(false);
+    }
+
+    public void openRestaurant() {
+        setOpenStatus(true);
+    }
+
+    public void closeRestaurant() {
+        setOpenStatus(false);
     }
 
     public void removePaymentMethod(PaymentMethod paymentMethod) {
