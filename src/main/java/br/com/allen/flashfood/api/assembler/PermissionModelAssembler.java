@@ -15,10 +15,10 @@ public class PermissionModelAssembler {
     private ModelMapper modelMapper;
 
     public PermissionResponse toModel(Permission permission) {
-        return modelMapper.map(permission, PermissionResponse.class)
+        return modelMapper.map(permission, PermissionResponse.class);
     }
 
-    public List<PermissionResponse> toCollectionModel(List<Permission> permissionList){
+    public List<PermissionResponse> toCollectionModel(List<Permission> permissionList) {
         return permissionList.stream()
                 .map(permission -> toModel(permission))
                 .collect(Collectors.toList());
