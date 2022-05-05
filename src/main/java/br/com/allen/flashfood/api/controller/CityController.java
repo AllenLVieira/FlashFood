@@ -1,6 +1,6 @@
 package br.com.allen.flashfood.api.controller;
 
-import br.com.allen.flashfood.api.assembler.CityModelAseembler;
+import br.com.allen.flashfood.api.assembler.CityModelAssembler;
 import br.com.allen.flashfood.api.assembler.CityRequestDisassembler;
 import br.com.allen.flashfood.api.model.request.CityRequest;
 import br.com.allen.flashfood.api.model.response.CityResponse;
@@ -26,7 +26,7 @@ public class CityController {
     private CityRegistrationService cityRegistration;
 
     @Autowired
-    private CityModelAseembler cityModelAseembler;
+    private CityModelAssembler cityModelAssembler;
 
     @Autowired
     private CityRequestDisassembler cityRequestDisassembler;
@@ -34,13 +34,13 @@ public class CityController {
     @GetMapping
     public List<CityResponse> getAllCity() {
         List<City> allCities = cityRepository.findAll();
-        return cityModelAseembler.toCollectionModel(allCities);
+        return cityModelAssembler.toCollectionModel(allCities);
     }
 
     @GetMapping("/{cityId}")
     public CityResponse getCityById(@PathVariable Long cityId) {
         City city = cityRegistration.findCityOrElseThrow(cityId);
-        return cityModelAseembler.toModel(city);
+        return cityModelAssembler.toModel(city);
     }
 
     @PostMapping
@@ -49,7 +49,7 @@ public class CityController {
         try {
             City city = cityRequestDisassembler.toDomainObject(cityRequest);
             city = cityRegistration.saveCity(city);
-            return cityModelAseembler.toModel(city);
+            return cityModelAssembler.toModel(city);
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
@@ -62,7 +62,7 @@ public class CityController {
             City actualCity = cityRegistration.findCityOrElseThrow(cityId);
             cityRequestDisassembler.copyToDomainObject(cityRequest, actualCity);
             actualCity = cityRegistration.saveCity(actualCity);
-            return cityModelAseembler.toModel(actualCity);
+            return cityModelAssembler.toModel(actualCity);
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
