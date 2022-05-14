@@ -3,6 +3,7 @@ package br.com.allen.flashfood.domain.service;
 import br.com.allen.flashfood.domain.exception.EntityInUseException;
 import br.com.allen.flashfood.domain.exception.FamilyNotFoundException;
 import br.com.allen.flashfood.domain.model.Family;
+import br.com.allen.flashfood.domain.model.Permission;
 import br.com.allen.flashfood.domain.repository.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +17,9 @@ public class FamilyRegistrationService {
 
     @Autowired
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private PermissionRegistrationService permissionService;
 
     @Transactional
     public Family saveFamily(Family family) {
@@ -33,6 +37,20 @@ public class FamilyRegistrationService {
             throw new EntityInUseException(
                     String.format(FAMILY_IN_USE, familyId));
         }
+    }
+
+    @Transactional
+    public void linkPermission(Long familyId, Long permissionId) {
+        Family family = findFamilyOrElseThrow(familyId);
+        Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
+        family.addPermissions(permission);
+    }
+
+    @Transactional
+    public void unlinkPermission(Long familyId, Long permissionId) {
+        Family family = findFamilyOrElseThrow(familyId);
+        Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
+        family.removePermissions(permission);
     }
 
     public Family findFamilyOrElseThrow(Long familyId) {
