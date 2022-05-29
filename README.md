@@ -9,7 +9,7 @@
 ![springboot](https://img.shields.io/badge/spring_boot-2.5.7-green?style=for-the-badge&logo=ghost)
 
 ## Design modeling view
-![Project Modeling](assets\FlashFood.png?raw=true)
+<a><img src="assets\FlashFood.png" alt="Project Modeling view" title="Project Modeling"></a>
 
 ## 🏁 Topics
 
@@ -45,7 +45,7 @@ $ ./mvnw spring-boot:run
 # The server will start at port:8080
 ```
 
-## ⚒️ Technologies
+## Technologies
 
 The following tools were used in the construction of the project:
 
@@ -56,7 +56,7 @@ The following tools were used in the construction of the project:
 - [MySQL](https://www.mysql.com/)
 - [Flyway](https://flywaydb.org/)
 
-## 💻 Author
+## Author
 
 <a href="https://www.linkedin.com/in/allen-vieira/">
  <img style="border-radius: 50%;" src="https://media-exp1.licdn.com/dms/image/C5603AQEH7LyMy8fWGg/profile-displayphoto-shrink_200_200/0/1517076438935?e=1655942400&v=beta&t=uYmVocB39lZTiPK7n3syIgTgAcJBARtLHj4afMkz2Fk" width="100px;" alt=""/>
