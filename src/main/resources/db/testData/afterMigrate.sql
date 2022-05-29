@@ -63,3 +63,5 @@ INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('F
 INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 3 - Restaurant 2', 'C', 89, 1, 2);
 INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 4 - Restaurant 2', 'D', 19, 1, 2);
 INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 5 - Restaurant 2', 'E', 8, 1, 2);
+
+INSERT INTO user_group (user_id, group_id) VALUES (1, 1), (1, 2), (2, 2);

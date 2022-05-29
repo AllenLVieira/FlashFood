@@ -6,8 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -36,7 +36,7 @@ public class User {
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private List<Family> groups = new ArrayList<>();
+    private Set<Family> groups = new HashSet<>();
 
     public boolean passwordConfirmed(String password) {
         return getPassword().equals(password);
@@ -44,5 +44,13 @@ public class User {
 
     public boolean passwordNotConfirmed(String password) {
         return !passwordConfirmed(password);
+    }
+
+    public boolean addGroup(Family group) {
+        return getGroups().add(group);
+    }
+
+    public boolean removeGroup(Family group) {
+        return getGroups().remove(group);
     }
 }
