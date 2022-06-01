@@ -65,3 +65,8 @@ INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('F
 INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 5 - Restaurant 2', 'E', 8, 1, 2);
 
 INSERT INTO user_group (user_id, group_id) VALUES (1, 1), (1, 2), (2, 2);
+
+
+DELETE FROM restaurant_user_manager;
+INSERT INTO user(id, name, email, password, registration_date) values (5, 'Allen Vieira', 'allenvieira96@gmail.com', '123', utc_timestamp);
+INSERT INTO restaurant_user_manager (restaurant_id, user_id) values (1, 5), (2,5);
