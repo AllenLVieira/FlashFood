@@ -79,6 +79,19 @@ public class RestaurantController {
         restaurantRegistration.disableRestaurant(restaurantId);
     }
 
+    @PutMapping("/activations")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void massActivateRestaurant(@RequestBody List<Long> restaurantIds) {
+        restaurantRegistration.massActivateRestaurant(restaurantIds);
+    }
+
+    @DeleteMapping("/activations")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void massDisableRestaurant(@RequestBody List<Long> restaurantIds) {
+        restaurantRegistration.massDisableRestaurant(restaurantIds);
+    }
+
+
     @PutMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void openRestaurant(@PathVariable Long restaurantId) {
