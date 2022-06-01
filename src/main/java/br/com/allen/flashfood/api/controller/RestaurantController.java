@@ -7,6 +7,7 @@ import br.com.allen.flashfood.api.model.response.RestaurantResponse;
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.CityNotFoundException;
 import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
+import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
@@ -77,13 +78,21 @@ public class RestaurantController {
     @PutMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void massActivateRestaurant(@RequestBody List<Long> restaurantIds) {
-        restaurantRegistration.massActivateRestaurant(restaurantIds);
+        try {
+            restaurantRegistration.massActivateRestaurant(restaurantIds);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
     }
 
     @DeleteMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void massDisableRestaurant(@RequestBody List<Long> restaurantIds) {
-        restaurantRegistration.massDisableRestaurant(restaurantIds);
+        try {
+            restaurantRegistration.massDisableRestaurant(restaurantIds);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
     }
 
 
