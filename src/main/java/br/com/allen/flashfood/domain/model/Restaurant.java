@@ -56,6 +56,12 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     private Set<PaymentMethod> paymentMethod = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "restaurant_user_manager",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> managers = new HashSet<>();
+
     public void activate() {
         setActive(true);
     }
@@ -78,5 +84,13 @@ public class Restaurant {
 
     public void addPaymentMethod(PaymentMethod paymentMethod) {
         getPaymentMethod().add(paymentMethod);
+    }
+
+    public boolean addNewManager(User user) {
+        return getManagers().add(user);
+    }
+
+    public boolean removeManager(User user) {
+        return getManagers().remove(user);
     }
 }

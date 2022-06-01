@@ -1,10 +1,7 @@
 package br.com.allen.flashfood.domain.service;
 
 import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
-import br.com.allen.flashfood.domain.model.City;
-import br.com.allen.flashfood.domain.model.Cuisine;
-import br.com.allen.flashfood.domain.model.PaymentMethod;
-import br.com.allen.flashfood.domain.model.Restaurant;
+import br.com.allen.flashfood.domain.model.*;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +20,9 @@ public class RestaurantRegistrationService {
 
     @Autowired
     private PaymentMethodRegistrationService paymentMethodRegistrationService;
+
+    @Autowired
+    private UserRegistrationsService userService;
 
     @Transactional
     public Restaurant saveRestaurant(Restaurant restaurant) {
@@ -71,6 +71,22 @@ public class RestaurantRegistrationService {
     public void closeRestaurant(Long restaurantId) {
         Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
         actualRestaurant.closeRestaurant();
+    }
+
+    @Transactional
+    public void unlinkManager(Long restaurantId, Long userId) {
+        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+        User user = userService.findUserOrElseThrow(userId);
+
+        restaurant.removeManager(user);
+    }
+
+    @Transactional
+    public void linkManager(Long restaurantId, Long userId) {
+        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+        User user = userService.findUserOrElseThrow(userId);
+
+        restaurant.addNewManager(user);
     }
 
     public Restaurant findRestaurantOrElseThrow(Long cuisineId) {
