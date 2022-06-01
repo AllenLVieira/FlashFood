@@ -10,7 +10,7 @@ import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +19,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants")
+@RequiredArgsConstructor
 public class RestaurantController {
-    @Autowired
-    private RestaurantRepository restaurantRepository;
 
-    @Autowired
-    private RestaurantRegistrationService restaurantRegistration;
-
-    @Autowired
-    private RestaurantModelAssembler restaurantModelAssembler;
-
-    @Autowired
-    private RestaurantRequestDisassembler requestDisassembler;
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantRegistrationService restaurantRegistration;
+    private final RestaurantModelAssembler restaurantModelAssembler;
+    private final RestaurantRequestDisassembler requestDisassembler;
 
     @GetMapping
     public List<RestaurantResponse> getAllRestaurants() {
