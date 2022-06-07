@@ -97,7 +97,7 @@ INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (2, 1);
 INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                            address_complement, address_district, address_number, address_street, address_zipcode,
                            address_city_id, status, registration_date)
-VALUES (1, 217.9, 14.9, 203, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
+VALUES (1, 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
         1, 'CREATED', utc_timestamp);
 
 -- Order items
