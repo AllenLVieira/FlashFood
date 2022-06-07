@@ -28,6 +28,7 @@ public class DeliveryOrder {
     @Embedded
     private Address deliveryAddress;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @CreationTimestamp
