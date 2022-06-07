@@ -29,7 +29,7 @@ public class DeliveryOrder {
     private Address deliveryAddress;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.CREATED;
 
     @CreationTimestamp
     private OffsetDateTime registrationDate;
@@ -54,4 +54,20 @@ public class DeliveryOrder {
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> items = new ArrayList<>();
+
+    public void calculateTotalAmount() {
+        this.subtotal = getItems().stream()
+                .map(item -> item.getTotalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.amount = this.subtotal.add(this.freightRate);
+    }
+
+    public void defineFreightRate() {
+        setFreightRate(getRestaurant().getFreightRate());
+    }
+
+    public void assignOrderToItems() {
+        getItems().forEach(item -> item.setOrder(this));
+    }
 }
