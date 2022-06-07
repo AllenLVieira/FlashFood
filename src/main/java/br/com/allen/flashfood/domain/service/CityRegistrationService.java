@@ -5,20 +5,19 @@ import br.com.allen.flashfood.domain.exception.EntityInUseException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.CityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CityRegistrationService {
     public static final String CITY_IN_USE = "City with %d code cannot be removed because it is in use.";
-    @Autowired
-    private CityRepository cityRepository;
-
-    @Autowired
-    private StateRegistrationService stateRegistration;
+    
+    private final CityRepository cityRepository;
+    private final StateRegistrationService stateRegistration;
 
     @Transactional
     public City saveCity(City city) {

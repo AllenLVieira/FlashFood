@@ -9,27 +9,23 @@ import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cities")
+@RequestMapping(name = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class CityController {
-    @Autowired
-    private CityRepository cityRepository;
 
-    @Autowired
-    private CityRegistrationService cityRegistration;
-
-    @Autowired
-    private CityModelAssembler cityModelAssembler;
-
-    @Autowired
-    private CityRequestDisassembler cityRequestDisassembler;
+    private final CityRepository cityRepository;
+    private final CityRegistrationService cityRegistration;
+    private final CityModelAssembler cityModelAssembler;
+    private final CityRequestDisassembler cityRequestDisassembler;
 
     @GetMapping
     public List<CityResponse> getAllCity() {
