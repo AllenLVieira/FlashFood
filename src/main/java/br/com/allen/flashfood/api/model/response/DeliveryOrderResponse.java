@@ -21,7 +21,7 @@ public class DeliveryOrderResponse {
     private OffsetDateTime deliveryDate;
     private OffsetDateTime cancellationDate;
     private RestaurantSummaryResponse restaurant;
-    private UserResponse userResponse;
+    private UserResponse user;
     private PaymentMethodResponse paymentMethod;
     private AddressResponse deliveryAddress;
     private List<OrderItemResponse> items;

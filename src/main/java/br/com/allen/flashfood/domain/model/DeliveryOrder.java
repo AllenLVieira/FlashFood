@@ -50,7 +50,7 @@ public class DeliveryOrder {
 
     @ManyToOne
     @JoinColumn(name = "user_client_id", nullable = false)
-    private User cliente;
+    private User user;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> items = new ArrayList<>();
