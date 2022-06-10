@@ -93,4 +93,12 @@ public class Restaurant {
     public boolean removeManager(User user) {
         return getManagers().remove(user);
     }
+
+    public boolean acceptPaymentMethod(PaymentMethod paymentMethod) {
+        return getPaymentMethod().contains(paymentMethod);
+    }
+
+    public boolean doesNotAcceptPaymentMethod(PaymentMethod paymentMethod) {
+        return !acceptPaymentMethod(paymentMethod);
+    }
 }

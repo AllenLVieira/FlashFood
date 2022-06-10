@@ -1,21 +1,23 @@
 -- Delete data first
-set foreign_key_checks = 0;
+SET foreign_key_checks = 0;
 
-delete from state;
-delete from city;
-delete from cuisine;
-delete from restaurant;
-delete from product;
-delete from payment_method;
-delete from restaurant_payment_method;
-delete from permission;
-delete from family;
-delete from family_permission;
-delete from user;
-delete from user_group;
+DELETE FROM state;
+DELETE FROM city;
+DELETE FROM cuisine;
+DELETE FROM restaurant;
+DELETE FROM product;
+DELETE FROM payment_method;
+DELETE FROM restaurant_payment_method;
+DELETE FROM permission;
+DELETE FROM family;
+DELETE FROM family_permission;
+DELETE FROM user;
+DELETE FROM user_group;
 DELETE FROM restaurant_user_manager;
+DELETE FROM order_item;
+DELETE FROM delivery_order;
 
-set foreign_key_checks = 1;
+SET foreign_key_checks = 1;
 
 -- State
 INSERT INTO state (id, name) VALUES (1, 'São Paulo');
@@ -90,3 +92,16 @@ INSERT INTO user_group (user_id, group_id) VALUES (5, 2);
 INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (3, 5);
 INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (1, 1);
 INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (2, 1);
+
+-- Order
+INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+                           address_complement, address_district, address_number, address_street, address_zipcode,
+                           address_city_id, status, registration_date)
+VALUES (1, 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
+        1, 'CREATED', utc_timestamp);
+
+-- Order items
+INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
+(1, 2, 39, 78, '', 1, 2);
+INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
+(2, 1, 125, 125, '', 1, 3);
