@@ -1,17 +1,20 @@
 package br.com.allen.flashfood.api.controller;
 
+import br.com.allen.flashfood.api.assembler.DeliveryOrderRequestDisassembler;
 import br.com.allen.flashfood.api.assembler.OrderModelAssembler;
 import br.com.allen.flashfood.api.assembler.OrderModelSummaryAssembler;
+import br.com.allen.flashfood.api.model.request.DeliveryOrderRequest;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderResponse;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderSummaryResponse;
+import br.com.allen.flashfood.domain.exception.BusinessException;
+import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
+import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.OrderRepository;
 import br.com.allen.flashfood.domain.service.OrderRegistrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class OrderController {
     private final OrderRegistrationService orderService;
     private final OrderModelSummaryAssembler orderSummaryAssembler;
     private final OrderModelAssembler orderAssembler;
+    private final DeliveryOrderRequestDisassembler orderDisassembler;
 
     @GetMapping
     public List<DeliveryOrderSummaryResponse> getAllOrders() {
@@ -37,5 +41,22 @@ public class OrderController {
         DeliveryOrder order = orderService.findOrderOrElseThrow(orderId);
 
         return orderAssembler.toModel(order);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DeliveryOrderResponse addNewDeliveryOrder(@RequestBody DeliveryOrderRequest request) {
+        try {
+            DeliveryOrder newOrder = orderDisassembler.toDomainObject(request);
+
+            //TODO: Adjust when there is user authentication
+            newOrder.setUser(new User());
+            newOrder.getUser().setId(1L);
+
+            newOrder = orderService.createOrder(newOrder);
+            return orderAssembler.toModel(newOrder);
+        } catch (EntityNotFoundedException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
     }
 }
