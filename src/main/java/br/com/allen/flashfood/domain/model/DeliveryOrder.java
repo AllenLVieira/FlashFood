@@ -52,7 +52,7 @@ public class DeliveryOrder {
     @JoinColumn(name = "user_client_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
     public void calculateTotalAmount() {
