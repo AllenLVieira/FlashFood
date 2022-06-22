@@ -40,7 +40,7 @@ public class DeliveryOrder {
 
     private OffsetDateTime deliveryDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private PaymentMethod paymentMethod;
 
