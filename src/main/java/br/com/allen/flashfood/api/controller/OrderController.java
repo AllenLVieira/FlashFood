@@ -1,7 +1,9 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.OrderModelAssembler;
+import br.com.allen.flashfood.api.assembler.OrderModelSummaryAssembler;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderResponse;
+import br.com.allen.flashfood.api.model.response.DeliveryOrderSummaryResponse;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.repository.OrderRepository;
 import br.com.allen.flashfood.domain.service.OrderRegistrationService;
@@ -20,13 +22,14 @@ public class OrderController {
 
     private final OrderRepository orderRepository;
     private final OrderRegistrationService orderService;
+    private final OrderModelSummaryAssembler orderSummaryAssembler;
     private final OrderModelAssembler orderAssembler;
 
     @GetMapping
-    public List<DeliveryOrderResponse> getAllOrders() {
+    public List<DeliveryOrderSummaryResponse> getAllOrders() {
         List<DeliveryOrder> allOrders = orderRepository.findAll();
 
-        return orderAssembler.toCollectionModel(allOrders);
+        return orderSummaryAssembler.toCollectionModel(allOrders);
     }
 
     @GetMapping("/{orderId}")
