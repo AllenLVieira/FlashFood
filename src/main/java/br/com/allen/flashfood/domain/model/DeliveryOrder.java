@@ -52,10 +52,12 @@ public class DeliveryOrder {
     @JoinColumn(name = "user_client_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
     public void calculateTotalAmount() {
+        getItems().forEach(OrderItem::calculateTotalPrice);
+
         this.subtotal = getItems().stream()
                 .map(item -> item.getTotalPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -63,11 +65,4 @@ public class DeliveryOrder {
         this.amount = this.subtotal.add(this.freightRate);
     }
 
-    public void defineFreightRate() {
-        setFreightRate(getRestaurant().getFreightRate());
-    }
-
-    public void assignOrderToItems() {
-        getItems().forEach(item -> item.setOrder(this));
-    }
 }

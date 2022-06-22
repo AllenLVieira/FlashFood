@@ -6,12 +6,13 @@ import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/managers")
+@RequestMapping(value = "/restaurants/{restaurantId}/managers", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class RestaurantUserManagerController {
 

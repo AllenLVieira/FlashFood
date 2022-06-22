@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CityController {
 
