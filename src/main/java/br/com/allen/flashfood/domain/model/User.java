@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "`user`")
 public class User {
 
     @Id

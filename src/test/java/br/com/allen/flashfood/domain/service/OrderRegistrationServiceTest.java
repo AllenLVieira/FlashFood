@@ -181,7 +181,6 @@ class OrderRegistrationServiceTest {
         deliveryOrder.setPaymentMethod(paymentMethod1);
         deliveryOrder.setRegistrationDate(null);
         deliveryOrder.setRestaurant(restaurant1);
-        deliveryOrder.setStatus(OrderStatus.CREATED);
         deliveryOrder.setSubtotal(BigDecimal.valueOf(42L));
         deliveryOrder.setUser(user1);
         assertThrows(BusinessException.class, () -> underTest.createOrder(deliveryOrder));
@@ -327,7 +326,6 @@ class OrderRegistrationServiceTest {
         deliveryOrder.setPaymentMethod(paymentMethod);
         deliveryOrder.setRegistrationDate(null);
         deliveryOrder.setRestaurant(restaurant1);
-        deliveryOrder.setStatus(OrderStatus.CREATED);
         deliveryOrder.setSubtotal(BigDecimal.valueOf(42L));
         deliveryOrder.setUser(user1);
         assertThrows(BusinessException.class, () -> underTest.createOrder(deliveryOrder));
@@ -420,7 +418,6 @@ class OrderRegistrationServiceTest {
         deliveryOrder.setPaymentMethod(paymentMethod);
         deliveryOrder.setRegistrationDate(null);
         deliveryOrder.setRestaurant(restaurant);
-        deliveryOrder.setStatus(OrderStatus.CREATED);
         deliveryOrder.setSubtotal(BigDecimal.valueOf(42L));
         deliveryOrder.setUser(user);
         when(orderRepository.save(any())).thenReturn(deliveryOrder);
@@ -572,7 +569,6 @@ class OrderRegistrationServiceTest {
         deliveryOrder1.setPaymentMethod(paymentMethod2);
         deliveryOrder1.setRegistrationDate(null);
         deliveryOrder1.setRestaurant(restaurant2);
-        deliveryOrder1.setStatus(OrderStatus.CREATED);
         deliveryOrder1.setSubtotal(BigDecimal.valueOf(42L));
         deliveryOrder1.setUser(user2);
         DeliveryOrder actualCreateOrderResult = underTest.createOrder(deliveryOrder1);
