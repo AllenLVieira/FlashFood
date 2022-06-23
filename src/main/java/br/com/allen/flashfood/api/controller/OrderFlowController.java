@@ -24,4 +24,10 @@ public class OrderFlowController {
     public void deliverOrder(@PathVariable Long orderId) {
         orderFlowService.deliverOrder(orderId);
     }
+
+    @PutMapping("/cancellation")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelOrder(@PathVariable Long orderId) {
+        orderFlowService.cancelOrder(orderId);
+    }
 }

@@ -35,6 +35,16 @@ public class OrderFlowService {
         order.setDeliveryDate(OffsetDateTime.now());
     }
 
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        DeliveryOrder order = orderService.findOrderOrElseThrow(orderId);
+
+        validateOrderStatus(order, OrderStatus.CREATED, OrderStatus.CANCELED);
+
+        order.setStatus(OrderStatus.CANCELED);
+        order.setCancellationDate(OffsetDateTime.now());
+    }
+
     /**
      * @param order        Order to be validate
      * @param sourceStatus Initial status required for validation
@@ -47,4 +57,5 @@ public class OrderFlowService {
                             order.getStatus().getDescription(), targetStatus.getDescription()));
         }
     }
+
 }
