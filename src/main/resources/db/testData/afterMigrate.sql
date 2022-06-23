@@ -105,6 +105,13 @@ INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, u
                            address_city_id, status, registration_date)
 VALUES (2, 39, 14.9, 53.9, 2, 2, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
         1, 'CREATED', utc_timestamp);
+        
+INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+                            address_complement, address_district, address_number, address_street, address_zipcode,
+                            address_city_id, status, registration_date, cancellation_date)
+VALUES (3, 203, 14.9, 217.9, 1, 4, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+        1, 'CANCELED', utc_timestamp, utc_timestamp + INTERVAL 5 MINUTE);
+
 
 -- Order items
 INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
