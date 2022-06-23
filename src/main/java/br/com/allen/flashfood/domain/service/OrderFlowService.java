@@ -19,13 +19,32 @@ public class OrderFlowService {
     public void confirmOrder(Long orderId) {
         DeliveryOrder order = orderService.findOrderOrElseThrow(orderId);
 
-        if (!order.getStatus().equals(OrderStatus.CREATED)) {
-            throw new BusinessException(
-                    String.format("Order status %d cannot be changed from %s to %s.", order.getId(),
-                            order.getStatus().getDescription(), OrderStatus.CONFIRMED.getDescription()));
-        }
+        validateOrderStatus(order, OrderStatus.CREATED, OrderStatus.CONFIRMED);
 
         order.setStatus(OrderStatus.CONFIRMED);
         order.setConfirmationDate(OffsetDateTime.now());
+    }
+
+    @Transactional
+    public void deliverOrder(Long orderId) {
+        DeliveryOrder order = orderService.findOrderOrElseThrow(orderId);
+
+        validateOrderStatus(order, OrderStatus.CONFIRMED, OrderStatus.DELIVERED);
+
+        order.setStatus(OrderStatus.DELIVERED);
+        order.setDeliveryDate(OffsetDateTime.now());
+    }
+
+    /**
+     * @param order        Order to be validate
+     * @param sourceStatus Initial status required for validation
+     * @param targetStatus Desired status on conversion
+     */
+    private void validateOrderStatus(DeliveryOrder order, OrderStatus sourceStatus, OrderStatus targetStatus) {
+        if (!order.getStatus().equals(sourceStatus)) {
+            throw new BusinessException(
+                    String.format("Order status %d cannot be changed from %s to %s.", order.getId(),
+                            order.getStatus().getDescription(), targetStatus.getDescription()));
+        }
     }
 }

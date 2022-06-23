@@ -18,4 +18,10 @@ public class OrderFlowController {
     public void confirmOrder(@PathVariable Long orderId) {
         orderFlowService.confirmOrder(orderId);
     }
+
+    @PutMapping("/delivered")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deliverOrder(@PathVariable Long orderId) {
+        orderFlowService.deliverOrder(orderId);
+    }
 }
