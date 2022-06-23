@@ -1,6 +1,6 @@
 package br.com.allen.flashfood.api.controller;
 
-import br.com.allen.flashfood.api.assembler.CityModelAseembler;
+import br.com.allen.flashfood.api.assembler.CityModelAssembler;
 import br.com.allen.flashfood.api.assembler.CityRequestDisassembler;
 import br.com.allen.flashfood.api.model.request.CityRequest;
 import br.com.allen.flashfood.api.model.response.CityResponse;
@@ -9,38 +9,34 @@ import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cities")
+@RequestMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class CityController {
-    @Autowired
-    private CityRepository cityRepository;
 
-    @Autowired
-    private CityRegistrationService cityRegistration;
-
-    @Autowired
-    private CityModelAseembler cityModelAseembler;
-
-    @Autowired
-    private CityRequestDisassembler cityRequestDisassembler;
+    private final CityRepository cityRepository;
+    private final CityRegistrationService cityRegistration;
+    private final CityModelAssembler cityModelAssembler;
+    private final CityRequestDisassembler cityRequestDisassembler;
 
     @GetMapping
     public List<CityResponse> getAllCity() {
         List<City> allCities = cityRepository.findAll();
-        return cityModelAseembler.toCollectionModel(allCities);
+        return cityModelAssembler.toCollectionModel(allCities);
     }
 
     @GetMapping("/{cityId}")
     public CityResponse getCityById(@PathVariable Long cityId) {
         City city = cityRegistration.findCityOrElseThrow(cityId);
-        return cityModelAseembler.toModel(city);
+        return cityModelAssembler.toModel(city);
     }
 
     @PostMapping
@@ -49,7 +45,7 @@ public class CityController {
         try {
             City city = cityRequestDisassembler.toDomainObject(cityRequest);
             city = cityRegistration.saveCity(city);
-            return cityModelAseembler.toModel(city);
+            return cityModelAssembler.toModel(city);
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
@@ -62,7 +58,7 @@ public class CityController {
             City actualCity = cityRegistration.findCityOrElseThrow(cityId);
             cityRequestDisassembler.copyToDomainObject(cityRequest, actualCity);
             actualCity = cityRegistration.saveCity(actualCity);
-            return cityModelAseembler.toModel(actualCity);
+            return cityModelAssembler.toModel(actualCity);
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }

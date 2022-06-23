@@ -1,63 +1,122 @@
-set foreign_key_checks = 0;
+-- Delete data first
+SET foreign_key_checks = 0;
 
-delete from city;
-delete from cuisine;
-delete from family_permission;
-delete from family;
-delete from restaurant_payment_method;
-delete from restaurant;
-delete from product;
-delete from permission;
-delete from payment_method;
-delete from state;
-delete from user;
-delete from user_group;
+DELETE FROM state;
+DELETE FROM city;
+DELETE FROM cuisine;
+DELETE FROM restaurant;
+DELETE FROM product;
+DELETE FROM payment_method;
+DELETE FROM restaurant_payment_method;
+DELETE FROM permission;
+DELETE FROM family;
+DELETE FROM family_permission;
+DELETE FROM user;
+DELETE FROM user_group;
+DELETE FROM restaurant_user_manager;
+DELETE FROM order_item;
+DELETE FROM delivery_order;
 
-set foreign_key_checks = 1;
+SET foreign_key_checks = 1;
 
-alter table city auto_increment = 1;
-alter table cuisine auto_increment = 1;
-alter table family auto_increment = 1;
-alter table restaurant auto_increment = 1;
-alter table product auto_increment = 1;
-alter table permission auto_increment = 1;
-alter table payment_method auto_increment = 1;
-alter table state auto_increment = 1;
-alter table user auto_increment = 1;
+-- State
+INSERT INTO state (id, name) VALUES (1, 'São Paulo');
+INSERT INTO state (id, name) VALUES (2, 'Rondônia');
 
-INSERT INTO state (id, name) VALUES (1, 'São Paulo'),(2, 'Bahia'),(3, 'Pernambuco');
+-- City 
+INSERT INTO city (id, name, state_id) VALUES (1, 'São Paulo', 1);
+INSERT INTO city (id, name, state_id) VALUES (2, 'São Caetano do Sul', 1);
+INSERT INTO city (id, name, state_id) VALUES (3, 'Porto Velho', 2);
 
-INSERT INTO city (id, name, state_id) VALUES (1, 'São Paulo', 1),(2, 'Salvador', 2),(3, 'Recife', 3);
+-- Cuisine
+INSERT INTO cuisine (id, name) VALUES (1, 'Italiana');
+INSERT INTO cuisine (id, name) VALUES (2, 'Brasileira');
 
-INSERT INTO cuisine (id, name) VALUES (1, 'Italian'),(2, 'Brazilian');
+-- Restaurant
+INSERT INTO restaurant (id, freight_rate, name, registration_date, update_date, address_complement, address_district, address_number, address_street, address_zipcode, address_city_id, cuisine_id, active, open_status) VALUES (1, 14.9, 'Pecorino', '2022-05-31 12:00:00', '2022-05-31 12:00:00', 'Shopping Center 3' ,'Cerqueira César' ,'2064' ,'Av. Paulista' ,'01310-928 ' , 1, 1, 1, 1);
+INSERT INTO restaurant (id, freight_rate, name, registration_date, update_date, address_complement, address_district, address_number, address_street, address_zipcode, address_city_id, cuisine_id, active, open_status) VALUES (2, 0.0, 'Brasil a Gosto', '2022-05-31 12:00:00', '2022-05-31 12:00:00', '' ,'Jardim Paulista' ,'70' ,'Rua Professor Azevedo Amaral' ,'01409-030' , 1, 2, 0, 0);
+INSERT INTO restaurant (id, freight_rate, name, registration_date, update_date, address_complement, address_district, address_number, address_street, address_zipcode, address_city_id, cuisine_id, active, open_status) VALUES (3, 25.0, 'San Gennaro', '2022-05-31 12:00:00', '2022-06-01 10:00:00', 'Caiari' ,'' ,'568' ,'Rua Duque de Caxias' ,'76801-170' , 2, 1, 1, 0);
 
-INSERT INTO restaurant (name, freight_rate, cuisine_id, registration_date,update_date, address_zipcode, address_street, address_number, address_city_id, address_district, address_complement, active) VALUES('Pecorino', 16.9, 1, utc_timestamp, utc_timestamp, '04285-001', 'Rua Elba','909', 1, 'Vila Moinho Velho', 'Casa 2', true);
-INSERT INTO restaurant (name, freight_rate, cuisine_id, registration_date,update_date, address_zipcode, address_street, address_number, address_city_id, address_district, address_complement, active) VALUES('Soho', 30, 2, utc_timestamp, utc_timestamp,'40015-160', 'Rua Lafayete Coutinho','1010', 2, 'Bahia Marina', '', true);
+-- Product
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (1, 1, 'Queijo coalho na chapa com melaço e pesto de cheiro-verde', 'Queijo coalho', 30.9, 2);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (2, 1, 'Bolinhos de risoto recheados com queijo mussarela', 'Arancini', 39.0, 1);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (3, 1, 'Polpettone recheado de mussarela, coberto com molho de tomates e queijo parmesão, servido com linguine na manteiga', 'Polpettone alla parmigiana com linguine', 125.0, 1);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (4, 1, 'Camarão frito no azeito e alho', 'Camarão alho e óleo', 85.0, 3);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (5, 1, 'Molho de tomate, mussarela, catupiry, provolone e parmesão', 'Quattro Formaggi', 74.0, 3);
 
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Bruschetta', 'Delicious Italian delicacy with melted cheese.', 8, 1,1);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Fish Moqueca', 'Moqueca is a unique Brazilian delicacy.', 100, 1,2);
+-- Payment Methods
+INSERT INTO payment_method (id, description) VALUES (1, 'Dinheiro');
+INSERT INTO payment_method (id, description) VALUES (2, 'Pix');
+INSERT INTO payment_method (id, description) VALUES (3, 'Cartão de débito');
+INSERT INTO payment_method (id, description) VALUES (4, 'Cartão de crédito');
 
-INSERT INTO payment_method (id, description) VALUES (1, 'Credit Card'),(2, 'Debit Card'),(3, 'Money');
+-- Restaurant Payment Methods
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, '1');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, '2');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, '3');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, '4');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (2, '2');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (2, '3');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (3, '1');
+INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (3, '2');
 
-INSERT INTO permission (id, name, description) VALUES (1, 'CONSULT', 'Allows you consult cuisines');
-INSERT INTO permission (id, name, description) VALUES (2, 'EDIT', 'Allows you to edit cuisines');
+-- Permission
+INSERT INTO permission (id, name, description) VALUES (1, 'CONSULTA', 'Permite apenas a consulta às cozinhas');
+INSERT INTO permission (id, name, description) VALUES (2, 'EDIÇÃO', 'Permite a edição das cozinhas');
 
-INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1),(1, 2),(1, 3),(2, 3);
+-- Family (Group)
+INSERT INTO family (id, name) VALUES (1, 'Normal');
+INSERT INTO family (id, name) VALUES (2, 'Super');
 
-INSERT INTO family (name) VALUES ('TESTE1'), ('TESTE2'), ('TESTE3'), ('TESTE4');
+-- Group Permission
+INSERT INTO family_permission (family_id, permission_id) VALUES (1, '1');
+INSERT INTO family_permission (family_id, permission_id) VALUES (2, '1');
+INSERT INTO family_permission (family_id, permission_id) VALUES (2, '2');
 
-INSERT INTO user (id, name, email, password, registration_date) VALUES
-(1, 'João da Silva', 'joao.ger@gmail.com', '123', utc_timestamp),
-(2, 'Maria Joaquina', 'maria.vnd@gmail.com', '123', utc_timestamp),
-(3, 'José Souza', 'jose.aux@gmail.com', '123', utc_timestamp),
-(4, 'Sebastião Martins', 'sebastiao.cad@gmail.com', '123', utc_timestamp);
+-- Users
+INSERT INTO user (id, name, email, password, registration_date) VALUES (1, 'Gabriel García Márquez', 'gabriel.garcia.marquez@hotmail.com', '123456', '2022-05-31 12:00:00');
+INSERT INTO user (id, name, email, password, registration_date) VALUES (2, 'José Saramago', 'jose.saramago@gmail.com', '123456', '2022-05-31 12:00:00');
+INSERT INTO user (id, name, email, password, registration_date) VALUES (3, 'Jane Austen', 'austen.jane@gmail.com', '123456', '2022-05-31 12:00:00');
+INSERT INTO user (id, name, email, password, registration_date) VALUES (4, 'Virginia Woolf', 'wolf.virginia@gmail.com', '123456', '2022-05-31 12:00:00');
+INSERT INTO user (id, name, email, password, registration_date) VALUES (5, 'Allen de Lima Vieira', 'allenvieira96@gmail.com', '123456', '2022-05-31 12:00:00');
 
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 1 - Restaurant 1', 'A', 78.90, 1, 1);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 2 - Restaurant 1', 'B', 110, 1, 1);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 3 - Restaurant 1', 'C', 87.20, 1, 1);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 4 - Restaurant 1', 'D', 21, 1, 1);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 1 - Restaurant 2', 'A', 43, 1, 2);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 2 - Restaurant 2', 'B', 79, 1, 2);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 3 - Restaurant 2', 'C', 89, 1, 2);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 4 - Restaurant 2', 'D', 19, 1, 2);
-INSERT INTO product (name, description, price, active, restaurant_id) VALUES ('Food 5 - Restaurant 2', 'E', 8, 1, 2);
+-- User Group
+INSERT INTO user_group (user_id, group_id) VALUES (1, 1);
+INSERT INTO user_group (user_id, group_id) VALUES (2, 1);
+INSERT INTO user_group (user_id, group_id) VALUES (3, 1);
+INSERT INTO user_group (user_id, group_id) VALUES (4, 1);
+INSERT INTO user_group (user_id, group_id) VALUES (5, 1);
+INSERT INTO user_group (user_id, group_id) VALUES (5, 2);
+
+-- Restaraunt Managers
+INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (3, 5);
+INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (1, 1);
+INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (2, 1);
+
+-- Order
+INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+                           address_complement, address_district, address_number, address_street, address_zipcode,
+                           address_city_id, status, registration_date)
+VALUES (1, 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
+        1, 'CREATED', utc_timestamp);
+
+INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+                           address_complement, address_district, address_number, address_street, address_zipcode,
+                           address_city_id, status, registration_date)
+VALUES (2, 39, 14.9, 53.9, 2, 2, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+        1, 'CREATED', utc_timestamp);
+        
+INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+                            address_complement, address_district, address_number, address_street, address_zipcode,
+                            address_city_id, status, registration_date, cancellation_date)
+VALUES (3, 203, 14.9, 217.9, 1, 4, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+        1, 'CANCELED', utc_timestamp, utc_timestamp + INTERVAL 5 MINUTE);
+
+
+-- Order items
+INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
+(1, 2, 39, 78, '', 1, 2);
+INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
+(2, 1, 125, 125, '', 1, 3);
+INSERT INTO order_item (id, quantity, unit_price, total_price, note, order_id, product_id) VALUES
+(3, 1, 39, 39, '', 2, 2);

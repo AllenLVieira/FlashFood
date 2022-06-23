@@ -30,4 +30,19 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Product product;
+
+    public void calculateTotalPrice() {
+        BigDecimal unitPriceInside = this.getUnitPrice();
+        Integer quantityInside = this.getQuantity();
+
+        if (unitPriceInside == null) {
+            unitPriceInside = BigDecimal.ZERO;
+        }
+
+        if (quantityInside == null) {
+            quantityInside = 0;
+        }
+
+        this.setTotalPrice(unitPriceInside.multiply(new BigDecimal(quantityInside)));
+    }
 }
