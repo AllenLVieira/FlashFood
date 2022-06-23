@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.model;
 
+import br.com.allen.flashfood.domain.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -63,6 +64,30 @@ public class DeliveryOrder {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.amount = this.subtotal.add(this.freightRate);
+    }
+
+    public void confirm() {
+        setStatus(OrderStatus.CONFIRMED);
+        setConfirmationDate(OffsetDateTime.now());
+    }
+
+    public void deliver() {
+        setStatus(OrderStatus.DELIVERED);
+        setDeliveryDate(OffsetDateTime.now());
+    }
+
+    public void cancel() {
+        setStatus(OrderStatus.CANCELED);
+        setCancellationDate(OffsetDateTime.now());
+    }
+
+    public void setStatus(OrderStatus newStatus) {
+        if (getStatus().cannotChangeStatusTo(newStatus)) {
+            throw new BusinessException(
+                    String.format("Order status %d cannot be changed from %s to %s.", getId(),
+                            getStatus().getDescription(), newStatus.getDescription()));
+        }
+        this.status = newStatus;
     }
 
 }
