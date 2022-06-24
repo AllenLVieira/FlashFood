@@ -4,6 +4,7 @@ import br.com.allen.flashfood.api.assembler.RestaurantModelAssembler;
 import br.com.allen.flashfood.api.assembler.RestaurantRequestDisassembler;
 import br.com.allen.flashfood.api.model.request.RestaurantRequest;
 import br.com.allen.flashfood.api.model.response.RestaurantResponse;
+import br.com.allen.flashfood.api.model.view.RestaurantView;
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.CityNotFoundException;
 import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
@@ -14,6 +15,7 @@ import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,9 +31,37 @@ public class RestaurantController {
     private final RestaurantModelAssembler restaurantModelAssembler;
     private final RestaurantRequestDisassembler requestDisassembler;
 
+    /*
+    Example using JsonView
+    @JsonView(RestaurantView.Summary.class)
+    @GetMapping(params = "projection=summary")
+    public List<RestaurantResponse> getAllRestaurantsSummary() {
+        return getAllRestaurants();
+    }
+
+    @JsonView(RestaurantView.OnlyName.class)
+    @GetMapping(params = "projection=only-name")
+    public List<RestaurantResponse> getAllRestaurantsOnlyName() {
+        return getAllRestaurants();
+    }*/
+
+    /**
+     * @param projection Define what fields will be returned to the response
+     * @return List of all Restaurants
+     */
     @GetMapping
-    public List<RestaurantResponse> getAllRestaurants() {
-        return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
+    public MappingJacksonValue getAllRestaurants(@RequestParam(required = false) String projection) {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        List<RestaurantResponse> restaurantResponse = restaurantModelAssembler.toCollectionModel(restaurants);
+
+        MappingJacksonValue restaurantWrapper = new MappingJacksonValue(restaurantResponse);
+        restaurantWrapper.setSerializationView(RestaurantView.Summary.class);
+        if ("only-name".equals(projection)) {
+            restaurantWrapper.setSerializationView(RestaurantView.OnlyName.class);
+        } else if ("full".equals(projection)) {
+            restaurantWrapper.setSerializationView(null);
+        }
+        return restaurantWrapper;
     }
 
     @GetMapping("/{restaurantId}")
