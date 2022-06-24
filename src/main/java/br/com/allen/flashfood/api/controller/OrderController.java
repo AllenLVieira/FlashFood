@@ -37,9 +37,9 @@ public class OrderController {
         return orderSummaryAssembler.toCollectionModel(allOrders);
     }
 
-    @GetMapping("/{orderId}")
-    public DeliveryOrderResponse getOrderById(@PathVariable Long orderId) {
-        DeliveryOrder order = orderService.findOrderOrElseThrow(orderId);
+    @GetMapping("/{orderCode}")
+    public DeliveryOrderResponse getOrderById(@PathVariable String orderCode) {
+        DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
 
         return orderAssembler.toModel(order);
     }

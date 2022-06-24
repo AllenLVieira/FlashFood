@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Setter
 public class DeliveryOrderSummaryResponse {
 
-    private Long id;
+    private String orderCode;
     private BigDecimal subtotal;
     private BigDecimal freightRate;
     private BigDecimal amount;

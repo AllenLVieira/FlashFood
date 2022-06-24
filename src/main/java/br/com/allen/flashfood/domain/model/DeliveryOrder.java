@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -19,6 +20,8 @@ public class DeliveryOrder {
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String orderCode;
 
     private BigDecimal subtotal;
 
@@ -84,10 +87,16 @@ public class DeliveryOrder {
     public void setStatus(OrderStatus newStatus) {
         if (getStatus().cannotChangeStatusTo(newStatus)) {
             throw new BusinessException(
-                    String.format("Order status %d cannot be changed from %s to %s.", getId(),
+                    String.format("Order status %s cannot be changed from %s to %s.", getOrderCode(),
                             getStatus().getDescription(), newStatus.getDescription()));
         }
         this.status = newStatus;
     }
+    
+    @PrePersist
+    private void generateNewOrderCode() {
+        setOrderCode(UUID.randomUUID().toString());
+    }
+
 
 }

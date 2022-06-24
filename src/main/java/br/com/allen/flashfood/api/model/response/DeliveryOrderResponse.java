@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class DeliveryOrderResponse {
 
-    private Long id;
+    private String orderCode;
     private BigDecimal subtotal;
     private BigDecimal freightRate;
     private BigDecimal amount;
