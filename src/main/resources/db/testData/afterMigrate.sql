@@ -40,6 +40,7 @@ INSERT INTO restaurant (id, freight_rate, name, registration_date, update_date, 
 -- Product
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (1, 1, 'Queijo coalho na chapa com melaço e pesto de cheiro-verde', 'Queijo coalho', 30.9, 2);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (2, 1, 'Bolinhos de risoto recheados com queijo mussarela', 'Arancini', 39.0, 1);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (6, 0, 'Test Product - Disabled', 'Test Product', 99.9, 1);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (3, 1, 'Polpettone recheado de mussarela, coberto com molho de tomates e queijo parmesão, servido com linguine na manteiga', 'Polpettone alla parmigiana com linguine', 125.0, 1);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (4, 1, 'Camarão frito no azeito e alho', 'Camarão alho e óleo', 85.0, 3);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (5, 1, 'Molho de tomate, mussarela, catupiry, provolone e parmesão', 'Quattro Formaggi', 74.0, 3);
