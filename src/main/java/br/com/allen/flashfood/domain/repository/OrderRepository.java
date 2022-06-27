@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends CustomJpaRepository<DeliveryOrder, Long> {
+public interface OrderRepository extends CustomJpaRepository<DeliveryOrder, Long>,
+        JpaSpecificationExecutor<DeliveryOrder> {
 
     Optional<DeliveryOrder> findByOrderCode(String orderCode);
 

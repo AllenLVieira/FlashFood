@@ -11,7 +11,9 @@ import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.OrderRepository;
+import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
 import br.com.allen.flashfood.domain.service.OrderRegistrationService;
+import br.com.allen.flashfood.infrastructure.repository.spec.DeliveryOrderSpecifications;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.RequiredArgsConstructor;
@@ -49,9 +51,15 @@ public class OrderController {
             filters.addFilter("orderFilter",
                     SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
         }
-        
+
         orderWrapper.setFilters(filters);
         return orderWrapper;
+    }
+
+    @GetMapping("/filters")
+    public List<DeliveryOrderResponse> getAllOrdersWithFilters(DeliveryOrderFilter filter) {
+        List<DeliveryOrder> allOrders = orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter));
+        return orderAssembler.toCollectionModel(allOrders);
     }
 
     @GetMapping("/{orderCode}")
