@@ -5,21 +5,19 @@ import br.com.allen.flashfood.domain.exception.FamilyNotFoundException;
 import br.com.allen.flashfood.domain.model.Family;
 import br.com.allen.flashfood.domain.model.Permission;
 import br.com.allen.flashfood.domain.repository.FamilyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class FamilyRegistrationService {
     public static final String FAMILY_IN_USE = "Family with %d code cannot be removed because it is in use.";
-
-    @Autowired
-    private FamilyRepository familyRepository;
-
-    @Autowired
-    private PermissionRegistrationService permissionService;
+    
+    private final FamilyRepository familyRepository;
+    private final PermissionRegistrationService permissionService;
 
     @Transactional
     public Family saveFamily(Family family) {
