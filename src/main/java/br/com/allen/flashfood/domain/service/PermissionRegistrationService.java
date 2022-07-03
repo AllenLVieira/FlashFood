@@ -3,14 +3,14 @@ package br.com.allen.flashfood.domain.service;
 import br.com.allen.flashfood.domain.exception.PermissionNotFoundException;
 import br.com.allen.flashfood.domain.model.Permission;
 import br.com.allen.flashfood.domain.repository.PermissionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PermissionRegistrationService {
 
-    @Autowired
-    private PermissionRepository repository;
+    private final PermissionRepository repository;
 
     public Permission findPermissionOrElseThrow(Long permissionId) {
         return repository.findById(permissionId)
