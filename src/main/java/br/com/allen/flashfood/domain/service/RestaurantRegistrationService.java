@@ -3,28 +3,21 @@ package br.com.allen.flashfood.domain.service;
 import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.model.*;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RestaurantRegistrationService {
-    @Autowired
-    private RestaurantRepository restaurantRepository;
 
-    @Autowired
-    private CuisineRegistrationService cuisineRegistration;
-
-    @Autowired
-    private CityRegistrationService cityRegistration;
-
-    @Autowired
-    private PaymentMethodRegistrationService paymentMethodRegistrationService;
-
-    @Autowired
-    private UserRegistrationsService userService;
+    private final RestaurantRepository restaurantRepository;
+    private final CuisineRegistrationService cuisineRegistration;
+    private final CityRegistrationService cityRegistration;
+    private final PaymentMethodRegistrationService paymentMethodRegistrationService;
+    private final UserRegistrationsService userService;
 
     @Transactional
     public Restaurant saveRestaurant(Restaurant restaurant) {
@@ -101,8 +94,8 @@ public class RestaurantRegistrationService {
         restaurant.addNewManager(user);
     }
 
-    public Restaurant findRestaurantOrElseThrow(Long cuisineId) {
-        return restaurantRepository.findById(cuisineId)
-                .orElseThrow(() -> new RestaurantNotFoundException(cuisineId));
+    public Restaurant findRestaurantOrElseThrow(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
     }
 }
