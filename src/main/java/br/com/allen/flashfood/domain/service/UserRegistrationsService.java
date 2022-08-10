@@ -5,19 +5,17 @@ import br.com.allen.flashfood.domain.exception.UserNotFoundException;
 import br.com.allen.flashfood.domain.model.Family;
 import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserRegistrationsService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private FamilyRegistrationService familyService;
+    private final UserRepository userRepository;
+    private final FamilyRegistrationService familyService;
 
     @Transactional
     public User saveUser(User user) {

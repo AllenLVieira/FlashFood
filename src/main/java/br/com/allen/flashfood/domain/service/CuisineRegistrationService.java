@@ -4,17 +4,17 @@ import br.com.allen.flashfood.domain.exception.CuisineNotFoundException;
 import br.com.allen.flashfood.domain.exception.EntityInUseException;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CuisineRegistrationService {
     public static final String CUISINE_IN_USE = "Cuisine with %d code cannot be removed because it is in use.";
-    @Autowired
-    private CuisineRepository cuisineRepository;
+    private final CuisineRepository cuisineRepository;
 
     @Transactional
     public Cuisine saveCuisine(Cuisine cuisine) {
