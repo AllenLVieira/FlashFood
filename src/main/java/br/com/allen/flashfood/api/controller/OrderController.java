@@ -18,6 +18,10 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -57,9 +61,12 @@ public class OrderController {
     }
 
     @GetMapping("/filters")
-    public List<DeliveryOrderResponse> getAllOrdersWithFilters(DeliveryOrderFilter filter) {
-        List<DeliveryOrder> allOrders = orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter));
-        return orderAssembler.toCollectionModel(allOrders);
+    public Page<DeliveryOrderResponse> getAllOrdersWithFilters(DeliveryOrderFilter filter,
+                                                               @PageableDefault(size = 10) Pageable pageable) {
+        Page<DeliveryOrder> allOrdersPageable = orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter),
+                pageable);
+        List<DeliveryOrderResponse> deliveryOrderList = orderAssembler.toCollectionModel(allOrdersPageable.getContent());
+        return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
     }
 
     @GetMapping("/{orderCode}")

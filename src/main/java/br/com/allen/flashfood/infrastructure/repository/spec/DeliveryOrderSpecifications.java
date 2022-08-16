@@ -14,8 +14,10 @@ public class DeliveryOrderSpecifications {
 
     public static Specification<DeliveryOrder> usingFilters(DeliveryOrderFilter filter) {
         return (root, query, builder) -> {
-            root.fetch("restaurant").fetch("cuisine");
-            root.fetch("user");
+            if (DeliveryOrder.class.equals(query.getResultType())) {
+                root.fetch("restaurant").fetch("cuisine");
+                root.fetch("user");
+            }
 
             var predicates = new ArrayList<Predicate>();
 
