@@ -16,16 +16,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          maven-version: '3.6.3'
-
-      - name: Compilação
-        run: mvn compile
-
-      - name: Testes
-        run: mvn test
-
-      - name: Geração do relatório de cobertura
-        run: mvn jacoco:report
+          distribution: 'zulu'
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
