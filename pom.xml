@@ -18,6 +18,8 @@
     <description>Repository aimed at creating a REST API for a food delivery service.</description>
     <properties>
         <java.version>11</java.version>
+        <sonar.organization>allenvieira</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>
