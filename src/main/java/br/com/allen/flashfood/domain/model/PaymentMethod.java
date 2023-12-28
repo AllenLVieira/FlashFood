@@ -1,9 +1,8 @@
 package br.com.allen.flashfood.domain.model;
 
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
 
 @Entity
 @Data

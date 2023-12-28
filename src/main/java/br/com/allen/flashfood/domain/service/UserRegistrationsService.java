@@ -5,11 +5,10 @@ import br.com.allen.flashfood.domain.exception.UserNotFoundException;
 import br.com.allen.flashfood.domain.model.Family;
 import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

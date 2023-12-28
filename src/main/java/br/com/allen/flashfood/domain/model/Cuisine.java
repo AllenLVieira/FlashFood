@@ -11,14 +11,14 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cuisine {
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @EqualsAndHashCode.Include
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @OneToMany(mappedBy = "cuisine")
-    private List<Restaurant> restaurant = new ArrayList<>();
+  @OneToMany(mappedBy = "cuisine")
+  private List<Restaurant> restaurant = new ArrayList<>();
 }

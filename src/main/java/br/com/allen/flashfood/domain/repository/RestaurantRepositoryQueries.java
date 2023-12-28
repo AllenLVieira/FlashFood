@@ -1,7 +1,6 @@
 package br.com.allen.flashfood.domain.repository;
 
 import br.com.allen.flashfood.domain.model.Restaurant;
-
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -11,16 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class CityModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public CityResponse toModel(City city) {
-        return modelMapper.map(city, CityResponse.class);
-    }
+  public CityResponse toModel(City city) {
+    return modelMapper.map(city, CityResponse.class);
+  }
 
-    public List<CityResponse> toCollectionModel(List<City> cities) {
-        return cities.stream()
-                .map(city -> toModel(city))
-                .collect(Collectors.toList());
-    }
+  public List<CityResponse> toCollectionModel(List<City> cities) {
+    return cities.stream().map(city -> toModel(city)).collect(Collectors.toList());
+  }
 }

@@ -1,11 +1,17 @@
 package br.com.allen.flashfood.domain.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.FamilyNotFoundException;
 import br.com.allen.flashfood.domain.exception.UserNotFoundException;
 import br.com.allen.flashfood.domain.model.Family;
 import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.UserRepository;
+import java.util.HashSet;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,26 +21,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashSet;
-import java.util.Optional;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ContextConfiguration(classes = {UserRegistrationsService.class})
 @ExtendWith(SpringExtension.class)
 class UserRegistrationsServiceTest {
+    User user;
     @Autowired
     private UserRegistrationsService underTest;
-
     @MockBean
     private FamilyRegistrationService familyRegistrationService;
-
     @MockBean
     private UserRepository userRepository;
-
-    User user;
 
     @BeforeEach
     void setUp() {

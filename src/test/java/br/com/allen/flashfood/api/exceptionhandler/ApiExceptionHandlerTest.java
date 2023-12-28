@@ -1,9 +1,13 @@
 package br.com.allen.flashfood.api.exceptionhandler;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.CityNotFoundException;
 import br.com.allen.flashfood.domain.exception.EntityInUseException;
 import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
+import java.beans.PropertyChangeEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,11 +29,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import java.beans.PropertyChangeEvent;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ApiExceptionHandler.class, MessageSource.class})
 @ExtendWith(SpringExtension.class)
@@ -1040,7 +1039,7 @@ class ApiExceptionHandlerTest {
     void testHandleUncaught4() {
         Exception ex = new Exception("An error occurred");
         WebRequest request = mock(WebRequest.class);
-        doNothing().when(request).setAttribute(Mockito.<String>any(), Mockito.<Object>any(), anyInt());
+        doNothing().when(request).setAttribute(Mockito.any(), Mockito.any(), anyInt());
         ResponseEntity<Object> actualHandleUncaughtResult = apiExceptionHandler.handleUncaught(ex, request);
         assertTrue(actualHandleUncaughtResult.hasBody());
         assertTrue(actualHandleUncaughtResult.getHeaders().isEmpty());
@@ -1053,7 +1052,7 @@ class ApiExceptionHandlerTest {
         assertNull(((ApiError) actualHandleUncaughtResult.getBody()).getFields());
         assertEquals("https://www.flashfood.com.br/system-error",
                 ((ApiError) actualHandleUncaughtResult.getBody()).getType());
-        verify(request).setAttribute(Mockito.<String>any(), Mockito.<Object>any(), anyInt());
+        verify(request).setAttribute(Mockito.any(), Mockito.any(), anyInt());
     }
 
     /**

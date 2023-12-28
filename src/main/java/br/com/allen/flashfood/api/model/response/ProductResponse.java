@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ProductResponse {
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Boolean active;
+  private Long id;
+  private String name;
+  private String description;
+  private BigDecimal price;
+  private Boolean active;
 }

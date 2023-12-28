@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeliveryOrderRequestDisassembler {
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    public DeliveryOrder toDomainObject(DeliveryOrderRequest request) {
-        return modelMapper.map(request, DeliveryOrder.class);
-    }
+  public DeliveryOrder toDomainObject(DeliveryOrderRequest request) {
+    return modelMapper.map(request, DeliveryOrder.class);
+  }
 
-    public void copyToDomainObject(DeliveryOrderRequest request, DeliveryOrder deliveryOrder) {
-        modelMapper.map(request, deliveryOrder);
-    }
+  public void copyToDomainObject(DeliveryOrderRequest request, DeliveryOrder deliveryOrder) {
+    modelMapper.map(request, deliveryOrder);
+  }
 }

@@ -14,45 +14,46 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class FamilyRegistrationService {
-    public static final String FAMILY_IN_USE = "Family with %d code cannot be removed because it is in use.";
-    
-    private final FamilyRepository familyRepository;
-    private final PermissionRegistrationService permissionService;
+  public static final String FAMILY_IN_USE =
+      "Family with %d code cannot be removed because it is in use.";
 
-    @Transactional
-    public Family saveFamily(Family family) {
-        return familyRepository.save(family);
-    }
+  private final FamilyRepository familyRepository;
+  private final PermissionRegistrationService permissionService;
 
-    @Transactional
-    public void deleteFamily(Long familyId) {
-        try {
-            familyRepository.deleteById(familyId);
-            familyRepository.flush();
-        } catch (EmptyResultDataAccessException e) {
-            throw new FamilyNotFoundException(familyId);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format(FAMILY_IN_USE, familyId));
-        }
-    }
+  @Transactional
+  public Family saveFamily(Family family) {
+    return familyRepository.save(family);
+  }
 
-    @Transactional
-    public void linkPermission(Long familyId, Long permissionId) {
-        Family family = findFamilyOrElseThrow(familyId);
-        Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
-        family.addPermissions(permission);
+  @Transactional
+  public void deleteFamily(Long familyId) {
+    try {
+      familyRepository.deleteById(familyId);
+      familyRepository.flush();
+    } catch (EmptyResultDataAccessException e) {
+      throw new FamilyNotFoundException(familyId);
+    } catch (DataIntegrityViolationException e) {
+      throw new EntityInUseException(String.format(FAMILY_IN_USE, familyId));
     }
+  }
 
-    @Transactional
-    public void unlinkPermission(Long familyId, Long permissionId) {
-        Family family = findFamilyOrElseThrow(familyId);
-        Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
-        family.removePermissions(permission);
-    }
+  @Transactional
+  public void linkPermission(Long familyId, Long permissionId) {
+    Family family = findFamilyOrElseThrow(familyId);
+    Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
+    family.addPermissions(permission);
+  }
 
-    public Family findFamilyOrElseThrow(Long familyId) {
-        return familyRepository.findById(familyId)
-                .orElseThrow(() -> new FamilyNotFoundException(familyId));
-    }
+  @Transactional
+  public void unlinkPermission(Long familyId, Long permissionId) {
+    Family family = findFamilyOrElseThrow(familyId);
+    Permission permission = permissionService.findPermissionOrElseThrow(permissionId);
+    family.removePermissions(permission);
+  }
+
+  public Family findFamilyOrElseThrow(Long familyId) {
+    return familyRepository
+        .findById(familyId)
+        .orElseThrow(() -> new FamilyNotFoundException(familyId));
+  }
 }

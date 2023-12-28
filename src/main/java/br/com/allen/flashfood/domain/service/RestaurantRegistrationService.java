@@ -3,11 +3,10 @@ package br.com.allen.flashfood.domain.service;
 import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.model.*;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

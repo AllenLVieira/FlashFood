@@ -4,10 +4,9 @@ import br.com.allen.flashfood.domain.exception.BusinessException;
 import br.com.allen.flashfood.domain.exception.OrderNotFoundException;
 import br.com.allen.flashfood.domain.model.*;
 import br.com.allen.flashfood.domain.repository.OrderRepository;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor

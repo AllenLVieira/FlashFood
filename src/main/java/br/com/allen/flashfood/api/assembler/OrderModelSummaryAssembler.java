@@ -13,15 +13,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderModelSummaryAssembler {
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    public DeliveryOrderSummaryResponse toModel(DeliveryOrder order) {
-        return modelMapper.map(order, DeliveryOrderSummaryResponse.class);
-    }
+  public DeliveryOrderSummaryResponse toModel(DeliveryOrder order) {
+    return modelMapper.map(order, DeliveryOrderSummaryResponse.class);
+  }
 
-    public List<DeliveryOrderSummaryResponse> toCollectionModel(List<DeliveryOrder> orders) {
-        return orders.stream()
-                .map(order -> toModel(order))
-                .collect(Collectors.toList());
-    }
+  public List<DeliveryOrderSummaryResponse> toCollectionModel(List<DeliveryOrder> orders) {
+    return orders.stream().map(order -> toModel(order)).collect(Collectors.toList());
+  }
 }

@@ -11,16 +11,11 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ProductRequest {
-    @NotBlank
-    private String name;
+  @NotBlank private String name;
 
-    @NotBlank
-    private String description;
+  @NotBlank private String description;
 
-    @NotNull
-    @PositiveOrZero
-    private BigDecimal price;
+  @NotNull @PositiveOrZero private BigDecimal price;
 
-    @NotNull
-    private boolean active;
+  @NotNull private boolean active;
 }

@@ -15,10 +15,10 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = {})
 @PositiveOrZero
 public @interface FreightRate {
-    @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
-    String message() default "{FreightRate.Invalid}";
+  @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
+  String message() default "{FreightRate.Invalid}";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

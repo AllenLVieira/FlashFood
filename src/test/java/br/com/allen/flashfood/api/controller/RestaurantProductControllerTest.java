@@ -1,5 +1,9 @@
 package br.com.allen.flashfood.api.controller;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import br.com.allen.flashfood.api.assembler.ProductModelAssembler;
 import br.com.allen.flashfood.api.assembler.ProductRequestDisassembler;
 import br.com.allen.flashfood.api.model.request.ProductRequest;
@@ -9,6 +13,10 @@ import br.com.allen.flashfood.domain.repository.ProductRepository;
 import br.com.allen.flashfood.domain.service.ProductRegistrationService;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +30,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ContextConfiguration(classes = {RestaurantProductController.class})
 @ExtendWith(SpringExtension.class)

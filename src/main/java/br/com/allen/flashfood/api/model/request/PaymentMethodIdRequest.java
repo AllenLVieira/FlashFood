@@ -9,6 +9,5 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class PaymentMethodIdRequest {
 
-    @NotNull
-    private Long id;
+  @NotNull private Long id;
 }

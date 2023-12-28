@@ -12,17 +12,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class PermissionModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public PermissionResponse toModel(Permission permission) {
-        return modelMapper.map(permission, PermissionResponse.class);
-    }
+  public PermissionResponse toModel(Permission permission) {
+    return modelMapper.map(permission, PermissionResponse.class);
+  }
 
-    public List<PermissionResponse> toCollectionModel(Collection<Permission> permissionList) {
-        return permissionList.stream()
-                .map(permission -> toModel(permission))
-                .collect(Collectors.toList());
-    }
-
+  public List<PermissionResponse> toCollectionModel(Collection<Permission> permissionList) {
+    return permissionList.stream()
+        .map(permission -> toModel(permission))
+        .collect(Collectors.toList());
+  }
 }

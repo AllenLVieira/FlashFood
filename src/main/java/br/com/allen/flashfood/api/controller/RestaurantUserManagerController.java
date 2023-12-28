@@ -12,29 +12,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/managers", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(
+    value = "/restaurants/{restaurantId}/managers",
+    produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class RestaurantUserManagerController {
 
-    private final RestaurantRegistrationService restaurantService;
-    private final UserModelAssembler userAssembler;
+  private final RestaurantRegistrationService restaurantService;
+  private final UserModelAssembler userAssembler;
 
-    @GetMapping
-    public List<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
-        Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
+  @GetMapping
+  public List<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
+    Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
-        return userAssembler.toCollectionModel(restaurant.getManagers());
-    }
+    return userAssembler.toCollectionModel(restaurant.getManagers());
+  }
 
-    @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void unlinkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
-        restaurantService.unlinkManager(restaurantId, userId);
-    }
+  @DeleteMapping("/{userId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void unlinkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    restaurantService.unlinkManager(restaurantId, userId);
+  }
 
-    @PutMapping("/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void linkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
-        restaurantService.linkManager(restaurantId, userId);
-    }
+  @PutMapping("/{userId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void linkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    restaurantService.linkManager(restaurantId, userId);
+  }
 }

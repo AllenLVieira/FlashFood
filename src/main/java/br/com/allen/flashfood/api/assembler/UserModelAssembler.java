@@ -12,16 +12,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public UserResponse toModel(User user) {
-        return modelMapper.map(user, UserResponse.class);
-    }
+  public UserResponse toModel(User user) {
+    return modelMapper.map(user, UserResponse.class);
+  }
 
-    public List<UserResponse> toCollectionModel(Collection<User> userList) {
-        return userList.stream()
-                .map(user -> toModel(user))
-                .collect(Collectors.toList());
-    }
+  public List<UserResponse> toCollectionModel(Collection<User> userList) {
+    return userList.stream().map(user -> toModel(user)).collect(Collectors.toList());
+  }
 }

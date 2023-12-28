@@ -9,6 +9,5 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class PaymentMethodRequest {
 
-    @NotBlank
-    private String description;
+  @NotBlank private String description;
 }

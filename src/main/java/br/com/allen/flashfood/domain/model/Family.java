@@ -12,26 +12,26 @@ import java.util.Set;
 @Entity
 public class Family {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
+  private long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @ManyToMany
-    @JoinTable(name = "family_permission",
-            joinColumns = @JoinColumn(name = "family_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permission> permissions = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+      name = "family_permission",
+      joinColumns = @JoinColumn(name = "family_id"),
+      inverseJoinColumns = @JoinColumn(name = "permission_id"))
+  private Set<Permission> permissions = new HashSet<>();
 
-    public boolean removePermissions(Permission permission) {
-        return this.getPermissions().remove(permission);
-    }
+  public boolean removePermissions(Permission permission) {
+    return this.getPermissions().remove(permission);
+  }
 
-    public boolean addPermissions(Permission permission) {
-        return this.getPermissions().add(permission);
-    }
-
+  public boolean addPermissions(Permission permission) {
+    return this.getPermissions().add(permission);
+  }
 }

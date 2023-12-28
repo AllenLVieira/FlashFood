@@ -2,10 +2,9 @@ package br.com.allen.flashfood.infrastructure.repository.spec;
 
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
-import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import javax.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 
 public class DeliveryOrderSpecifications {
     private DeliveryOrderSpecifications() {

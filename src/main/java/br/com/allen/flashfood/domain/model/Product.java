@@ -11,24 +11,24 @@ import java.math.BigDecimal;
 @Entity
 public class Product {
 
-    @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  @EqualsAndHashCode.Include
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+  @Column(nullable = false)
+  private BigDecimal price;
 
-    @Column(nullable = false)
-    private boolean active;
+  @Column(nullable = false)
+  private boolean active;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Restaurant restaurant;
+  @ManyToOne
+  @JoinColumn(nullable = false)
+  private Restaurant restaurant;
 }

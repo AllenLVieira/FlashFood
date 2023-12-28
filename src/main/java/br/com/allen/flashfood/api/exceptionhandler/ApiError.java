@@ -11,18 +11,18 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError {
-    private Integer status;
-    private String type;
-    private String title;
-    private String detail;
-    private String userMessage;
-    private OffsetDateTime timestamp;
-    private List<Field> fields;
+  private Integer status;
+  private String type;
+  private String title;
+  private String detail;
+  private String userMessage;
+  private OffsetDateTime timestamp;
+  private List<Field> fields;
 
-    @Getter
-    @Builder
-    public static class Field {
-        private String name;
-        private String userMessage;
-    }
+  @Getter
+  @Builder
+  public static class Field {
+    private String name;
+    private String userMessage;
+  }
 }

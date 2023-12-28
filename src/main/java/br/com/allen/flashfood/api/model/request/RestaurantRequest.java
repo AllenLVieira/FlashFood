@@ -13,18 +13,11 @@ import java.math.BigDecimal;
 @Setter
 public class RestaurantRequest {
 
-    @NotBlank
-    private String name;
+  @NotBlank private String name;
 
-    @FreightRate
-    @NotNull
-    private BigDecimal freightRate;
+  @FreightRate @NotNull private BigDecimal freightRate;
 
-    @Valid
-    @NotNull
-    private CuisineIDRequest cuisine;
+  @Valid @NotNull private CuisineIDRequest cuisine;
 
-    @Valid
-    @NotNull
-    private AddressRequest address;
+  @Valid @NotNull private AddressRequest address;
 }

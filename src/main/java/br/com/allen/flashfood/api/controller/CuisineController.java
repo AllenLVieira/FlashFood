@@ -21,58 +21,54 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CuisineController {
-    @Autowired
-    private CuisineRepository cuisineRepository;
+  @Autowired private CuisineRepository cuisineRepository;
 
-    @Autowired
-    private CuisineRegistrationService cuisineRegistration;
+  @Autowired private CuisineRegistrationService cuisineRegistration;
 
-    @Autowired
-    private CuisineRequestDisassembler cuisineRequestDisassembler;
+  @Autowired private CuisineRequestDisassembler cuisineRequestDisassembler;
 
-    @Autowired
-    private CuisineModelAssembler cuisineModelAssembler;
+  @Autowired private CuisineModelAssembler cuisineModelAssembler;
 
-    /**
-     * Returns a list of all registered cuisines.
-     *
-     * @param pageable can receive as query params "size", "page" and "sort"
-     * @return a list of cuisines and information about pagination.
-     */
-    @GetMapping
-    public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
-        Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
-        List<CuisineResponse> cuisineResponse = cuisineModelAssembler.toCollectionModel(cuisinePage.getContent());
-        return new PageImpl<>(cuisineResponse,
-                pageable, cuisinePage.getTotalElements());
-    }
+  /**
+   * Returns a list of all registered cuisines.
+   *
+   * @param pageable can receive as query params "size", "page" and "sort"
+   * @return a list of cuisines and information about pagination.
+   */
+  @GetMapping
+  public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
+    Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
+    List<CuisineResponse> cuisineResponse =
+        cuisineModelAssembler.toCollectionModel(cuisinePage.getContent());
+    return new PageImpl<>(cuisineResponse, pageable, cuisinePage.getTotalElements());
+  }
 
-    @GetMapping("/{cuisineId}")
-    public CuisineResponse getCuisineById(@PathVariable Long cuisineId) {
-        Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
-        return cuisineModelAssembler.toModel(cuisine);
-    }
+  @GetMapping("/{cuisineId}")
+  public CuisineResponse getCuisineById(@PathVariable Long cuisineId) {
+    Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
+    return cuisineModelAssembler.toModel(cuisine);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CuisineResponse addCuisine(@RequestBody @Valid CuisineRequest cuisineRequest) {
-        Cuisine cuisine = cuisineRequestDisassembler.toDomainObject(cuisineRequest);
-        cuisine = cuisineRegistration.saveCuisine(cuisine);
-        return cuisineModelAssembler.toModel(cuisine);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public CuisineResponse addCuisine(@RequestBody @Valid CuisineRequest cuisineRequest) {
+    Cuisine cuisine = cuisineRequestDisassembler.toDomainObject(cuisineRequest);
+    cuisine = cuisineRegistration.saveCuisine(cuisine);
+    return cuisineModelAssembler.toModel(cuisine);
+  }
 
-    @PutMapping("/{cuisineId}")
-    public CuisineResponse updateCuisine(@PathVariable Long cuisineId,
-                                         @RequestBody @Valid CuisineRequest cuisineRequest) {
-        Cuisine actualCuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
-        cuisineRequestDisassembler.copyToDomainObject(cuisineRequest, actualCuisine);
-        actualCuisine = cuisineRegistration.saveCuisine(actualCuisine);
-        return cuisineModelAssembler.toModel(actualCuisine);
-    }
+  @PutMapping("/{cuisineId}")
+  public CuisineResponse updateCuisine(
+      @PathVariable Long cuisineId, @RequestBody @Valid CuisineRequest cuisineRequest) {
+    Cuisine actualCuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
+    cuisineRequestDisassembler.copyToDomainObject(cuisineRequest, actualCuisine);
+    actualCuisine = cuisineRegistration.saveCuisine(actualCuisine);
+    return cuisineModelAssembler.toModel(actualCuisine);
+  }
 
-    @DeleteMapping("/{cuisineId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCuisineById(@PathVariable Long cuisineId) {
-        cuisineRegistration.deleteCuisine(cuisineId);
-    }
+  @DeleteMapping("/{cuisineId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteCuisineById(@PathVariable Long cuisineId) {
+    cuisineRegistration.deleteCuisine(cuisineId);
+  }
 }

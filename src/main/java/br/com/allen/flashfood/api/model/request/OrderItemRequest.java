@@ -10,12 +10,9 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 public class OrderItemRequest {
 
-    @NotNull
-    private Long productId;
+  @NotNull private Long productId;
 
-    @NotNull
-    @PositiveOrZero
-    private Integer quantity;
+  @NotNull @PositiveOrZero private Integer quantity;
 
-    private String note;
+  private String note;
 }

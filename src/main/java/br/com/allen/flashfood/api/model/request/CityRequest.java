@@ -10,10 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CityRequest {
-    @NotBlank
-    private String name;
+  @NotBlank private String name;
 
-    @Valid
-    @NotNull
-    private StateIDRequest state;
+  @Valid @NotNull private StateIDRequest state;
 }

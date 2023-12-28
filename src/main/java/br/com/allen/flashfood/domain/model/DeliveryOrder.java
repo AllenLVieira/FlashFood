@@ -1,16 +1,15 @@
 package br.com.allen.flashfood.domain.model;
 
 import br.com.allen.flashfood.domain.exception.BusinessException;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

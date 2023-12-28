@@ -1,10 +1,9 @@
 package br.com.allen.flashfood.domain.repository.filter;
 
+import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.OffsetDateTime;
 
 @Setter
 @Getter

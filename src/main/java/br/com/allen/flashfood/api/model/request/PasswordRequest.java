@@ -8,9 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class PasswordRequest {
-    @NotBlank
-    private String actualPassword;
+  @NotBlank private String actualPassword;
 
-    @NotBlank
-    private String newPassword;
+  @NotBlank private String newPassword;
 }

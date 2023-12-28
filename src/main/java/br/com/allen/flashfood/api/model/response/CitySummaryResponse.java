@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class CitySummaryResponse {
 
-    private Long id;
-    private String name;
-    private String state;
+  private Long id;
+  private String name;
+  private String state;
 }

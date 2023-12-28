@@ -9,14 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CuisineRequestDisassembler {
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public Cuisine toDomainObject(CuisineRequest cuisineRequest) {
-        return modelMapper.map(cuisineRequest, Cuisine.class);
-    }
+  public Cuisine toDomainObject(CuisineRequest cuisineRequest) {
+    return modelMapper.map(cuisineRequest, Cuisine.class);
+  }
 
-    public void copyToDomainObject(CuisineRequest cuisineRequest, Cuisine cuisine) {
-        modelMapper.map(cuisineRequest, cuisine);
-    }
+  public void copyToDomainObject(CuisineRequest cuisineRequest, Cuisine cuisine) {
+    modelMapper.map(cuisineRequest, cuisine);
+  }
 }

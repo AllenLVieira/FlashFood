@@ -16,24 +16,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserGroupController {
 
-    private final UserRegistrationsService userService;
-    private final FamilyModelAssembler groupAssembler;
+  private final UserRegistrationsService userService;
+  private final FamilyModelAssembler groupAssembler;
 
-    @GetMapping
-    public List<FamilyResponse> getAllGroups(@PathVariable Long userId) {
-        User user = userService.findUserOrElseThrow(userId);
-        return groupAssembler.toCollectionModel(user.getGroups());
-    }
+  @GetMapping
+  public List<FamilyResponse> getAllGroups(@PathVariable Long userId) {
+    User user = userService.findUserOrElseThrow(userId);
+    return groupAssembler.toCollectionModel(user.getGroups());
+  }
 
-    @DeleteMapping("/{groupId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void unlinkGroup(@PathVariable Long userId, @PathVariable Long groupId) {
-        userService.unlinkGroup(userId, groupId);
-    }
+  @DeleteMapping("/{groupId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void unlinkGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+    userService.unlinkGroup(userId, groupId);
+  }
 
-    @PutMapping("/{groupId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void linkGroup(@PathVariable Long userId, @PathVariable Long groupId) {
-        userService.linkGroup(userId, groupId);
-    }
+  @PutMapping("/{groupId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void linkGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+    userService.linkGroup(userId, groupId);
+  }
 }

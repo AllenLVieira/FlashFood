@@ -18,50 +18,46 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FamilyController {
-    @Autowired
-    private FamilyRepository familyRepository;
+  @Autowired private FamilyRepository familyRepository;
 
-    @Autowired
-    private FamilyRegistrationService familyRegistrationService;
+  @Autowired private FamilyRegistrationService familyRegistrationService;
 
-    @Autowired
-    private FamilyModelAssembler familyModelAssembler;
+  @Autowired private FamilyModelAssembler familyModelAssembler;
 
-    @Autowired
-    private FamilyRequestDisassembler familyRequestDisassembler;
+  @Autowired private FamilyRequestDisassembler familyRequestDisassembler;
 
-    @GetMapping("/{groupId}")
-    public FamilyResponse findFamilyById(@PathVariable Long groupId) {
-        Family group = familyRegistrationService.findFamilyOrElseThrow(groupId);
-        return familyModelAssembler.toModel(group);
-    }
+  @GetMapping("/{groupId}")
+  public FamilyResponse findFamilyById(@PathVariable Long groupId) {
+    Family group = familyRegistrationService.findFamilyOrElseThrow(groupId);
+    return familyModelAssembler.toModel(group);
+  }
 
-    @GetMapping
-    public List<FamilyResponse> getAllGroups() {
-        List<Family> allGroups = familyRepository.findAll();
-        return familyModelAssembler.toCollectionModel(allGroups);
-    }
+  @GetMapping
+  public List<FamilyResponse> getAllGroups() {
+    List<Family> allGroups = familyRepository.findAll();
+    return familyModelAssembler.toCollectionModel(allGroups);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public FamilyResponse addFamily(@RequestBody @Valid FamilyRequest familyRequest) {
-        Family group = familyRequestDisassembler.toDomainObject(familyRequest);
-        group = familyRegistrationService.saveFamily(group);
-        return familyModelAssembler.toModel(group);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public FamilyResponse addFamily(@RequestBody @Valid FamilyRequest familyRequest) {
+    Family group = familyRequestDisassembler.toDomainObject(familyRequest);
+    group = familyRegistrationService.saveFamily(group);
+    return familyModelAssembler.toModel(group);
+  }
 
-    @PutMapping("/{groupId}")
-    public FamilyResponse updateFamily(@PathVariable Long groupId,
-                                       @RequestBody @Valid FamilyRequest familyRequest) {
-        Family actualGroup = familyRegistrationService.findFamilyOrElseThrow(groupId);
-        familyRequestDisassembler.copyToDomainObject(familyRequest, actualGroup);
-        actualGroup = familyRegistrationService.saveFamily(actualGroup);
-        return familyModelAssembler.toModel(actualGroup);
-    }
+  @PutMapping("/{groupId}")
+  public FamilyResponse updateFamily(
+      @PathVariable Long groupId, @RequestBody @Valid FamilyRequest familyRequest) {
+    Family actualGroup = familyRegistrationService.findFamilyOrElseThrow(groupId);
+    familyRequestDisassembler.copyToDomainObject(familyRequest, actualGroup);
+    actualGroup = familyRegistrationService.saveFamily(actualGroup);
+    return familyModelAssembler.toModel(actualGroup);
+  }
 
-    @DeleteMapping("/{groupId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFamily(@PathVariable Long groupId) {
-        familyRegistrationService.deleteFamily(groupId);
-    }
+  @DeleteMapping("/{groupId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteFamily(@PathVariable Long groupId) {
+    familyRegistrationService.deleteFamily(groupId);
+  }
 }

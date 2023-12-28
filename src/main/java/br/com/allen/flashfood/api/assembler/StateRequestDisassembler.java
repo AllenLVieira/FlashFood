@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StateRequestDisassembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public State toDomainObject(StateRequest stateRequest) {
-        return modelMapper.map(stateRequest, State.class);
-    }
+  public State toDomainObject(StateRequest stateRequest) {
+    return modelMapper.map(stateRequest, State.class);
+  }
 
-    public void copyToDomainObject(StateRequest stateRequest, State state) {
-        modelMapper.map(stateRequest, state);
-    }
+  public void copyToDomainObject(StateRequest stateRequest, State state) {
+    modelMapper.map(stateRequest, state);
+  }
 }

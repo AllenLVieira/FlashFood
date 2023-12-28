@@ -14,31 +14,31 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentMethodRegistrationService {
 
-    public static final String PAYMENT_METHOD_IN_USE = "Payment Method with %d code cannot be removed because it is in use.";
+  public static final String PAYMENT_METHOD_IN_USE =
+      "Payment Method with %d code cannot be removed because it is in use.";
 
-    private final PaymentMehodRepository paymentMehodRepository;
+  private final PaymentMehodRepository paymentMehodRepository;
 
-    @Transactional
-    public PaymentMethod savePaymentMethod(PaymentMethod paymentMethod) {
-        return paymentMehodRepository.save(paymentMethod);
+  @Transactional
+  public PaymentMethod savePaymentMethod(PaymentMethod paymentMethod) {
+    return paymentMehodRepository.save(paymentMethod);
+  }
+
+  @Transactional
+  public void deletePaymentMethod(Long paymentMethodId) {
+    try {
+      paymentMehodRepository.deleteById(paymentMethodId);
+      paymentMehodRepository.flush();
+    } catch (EmptyResultDataAccessException e) {
+      throw new PaymentMethodNotFoundException(paymentMethodId);
+    } catch (DataIntegrityViolationException e) {
+      throw new EntityInUseException(String.format(PAYMENT_METHOD_IN_USE, paymentMethodId));
     }
+  }
 
-    @Transactional
-    public void deletePaymentMethod(Long paymentMethodId) {
-        try {
-            paymentMehodRepository.deleteById(paymentMethodId);
-            paymentMehodRepository.flush();
-        } catch (EmptyResultDataAccessException e) {
-            throw new PaymentMethodNotFoundException(paymentMethodId);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format(PAYMENT_METHOD_IN_USE, paymentMethodId)
-            );
-        }
-    }
-
-    public PaymentMethod findPaymentMethodOrElseThrow(Long paymentMethodId) {
-        return paymentMehodRepository.findById(paymentMethodId)
-                .orElseThrow(() -> new PaymentMethodNotFoundException(paymentMethodId));
-    }
+  public PaymentMethod findPaymentMethodOrElseThrow(Long paymentMethodId) {
+    return paymentMehodRepository
+        .findById(paymentMethodId)
+        .orElseThrow(() -> new PaymentMethodNotFoundException(paymentMethodId));
+  }
 }
