@@ -11,18 +11,18 @@ import java.util.List;
 @Setter
 public class DeliveryOrderResponse {
 
-    private String orderCode;
-    private BigDecimal subtotal;
-    private BigDecimal freightRate;
-    private BigDecimal amount;
-    private String status;
-    private OffsetDateTime registrationDate;
-    private OffsetDateTime confirmationDate;
-    private OffsetDateTime deliveryDate;
-    private OffsetDateTime cancellationDate;
-    private RestaurantSummaryResponse restaurant;
-    private UserResponse user;
-    private PaymentMethodResponse paymentMethod;
-    private AddressResponse deliveryAddress;
-    private List<OrderItemResponse> items;
+  private String orderCode;
+  private BigDecimal subtotal;
+  private BigDecimal freightRate;
+  private BigDecimal amount;
+  private String status;
+  private OffsetDateTime registrationDate;
+  private OffsetDateTime confirmationDate;
+  private OffsetDateTime deliveryDate;
+  private OffsetDateTime cancellationDate;
+  private RestaurantSummaryResponse restaurant;
+  private UserResponse user;
+  private PaymentMethodResponse paymentMethod;
+  private AddressResponse deliveryAddress;
+  private List<OrderItemResponse> items;
 }

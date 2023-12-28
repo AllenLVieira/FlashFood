@@ -12,32 +12,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/groups/{familyId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(
+    value = "/groups/{familyId}/permissions",
+    produces = MediaType.APPLICATION_JSON_VALUE)
 public class FamilyPermissionController {
 
-    @Autowired
-    private FamilyRegistrationService familyService;
+  @Autowired private FamilyRegistrationService familyService;
 
-    @Autowired
-    private PermissionModelAssembler permissionAssembler;
+  @Autowired private PermissionModelAssembler permissionAssembler;
 
-    @GetMapping
-    public List<PermissionResponse> getAllPermissionsByFamilyId(@PathVariable Long familyId) {
-        Family family = familyService.findFamilyOrElseThrow(familyId);
-        return permissionAssembler.toCollectionModel(family.getPermissions());
-    }
+  @GetMapping
+  public List<PermissionResponse> getAllPermissionsByFamilyId(@PathVariable Long familyId) {
+    Family family = familyService.findFamilyOrElseThrow(familyId);
+    return permissionAssembler.toCollectionModel(family.getPermissions());
+  }
 
-    @DeleteMapping("/{permissionId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void unlinkPermission(@PathVariable Long familyId,
-                                 @PathVariable Long permissionId) {
-        familyService.unlinkPermission(familyId, permissionId);
-    }
+  @DeleteMapping("/{permissionId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void unlinkPermission(@PathVariable Long familyId, @PathVariable Long permissionId) {
+    familyService.unlinkPermission(familyId, permissionId);
+  }
 
-    @PutMapping("/{permissionId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void linkPermission(@PathVariable Long familyId,
-                               @PathVariable Long permissionId) {
-        familyService.linkPermission(familyId, permissionId);
-    }
+  @PutMapping("/{permissionId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void linkPermission(@PathVariable Long familyId, @PathVariable Long permissionId) {
+    familyService.linkPermission(familyId, permissionId);
+  }
 }

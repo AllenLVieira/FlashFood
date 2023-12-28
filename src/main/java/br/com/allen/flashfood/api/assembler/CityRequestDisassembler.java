@@ -10,16 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CityRequestDisassembler {
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public City toDomainObject(CityRequest cityRequest) {
-        return modelMapper.map(cityRequest, City.class);
-    }
+  public City toDomainObject(CityRequest cityRequest) {
+    return modelMapper.map(cityRequest, City.class);
+  }
 
-    public void copyToDomainObject(CityRequest cityRequest, City city) {
-        // Ensure that a city's state can be updated.
-        city.setState(new State());
-        modelMapper.map(cityRequest, city);
-    }
+  public void copyToDomainObject(CityRequest cityRequest, City city) {
+    // Ensure that a city's state can be updated.
+    city.setState(new State());
+    modelMapper.map(cityRequest, city);
+  }
 }

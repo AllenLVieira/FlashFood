@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrderFlowController {
 
-    private final OrderFlowService orderFlowService;
+  private final OrderFlowService orderFlowService;
 
-    @PutMapping("/confirmation")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmOrder(@PathVariable String orderCode) {
-        orderFlowService.confirmOrder(orderCode);
-    }
+  @PutMapping("/confirmation")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void confirmOrder(@PathVariable String orderCode) {
+    orderFlowService.confirmOrder(orderCode);
+  }
 
-    @PutMapping("/delivered")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliverOrder(@PathVariable String orderCode) {
-        orderFlowService.deliverOrder(orderCode);
-    }
+  @PutMapping("/delivered")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deliverOrder(@PathVariable String orderCode) {
+    orderFlowService.deliverOrder(orderCode);
+  }
 
-    @PutMapping("/cancellation")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelOrder(@PathVariable String orderCode) {
-        orderFlowService.cancelOrder(orderCode);
-    }
+  @PutMapping("/cancellation")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void cancelOrder(@PathVariable String orderCode) {
+    orderFlowService.cancelOrder(orderCode);
+  }
 }

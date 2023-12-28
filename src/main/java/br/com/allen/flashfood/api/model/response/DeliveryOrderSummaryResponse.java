@@ -12,12 +12,12 @@ import java.time.OffsetDateTime;
 @Setter
 public class DeliveryOrderSummaryResponse {
 
-    private String orderCode;
-    private BigDecimal subtotal;
-    private BigDecimal freightRate;
-    private BigDecimal amount;
-    private String status;
-    private OffsetDateTime registrationDate;
-    private RestaurantSummaryResponse restaurant;
-    private UserResponse user;
+  private String orderCode;
+  private BigDecimal subtotal;
+  private BigDecimal freightRate;
+  private BigDecimal amount;
+  private String status;
+  private OffsetDateTime registrationDate;
+  private RestaurantSummaryResponse restaurant;
+  private UserResponse user;
 }

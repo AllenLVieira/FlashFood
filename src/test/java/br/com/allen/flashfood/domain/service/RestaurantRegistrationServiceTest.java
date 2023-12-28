@@ -1,10 +1,18 @@
 package br.com.allen.flashfood.domain.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import br.com.allen.flashfood.domain.exception.PaymentMethodNotFoundException;
 import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.exception.UserNotFoundException;
 import br.com.allen.flashfood.domain.model.*;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,15 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {RestaurantRegistrationService.class})
 @ExtendWith(SpringExtension.class)

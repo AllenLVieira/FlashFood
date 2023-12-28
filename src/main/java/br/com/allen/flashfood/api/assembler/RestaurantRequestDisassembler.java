@@ -11,19 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestaurantRequestDisassembler {
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public Restaurant toDomainObject(RestaurantRequest restaurantRequest) {
-        return modelMapper.map(restaurantRequest, Restaurant.class);
-    }
+  public Restaurant toDomainObject(RestaurantRequest restaurantRequest) {
+    return modelMapper.map(restaurantRequest, Restaurant.class);
+  }
 
-    public void copyToDomainObject(RestaurantRequest restaurantRequest, Restaurant restaurant) {
-        // Ensure that a restaurant's cuisine can be updated.
-        restaurant.setCuisine(new Cuisine());
-        if (restaurant.getAddress() != null) {
-            restaurant.getAddress().setCity(new City());
-        }
-        modelMapper.map(restaurantRequest, restaurant);
+  public void copyToDomainObject(RestaurantRequest restaurantRequest, Restaurant restaurant) {
+    // Ensure that a restaurant's cuisine can be updated.
+    restaurant.setCuisine(new Cuisine());
+    if (restaurant.getAddress() != null) {
+      restaurant.getAddress().setCity(new City());
     }
+    modelMapper.map(restaurantRequest, restaurant);
+  }
 }

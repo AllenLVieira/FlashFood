@@ -1,13 +1,15 @@
 package br.com.allen.flashfood.infrastructure.repository;
 
+import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withFreeShipping;
+import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withSimilarName;
+
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.repository.RestaurantRepositoryQueries;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,13 +17,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withFreeShipping;
-import static br.com.allen.flashfood.infrastructure.repository.spec.RestaurantSpecifications.withSimilarName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 @Repository
 public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {

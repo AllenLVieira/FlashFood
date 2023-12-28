@@ -11,15 +11,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ModelMapperConfig {
 
-    @Bean
-    public ModelMapper modelMapper() {
-        var modelMapper = new ModelMapper();
-        var addressToAddressResponseTypeMap = modelMapper.createTypeMap(
-                Address.class, AddressResponse.class);
-        addressToAddressResponseTypeMap.<String>addMapping(source -> source.getCity().getState().getName(),
-                (target, value) -> target.getCity().setState(value));
-        modelMapper.createTypeMap(OrderItemRequest.class, OrderItem.class)
-                .addMappings(mapper -> mapper.skip(OrderItem::setId));
-        return modelMapper;
-    }
+  @Bean
+  public ModelMapper modelMapper() {
+    var modelMapper = new ModelMapper();
+    var addressToAddressResponseTypeMap =
+        modelMapper.createTypeMap(Address.class, AddressResponse.class);
+    addressToAddressResponseTypeMap.<String>addMapping(
+        source -> source.getCity().getState().getName(),
+        (target, value) -> target.getCity().setState(value));
+    modelMapper
+        .createTypeMap(OrderItemRequest.class, OrderItem.class)
+        .addMappings(mapper -> mapper.skip(OrderItem::setId));
+    return modelMapper;
+  }
 }

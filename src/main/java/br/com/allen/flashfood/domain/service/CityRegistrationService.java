@@ -14,35 +14,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CityRegistrationService {
-    public static final String CITY_IN_USE = "City with %d code cannot be removed because it is in use.";
-    
-    private final CityRepository cityRepository;
-    private final StateRegistrationService stateRegistration;
+  public static final String CITY_IN_USE =
+      "City with %d code cannot be removed because it is in use.";
 
-    @Transactional
-    public City saveCity(City city) {
-        Long stateId = city.getState().getId();
-        State state = stateRegistration.findStateOrElseThrow(stateId);
-        city.setState(state);
-        return cityRepository.save(city);
-    }
+  private final CityRepository cityRepository;
+  private final StateRegistrationService stateRegistration;
 
-    @Transactional
-    public void deleteCity(Long cityId) {
-        try {
-            cityRepository.deleteById(cityId);
-            cityRepository.flush();
-        } catch (EmptyResultDataAccessException e) {
-            throw new CityNotFoundException(cityId);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format(CITY_IN_USE, cityId)
-            );
-        }
-    }
+  @Transactional
+  public City saveCity(City city) {
+    Long stateId = city.getState().getId();
+    State state = stateRegistration.findStateOrElseThrow(stateId);
+    city.setState(state);
+    return cityRepository.save(city);
+  }
 
-    public City findCityOrElseThrow(Long cityId) {
-        return cityRepository.findById(cityId)
-                .orElseThrow(() -> new CityNotFoundException(cityId));
+  @Transactional
+  public void deleteCity(Long cityId) {
+    try {
+      cityRepository.deleteById(cityId);
+      cityRepository.flush();
+    } catch (EmptyResultDataAccessException e) {
+      throw new CityNotFoundException(cityId);
+    } catch (DataIntegrityViolationException e) {
+      throw new EntityInUseException(String.format(CITY_IN_USE, cityId));
     }
+  }
+
+  public City findCityOrElseThrow(Long cityId) {
+    return cityRepository.findById(cityId).orElseThrow(() -> new CityNotFoundException(cityId));
+  }
 }

@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StateRequest {
-    private String name;
+  private String name;
 }

@@ -11,21 +11,15 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class AddressRequest {
 
-    @NotBlank
-    private String zipCode;
+  @NotBlank private String zipCode;
 
-    @NotBlank
-    private String street;
+  @NotBlank private String street;
 
-    @NotBlank
-    private String number;
+  @NotBlank private String number;
 
-    @NotBlank
-    private String district;
+  @NotBlank private String district;
 
-    private String complement;
+  private String complement;
 
-    @Valid
-    @NotNull
-    private CityIdRequest city;
+  @Valid @NotNull private CityIdRequest city;
 }

@@ -18,53 +18,57 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(
+    value = "/restaurants/{restaurantId}/products",
+    produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class RestaurantProductController {
 
-    private final ProductRepository productRepository;
-    private final ProductRegistrationService productService;
-    private final RestaurantRegistrationService restaurantService;
-    private final ProductModelAssembler productAssembler;
-    private final ProductRequestDisassembler productDisassembler;
+  private final ProductRepository productRepository;
+  private final ProductRegistrationService productService;
+  private final RestaurantRegistrationService restaurantService;
+  private final ProductModelAssembler productAssembler;
+  private final ProductRequestDisassembler productDisassembler;
 
-    @GetMapping
-    public List<ProductResponse> getAllProductsByRestaurant(@PathVariable Long restaurantId,
-                                                            @RequestParam(required = false) boolean includeInactive) {
-        Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
-        
-        if (includeInactive) {
-            return productAssembler.toCollectionModel(productRepository.findByRestaurant(restaurant));
-        } else {
-            return productAssembler.toCollectionModel(productRepository.findActiveProductsByRestaurant(restaurant));
-        }
-    }
+  @GetMapping
+  public List<ProductResponse> getAllProductsByRestaurant(
+      @PathVariable Long restaurantId, @RequestParam(required = false) boolean includeInactive) {
+    Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
-    @GetMapping("/{productId}")
-    public ProductResponse getByRestaurantAndProduct(@PathVariable Long restaurantId,
-                                                     @PathVariable Long productId) {
-        Product product = productService.findProductOrElseThrow(restaurantId, productId);
-        return productAssembler.toModel(product);
+    if (includeInactive) {
+      return productAssembler.toCollectionModel(productRepository.findByRestaurant(restaurant));
+    } else {
+      return productAssembler.toCollectionModel(
+          productRepository.findActiveProductsByRestaurant(restaurant));
     }
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse addProduct(@PathVariable Long restaurantId,
-                                      @RequestBody @Valid ProductRequest productRequest) {
-        Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
-        Product product = productDisassembler.toDomainObject(productRequest);
-        product.setRestaurant(restaurant);
-        product = productService.saveProduct(product);
-        return productAssembler.toModel(product);
-    }
+  @GetMapping("/{productId}")
+  public ProductResponse getByRestaurantAndProduct(
+      @PathVariable Long restaurantId, @PathVariable Long productId) {
+    Product product = productService.findProductOrElseThrow(restaurantId, productId);
+    return productAssembler.toModel(product);
+  }
 
-    @PutMapping("/{productId}")
-    public ProductResponse updateProduct(@PathVariable Long restaurantId,
-                                         @PathVariable Long productId,
-                                         @RequestBody @Valid ProductRequest productRequest) {
-        Product actualProduct = productService.findProductOrElseThrow(restaurantId, productId);
-        productDisassembler.copyToDomainObject(productRequest, actualProduct);
-        actualProduct = productService.saveProduct(actualProduct);
-        return productAssembler.toModel(actualProduct);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public ProductResponse addProduct(
+      @PathVariable Long restaurantId, @RequestBody @Valid ProductRequest productRequest) {
+    Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
+    Product product = productDisassembler.toDomainObject(productRequest);
+    product.setRestaurant(restaurant);
+    product = productService.saveProduct(product);
+    return productAssembler.toModel(product);
+  }
+
+  @PutMapping("/{productId}")
+  public ProductResponse updateProduct(
+      @PathVariable Long restaurantId,
+      @PathVariable Long productId,
+      @RequestBody @Valid ProductRequest productRequest) {
+    Product actualProduct = productService.findProductOrElseThrow(restaurantId, productId);
+    productDisassembler.copyToDomainObject(productRequest, actualProduct);
+    actualProduct = productService.saveProduct(actualProduct);
+    return productAssembler.toModel(actualProduct);
+  }
 }

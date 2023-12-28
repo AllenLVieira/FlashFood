@@ -11,19 +11,19 @@ import java.math.BigDecimal;
 @Setter
 public class RestaurantResponse {
 
-    @JsonView({RestaurantView.Summary.class, RestaurantView.OnlyName.class})
-    private Long id;
+  @JsonView({RestaurantView.Summary.class, RestaurantView.OnlyName.class})
+  private Long id;
 
-    @JsonView({RestaurantView.Summary.class, RestaurantView.OnlyName.class})
-    private String name;
+  @JsonView({RestaurantView.Summary.class, RestaurantView.OnlyName.class})
+  private String name;
 
-    @JsonView(RestaurantView.Summary.class)
-    private BigDecimal freightRate;
+  @JsonView(RestaurantView.Summary.class)
+  private BigDecimal freightRate;
 
-    @JsonView(RestaurantView.Summary.class)
-    private CuisineResponse cuisine;
+  @JsonView(RestaurantView.Summary.class)
+  private CuisineResponse cuisine;
 
-    private Boolean active;
-    private Boolean openStatus;
-    private AddressResponse address;
+  private Boolean active;
+  private Boolean openStatus;
+  private AddressResponse address;
 }

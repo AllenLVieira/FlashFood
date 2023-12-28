@@ -21,53 +21,56 @@ import java.util.List;
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentMethodController {
 
-    @Autowired
-    private PaymentMehodRepository paymentMehodRepository;
+  @Autowired private PaymentMehodRepository paymentMehodRepository;
 
-    @Autowired
-    private PaymentMethodRegistrationService paymentMethodRegistrationService;
+  @Autowired private PaymentMethodRegistrationService paymentMethodRegistrationService;
 
-    @Autowired
-    private PaymentMethodModelAssembler paymentMethodModelAssembler;
+  @Autowired private PaymentMethodModelAssembler paymentMethodModelAssembler;
 
-    @Autowired
-    private PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
+  @Autowired private PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
-    @GetMapping
-    public List<PaymentMethodResponse> getAllPaymentMethods() {
-        List<PaymentMethod> allPaymentMethods = paymentMehodRepository.findAll();
-        return paymentMethodModelAssembler.toCollectionModel(allPaymentMethods);
+  @GetMapping
+  public List<PaymentMethodResponse> getAllPaymentMethods() {
+    List<PaymentMethod> allPaymentMethods = paymentMehodRepository.findAll();
+    return paymentMethodModelAssembler.toCollectionModel(allPaymentMethods);
+  }
+
+  @GetMapping("/{paymentMethodId}")
+  public PaymentMethodResponse getPaymentMethodById(@PathVariable Long paymentMethodId) {
+    PaymentMethod paymentMethod =
+        paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
+    return paymentMethodModelAssembler.toModel(paymentMethod);
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public PaymentMethodResponse addPaymentMethod(
+      @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
+    PaymentMethod paymentMethod =
+        paymentMethodRequestDisassembler.toDomainObject(paymentMethodRequest);
+    paymentMethod = paymentMethodRegistrationService.savePaymentMethod(paymentMethod);
+    return paymentMethodModelAssembler.toModel(paymentMethod);
+  }
+
+  @PutMapping("/{paymentMethodId}")
+  public PaymentMethodResponse updatePaymentMethod(
+      @PathVariable Long paymentMethodId,
+      @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
+    try {
+      PaymentMethod actualPaymentMethod =
+          paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
+      paymentMethodRequestDisassembler.copyToDomainObject(
+          paymentMethodRequest, actualPaymentMethod);
+      return paymentMethodModelAssembler.toModel(
+          paymentMethodRegistrationService.savePaymentMethod(actualPaymentMethod));
+    } catch (PaymentMethodNotFoundException e) {
+      throw new BusinessException(e.getMessage());
     }
+  }
 
-    @GetMapping("/{paymentMethodId}")
-    public PaymentMethodResponse getPaymentMethodById(@PathVariable Long paymentMethodId) {
-        PaymentMethod paymentMethod = paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
-        return paymentMethodModelAssembler.toModel(paymentMethod);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PaymentMethodResponse addPaymentMethod(@RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
-        PaymentMethod paymentMethod = paymentMethodRequestDisassembler.toDomainObject(paymentMethodRequest);
-        paymentMethod = paymentMethodRegistrationService.savePaymentMethod(paymentMethod);
-        return paymentMethodModelAssembler.toModel(paymentMethod);
-    }
-
-    @PutMapping("/{paymentMethodId}")
-    public PaymentMethodResponse updatePaymentMethod(@PathVariable Long paymentMethodId,
-                                                     @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
-        try {
-            PaymentMethod actualPaymentMethod = paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
-            paymentMethodRequestDisassembler.copyToDomainObject(paymentMethodRequest, actualPaymentMethod);
-            return paymentMethodModelAssembler.toModel(paymentMethodRegistrationService.savePaymentMethod(actualPaymentMethod));
-        } catch (PaymentMethodNotFoundException e) {
-            throw new BusinessException(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{paymentMethodId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePaymentMethodById(@PathVariable Long paymentMethodId) {
-        paymentMethodRegistrationService.deletePaymentMethod(paymentMethodId);
-    }
+  @DeleteMapping("/{paymentMethodId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deletePaymentMethodById(@PathVariable Long paymentMethodId) {
+    paymentMethodRegistrationService.deletePaymentMethod(paymentMethodId);
+  }
 }

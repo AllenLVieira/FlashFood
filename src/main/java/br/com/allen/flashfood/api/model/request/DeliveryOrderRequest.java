@@ -12,20 +12,14 @@ import java.util.List;
 @Setter
 public class DeliveryOrderRequest {
 
-    @Valid
-    @NotNull
-    private RestaurantIdRequest restaurant;
+  @Valid @NotNull private RestaurantIdRequest restaurant;
 
-    @Valid
-    @NotNull
-    private AddressRequest address;
+  @Valid @NotNull private AddressRequest address;
 
-    @Valid
-    @NotNull
-    private PaymentMethodIdRequest paymentMethod;
+  @Valid @NotNull private PaymentMethodIdRequest paymentMethod;
 
-    @Valid
-    @Size(min = 1)
-    @NotNull
-    private List<OrderItemRequest> items;
+  @Valid
+  @Size(min = 1)
+  @NotNull
+  private List<OrderItemRequest> items;
 }

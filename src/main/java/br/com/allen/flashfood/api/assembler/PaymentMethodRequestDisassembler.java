@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMethodRequestDisassembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public PaymentMethod toDomainObject(PaymentMethodRequest paymentMethod) {
-        return modelMapper.map(paymentMethod, PaymentMethod.class);
-    }
+  public PaymentMethod toDomainObject(PaymentMethodRequest paymentMethod) {
+    return modelMapper.map(paymentMethod, PaymentMethod.class);
+  }
 
-    public void copyToDomainObject(PaymentMethodRequest paymentMethodRequest, PaymentMethod paymentMethod) {
-        modelMapper.map(paymentMethodRequest, paymentMethod);
-    }
+  public void copyToDomainObject(
+      PaymentMethodRequest paymentMethodRequest, PaymentMethod paymentMethod) {
+    modelMapper.map(paymentMethodRequest, paymentMethod);
+  }
 }

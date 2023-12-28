@@ -9,6 +9,5 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class FamilyRequest {
 
-    @NotBlank
-    private String name;
+  @NotBlank private String name;
 }

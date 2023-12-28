@@ -11,16 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class StateModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public StateResponse toModel(State state) {
-        return modelMapper.map(state, StateResponse.class);
-    }
+  public StateResponse toModel(State state) {
+    return modelMapper.map(state, StateResponse.class);
+  }
 
-    public List<StateResponse> toCollectionModel(List<State> states) {
-        return states.stream()
-                .map(state -> toModel(state))
-                .collect(Collectors.toList());
-    }
+  public List<StateResponse> toCollectionModel(List<State> states) {
+    return states.stream().map(state -> toModel(state)).collect(Collectors.toList());
+  }
 }

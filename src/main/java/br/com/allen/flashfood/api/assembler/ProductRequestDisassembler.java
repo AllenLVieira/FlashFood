@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductRequestDisassembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public Product toDomainObject(ProductRequest productRequest) {
-        return modelMapper.map(productRequest, Product.class);
-    }
+  public Product toDomainObject(ProductRequest productRequest) {
+    return modelMapper.map(productRequest, Product.class);
+  }
 
-    public void copyToDomainObject(ProductRequest productRequest, Product product) {
-        modelMapper.map(productRequest, product);
-    }
+  public void copyToDomainObject(ProductRequest productRequest, Product product) {
+    modelMapper.map(productRequest, product);
+  }
 }

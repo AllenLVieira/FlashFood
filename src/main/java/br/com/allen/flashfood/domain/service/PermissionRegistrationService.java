@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PermissionRegistrationService {
 
-    private final PermissionRepository repository;
+  private final PermissionRepository repository;
 
-    public Permission findPermissionOrElseThrow(Long permissionId) {
-        return repository.findById(permissionId)
-                .orElseThrow(() -> new PermissionNotFoundException(permissionId));
-    }
+  public Permission findPermissionOrElseThrow(Long permissionId) {
+    return repository
+        .findById(permissionId)
+        .orElseThrow(() -> new PermissionNotFoundException(permissionId));
+  }
 }

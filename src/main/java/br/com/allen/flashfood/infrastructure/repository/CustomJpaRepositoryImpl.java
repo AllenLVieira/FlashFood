@@ -1,14 +1,13 @@
 package br.com.allen.flashfood.infrastructure.repository;
 
 import br.com.allen.flashfood.domain.repository.CustomJpaRepository;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import javax.persistence.EntityManager;
-import java.util.Optional;
-
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements CustomJpaRepository<T, ID> {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public CustomJpaRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
                                    EntityManager entityManager) {

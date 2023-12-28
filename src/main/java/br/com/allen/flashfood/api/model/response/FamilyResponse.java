@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FamilyResponse {
-    private Long id;
-    private String name;
+  private Long id;
+  private String name;
 }

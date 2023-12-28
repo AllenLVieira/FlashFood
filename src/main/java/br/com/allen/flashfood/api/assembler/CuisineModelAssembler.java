@@ -11,16 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class CuisineModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public CuisineResponse toModel(Cuisine cuisine) {
-        return modelMapper.map(cuisine, CuisineResponse.class);
-    }
+  public CuisineResponse toModel(Cuisine cuisine) {
+    return modelMapper.map(cuisine, CuisineResponse.class);
+  }
 
-    public List<CuisineResponse> toCollectionModel(List<Cuisine> cuisines) {
-        return cuisines.stream()
-                .map(cuisine -> toModel(cuisine))
-                .collect(Collectors.toList());
-    }
+  public List<CuisineResponse> toCollectionModel(List<Cuisine> cuisines) {
+    return cuisines.stream().map(cuisine -> toModel(cuisine)).collect(Collectors.toList());
+  }
 }
