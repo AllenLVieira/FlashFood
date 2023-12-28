@@ -11,10 +11,20 @@ import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.model.User;
 import br.com.allen.flashfood.domain.repository.OrderRepository;
+import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
 import br.com.allen.flashfood.domain.service.OrderRegistrationService;
+import br.com.allen.flashfood.infrastructure.repository.spec.DeliveryOrderSpecifications;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,10 +41,32 @@ public class OrderController {
     private final DeliveryOrderRequestDisassembler orderDisassembler;
 
     @GetMapping
-    public List<DeliveryOrderSummaryResponse> getAllOrders() {
+    public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
         List<DeliveryOrder> allOrders = orderRepository.findAll();
+        List<DeliveryOrderSummaryResponse> deliveryOrderResponse = orderSummaryAssembler.toCollectionModel(allOrders);
 
-        return orderSummaryAssembler.toCollectionModel(allOrders);
+        MappingJacksonValue orderWrapper = new MappingJacksonValue(deliveryOrderResponse);
+
+        SimpleFilterProvider filters = new SimpleFilterProvider()
+                .addFilter("orderFilter",
+                        SimpleBeanPropertyFilter.serializeAll());
+
+        if (StringUtils.isNotBlank(fields)) {
+            filters.addFilter("orderFilter",
+                    SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
+        }
+
+        orderWrapper.setFilters(filters);
+        return orderWrapper;
+    }
+
+    @GetMapping("/filters")
+    public Page<DeliveryOrderResponse> getAllOrdersWithFilters(DeliveryOrderFilter filter,
+                                                               @PageableDefault(size = 10) Pageable pageable) {
+        Page<DeliveryOrder> allOrdersPageable = orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter),
+                pageable);
+        List<DeliveryOrderResponse> deliveryOrderList = orderAssembler.toCollectionModel(allOrdersPageable.getContent());
+        return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
     }
 
     @GetMapping("/{orderCode}")

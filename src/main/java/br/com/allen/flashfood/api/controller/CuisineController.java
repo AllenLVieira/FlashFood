@@ -8,6 +8,9 @@ import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +33,18 @@ public class CuisineController {
     @Autowired
     private CuisineModelAssembler cuisineModelAssembler;
 
+    /**
+     * Returns a list of all registered cuisines.
+     *
+     * @param pageable can receive as query params "size", "page" and "sort"
+     * @return a list of cuisines and information about pagination.
+     */
     @GetMapping
-    public List<CuisineResponse> getAllCuisine() {
-        List<Cuisine> allCuisine = cuisineRepository.findAll();
-        return cuisineModelAssembler.toCollectionModel(allCuisine);
+    public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
+        Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
+        List<CuisineResponse> cuisineResponse = cuisineModelAssembler.toCollectionModel(cuisinePage.getContent());
+        return new PageImpl<>(cuisineResponse,
+                pageable, cuisinePage.getTotalElements());
     }
 
     @GetMapping("/{cuisineId}")

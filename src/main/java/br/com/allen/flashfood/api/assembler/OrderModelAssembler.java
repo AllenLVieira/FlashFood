@@ -21,7 +21,7 @@ public class OrderModelAssembler {
 
     public List<DeliveryOrderResponse> toCollectionModel(List<DeliveryOrder> orders) {
         return orders.stream()
-                .map(order -> toModel(order))
+                .map(this::toModel)
                 .collect(Collectors.toList());
     }
 }

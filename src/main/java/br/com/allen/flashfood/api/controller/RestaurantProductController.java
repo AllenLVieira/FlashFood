@@ -9,7 +9,7 @@ import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.ProductRepository;
 import br.com.allen.flashfood.domain.service.ProductRegistrationService;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,27 +19,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class RestaurantProductController {
-    @Autowired
-    private ProductRepository productRepository;
 
-    @Autowired
-    private ProductRegistrationService productService;
-
-    @Autowired
-    private RestaurantRegistrationService restaurantService;
-
-    @Autowired
-    private ProductModelAssembler productAssembler;
-
-    @Autowired
-    private ProductRequestDisassembler productDisassembler;
+    private final ProductRepository productRepository;
+    private final ProductRegistrationService productService;
+    private final RestaurantRegistrationService restaurantService;
+    private final ProductModelAssembler productAssembler;
+    private final ProductRequestDisassembler productDisassembler;
 
     @GetMapping
-    public List<ProductResponse> getAllProductsByRestaurant(@PathVariable Long restaurantId) {
+    public List<ProductResponse> getAllProductsByRestaurant(@PathVariable Long restaurantId,
+                                                            @RequestParam(required = false) boolean includeInactive) {
         Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
-        List<Product> allProducts = productRepository.findByRestaurant(restaurant);
-        return productAssembler.toCollectionModel(allProducts);
+        
+        if (includeInactive) {
+            return productAssembler.toCollectionModel(productRepository.findByRestaurant(restaurant));
+        } else {
+            return productAssembler.toCollectionModel(productRepository.findActiveProductsByRestaurant(restaurant));
+        }
     }
 
     @GetMapping("/{productId}")
