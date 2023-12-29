@@ -21,4 +21,11 @@ public class PhotoProduct {
   private String description;
   private String contentType;
   private Long filesize;
+
+  public Long getRestaurantId() {
+    if (getProduct() != null) {
+      return getProduct().getRestaurant().getId();
+    }
+    return null;
+  }
 }
