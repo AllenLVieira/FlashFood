@@ -35,228 +35,233 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(SpringExtension.class)
 class RestaurantProductControllerTest {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    State state = new State();
-    City city = new City();
-    Address address = new Address();
-    Cuisine cuisine = new Cuisine();
-    Restaurant restaurant = new Restaurant();
-    Product product = new Product();
-    List<ProductResponse> activeProducts = new ArrayList<>();
-    List<ProductResponse> allProducts = new ArrayList<>();
-    ProductResponse productResponse1 = new ProductResponse();
-    ProductResponse productResponse2 = new ProductResponse();
+  private static final ObjectMapper objectMapper = new ObjectMapper();
+  State state = new State();
+  City city = new City();
+  Address address = new Address();
+  Cuisine cuisine = new Cuisine();
+  Restaurant restaurant = new Restaurant();
+  Product product = new Product();
+  List<ProductResponse> activeProducts = new ArrayList<>();
+  List<ProductResponse> allProducts = new ArrayList<>();
+  ProductResponse productResponse1 = new ProductResponse();
+  ProductResponse productResponse2 = new ProductResponse();
 
-    @Autowired
-    private RestaurantProductController underTest;
+  @Autowired private RestaurantProductController underTest;
 
-    @MockBean
-    private ProductModelAssembler productModelAssembler;
+  @MockBean private ProductModelAssembler productModelAssembler;
 
-    @MockBean
-    private ProductRegistrationService productRegistrationService;
+  @MockBean private ProductRegistrationService productRegistrationService;
 
-    @MockBean
-    private ProductRepository productRepository;
+  @MockBean private ProductRepository productRepository;
 
-    @MockBean
-    private ProductRequestDisassembler productRequestDisassembler;
+  @MockBean private ProductRequestDisassembler productRequestDisassembler;
 
-    @MockBean
-    private RestaurantRegistrationService restaurantRegistrationService;
+  @MockBean private RestaurantRegistrationService restaurantRegistrationService;
 
-    @BeforeEach
-    void setUp() {
-        state.setId(123L);
-        state.setName("São Paulo");
+  @BeforeEach
+  void setUp() {
+    state.setId(123L);
+    state.setName("São Paulo");
 
-        city.setId(123L);
-        city.setName("São Paulo");
-        city.setState(state);
+    city.setId(123L);
+    city.setName("São Paulo");
+    city.setState(state);
 
-        address.setCity(city);
-        address.setComplement("Complement");
-        address.setDistrict("District");
-        address.setNumber("42");
-        address.setStreet("Street");
-        address.setZipCode("21654");
+    address.setCity(city);
+    address.setComplement("Complement");
+    address.setDistrict("District");
+    address.setNumber("42");
+    address.setStreet("Street");
+    address.setZipCode("21654");
 
-        cuisine.setId(123L);
-        cuisine.setName("Name");
-        cuisine.setRestaurant(new ArrayList<>());
+    cuisine.setId(123L);
+    cuisine.setName("Name");
+    cuisine.setRestaurant(new ArrayList<>());
 
-        restaurant.setActive(true);
-        restaurant.setAddress(address);
-        restaurant.setCuisine(cuisine);
-        restaurant.setFreightRate(BigDecimal.valueOf(42L));
-        restaurant.setId(123L);
-        restaurant.setManagers(new HashSet<>());
-        restaurant.setName("Name");
-        restaurant.setOpenStatus(true);
-        restaurant.setPaymentMethod(new HashSet<>());
-        restaurant.setProducts(new ArrayList<>());
-        restaurant.setRegistrationDate(null);
-        restaurant.setUpdateDate(null);
+    restaurant.setActive(true);
+    restaurant.setAddress(address);
+    restaurant.setCuisine(cuisine);
+    restaurant.setFreightRate(BigDecimal.valueOf(42L));
+    restaurant.setId(123L);
+    restaurant.setManagers(new HashSet<>());
+    restaurant.setName("Name");
+    restaurant.setOpenStatus(true);
+    restaurant.setPaymentMethod(new HashSet<>());
+    restaurant.setProducts(new ArrayList<>());
+    restaurant.setRegistrationDate(null);
+    restaurant.setUpdateDate(null);
 
-        product.setActive(true);
-        product.setDescription("Description");
-        product.setId(1L);
-        product.setName("Product 1");
-        product.setPrice(BigDecimal.valueOf(10L));
-        product.setRestaurant(restaurant);
+    product.setActive(true);
+    product.setDescription("Description");
+    product.setId(1L);
+    product.setName("Product 1");
+    product.setPrice(BigDecimal.valueOf(10L));
+    product.setRestaurant(restaurant);
 
-        productResponse1.setId(1L);
-        productResponse1.setName("Product 1");
-        productResponse1.setActive(true);
-        productResponse1.setPrice(BigDecimal.valueOf(10L));
-        productResponse1.setDescription("Description");
-        productResponse2.setId(2L);
-        productResponse2.setName("Product 2");
-        productResponse2.setActive(false);
-        productResponse2.setPrice(BigDecimal.valueOf(99L));
-        productResponse2.setDescription("Description 2");
-        activeProducts.add(productResponse1);
-        allProducts.add(productResponse1);
-        allProducts.add(productResponse2);
-    }
+    productResponse1.setId(1L);
+    productResponse1.setName("Product 1");
+    productResponse1.setActive(true);
+    productResponse1.setPrice(BigDecimal.valueOf(10L));
+    productResponse1.setDescription("Description");
+    productResponse2.setId(2L);
+    productResponse2.setName("Product 2");
+    productResponse2.setActive(false);
+    productResponse2.setPrice(BigDecimal.valueOf(99L));
+    productResponse2.setDescription("Description 2");
+    activeProducts.add(productResponse1);
+    allProducts.add(productResponse1);
+    allProducts.add(productResponse2);
+  }
 
-    /**
-     * Method under test: {@link RestaurantProductController#addProduct(Long, ProductRequest)}
-     */
-    @Test
-    void testAddProduct() throws Exception {
-        when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
+  /** Method under test: {@link RestaurantProductController#addProduct(Long, ProductRequest)} */
+  @Test
+  void testAddProduct() throws Exception {
+    when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
 
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setActive(true);
-        productRequest.setDescription("Description 3");
-        productRequest.setName("Product 3");
-        productRequest.setPrice(BigDecimal.valueOf(42L));
+    ProductRequest productRequest = new ProductRequest();
+    productRequest.setActive(true);
+    productRequest.setDescription("Description 3");
+    productRequest.setName("Product 3");
+    productRequest.setPrice(BigDecimal.valueOf(42L));
 
-        Product product3 = new Product();
-        product3.setId(3L);
-        product3.setName("Product 3");
-        product3.setActive(true);
-        product3.setDescription("Description 3");
-        product3.setPrice(BigDecimal.valueOf(42L));
-        product3.setRestaurant(restaurant);
+    Product product3 = new Product();
+    product3.setId(3L);
+    product3.setName("Product 3");
+    product3.setActive(true);
+    product3.setDescription("Description 3");
+    product3.setPrice(BigDecimal.valueOf(42L));
+    product3.setRestaurant(restaurant);
 
-        ProductResponse productResponse3 = new ProductResponse();
-        productResponse3.setId(3L);
-        productResponse3.setName("Product 3");
-        productResponse3.setActive(true);
-        productResponse3.setDescription("Description 3");
-        productResponse3.setPrice(BigDecimal.valueOf(42L));
+    ProductResponse productResponse3 = new ProductResponse();
+    productResponse3.setId(3L);
+    productResponse3.setName("Product 3");
+    productResponse3.setActive(true);
+    productResponse3.setDescription("Description 3");
+    productResponse3.setPrice(BigDecimal.valueOf(42L));
 
-        String json = objectMapper.writeValueAsString(productRequest);
+    String json = objectMapper.writeValueAsString(productRequest);
 
-        MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
-                .post("/restaurants/{restaurantId}/products", 123L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+    MockHttpServletRequestBuilder contentTypeResult =
+        MockMvcRequestBuilders.post("/restaurants/{restaurantId}/products", 123L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json);
 
-        when(productRegistrationService.saveProduct(any(Product.class))).thenReturn(product3);
-        when(productModelAssembler.toModel(any(Product.class))).thenReturn(productResponse3);
-        when(productRequestDisassembler.toDomainObject(any(ProductRequest.class))).thenReturn(product3);
+    when(productRegistrationService.saveProduct(any(Product.class))).thenReturn(product3);
+    when(productModelAssembler.toModel(any(Product.class))).thenReturn(productResponse3);
+    when(productRequestDisassembler.toDomainObject(any(ProductRequest.class))).thenReturn(product3);
 
-        MockMvcBuilders.standaloneSetup(underTest).build().perform(contentTypeResult)
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$.name", Matchers.is("Product 3")));
-    }
+    MockMvcBuilders.standaloneSetup(underTest)
+        .build()
+        .perform(contentTypeResult)
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+        .andExpect(jsonPath("$.name", Matchers.is("Product 3")));
+  }
 
-    /**
-     * Method under test: {@link RestaurantProductController#getAllProductsByRestaurant(Long, boolean)}
-     */
-    @Test
-    void testGetAllActiveProductsByRestaurant() throws Exception {
-        when(productRepository.findActiveProductsByRestaurant(any())).thenReturn(new ArrayList<>());
-        when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
-        when(productModelAssembler.toCollectionModel(any())).thenReturn(activeProducts);
+  /**
+   * Method under test: {@link RestaurantProductController#getAllProductsByRestaurant(Long,
+   * boolean)}
+   */
+  @Test
+  void testGetAllActiveProductsByRestaurant() throws Exception {
+    when(productRepository.findActiveProductsByRestaurant(any())).thenReturn(new ArrayList<>());
+    when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
+    when(productModelAssembler.toCollectionModel(any())).thenReturn(activeProducts);
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/restaurants/{restaurantId}/products", 123L);
-        MockMvcBuilders.standaloneSetup(underTest).build().perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", Matchers.is("Product 1")));
-    }
+    MockHttpServletRequestBuilder requestBuilder =
+        MockMvcRequestBuilders.get("/restaurants/{restaurantId}/products", 123L);
+    MockMvcBuilders.standaloneSetup(underTest)
+        .build()
+        .perform(requestBuilder)
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].name", Matchers.is("Product 1")));
+  }
 
-    /**
-     * Method under test: {@link RestaurantProductController#getAllProductsByRestaurant(Long, boolean)}
-     */
-    @Test
-    void testGetAllProductsByRestaurant2() throws Exception {
-        when(productRepository.findByRestaurant(any())).thenReturn(new ArrayList<>());
-        when(productRepository.findActiveProductsByRestaurant(any())).thenReturn(new ArrayList<>());
-        when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
-        when(productModelAssembler.toCollectionModel(any())).thenReturn(allProducts);
+  /**
+   * Method under test: {@link RestaurantProductController#getAllProductsByRestaurant(Long,
+   * boolean)}
+   */
+  @Test
+  void testGetAllProductsByRestaurant2() throws Exception {
+    when(productRepository.findByRestaurant(any())).thenReturn(new ArrayList<>());
+    when(productRepository.findActiveProductsByRestaurant(any())).thenReturn(new ArrayList<>());
+    when(restaurantRegistrationService.findRestaurantOrElseThrow(any())).thenReturn(restaurant);
+    when(productModelAssembler.toCollectionModel(any())).thenReturn(allProducts);
 
-        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/restaurants/{restaurantId}/products", 123L);
-        MockHttpServletRequestBuilder requestBuilder = getResult.param("includeInactive", String.valueOf(true));
-        MockMvcBuilders.standaloneSetup(underTest).build().perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", Matchers.is("Product 1")))
-                .andExpect(jsonPath("$[1].name", Matchers.is("Product 2")));
-    }
+    MockHttpServletRequestBuilder getResult =
+        MockMvcRequestBuilders.get("/restaurants/{restaurantId}/products", 123L);
+    MockHttpServletRequestBuilder requestBuilder =
+        getResult.param("includeInactive", String.valueOf(true));
+    MockMvcBuilders.standaloneSetup(underTest)
+        .build()
+        .perform(requestBuilder)
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("$[0].name", Matchers.is("Product 1")))
+        .andExpect(jsonPath("$[1].name", Matchers.is("Product 2")));
+  }
 
-    /**
-     * Method under test: {@link RestaurantProductController#getByRestaurantAndProduct(Long, Long)}
-     */
-    @Test
-    void testGetByRestaurantAndProduct() throws Exception {
-        when(productRegistrationService.findProductOrElseThrow(any(), any())).thenReturn(product);
-        when(productModelAssembler.toModel(any())).thenReturn(productResponse1);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/restaurants/{restaurantId}/products/{productId}", 123L, 1L);
-        MockMvcBuilders.standaloneSetup(underTest)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$.name", Matchers.is("Product 1")))
-                .andExpect(jsonPath("$.description", Matchers.is("Description")));
-    }
+  /**
+   * Method under test: {@link RestaurantProductController#getByRestaurantAndProduct(Long, Long)}
+   */
+  @Test
+  void testGetByRestaurantAndProduct() throws Exception {
+    when(productRegistrationService.findProductOrElseThrow(any(), any())).thenReturn(product);
+    when(productModelAssembler.toModel(any())).thenReturn(productResponse1);
+    MockHttpServletRequestBuilder requestBuilder =
+        MockMvcRequestBuilders.get("/restaurants/{restaurantId}/products/{productId}", 123L, 1L);
+    MockMvcBuilders.standaloneSetup(underTest)
+        .build()
+        .perform(requestBuilder)
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+        .andExpect(jsonPath("$.name", Matchers.is("Product 1")))
+        .andExpect(jsonPath("$.description", Matchers.is("Description")));
+  }
 
-    @Test
-    void updateProduct() throws Exception {
-        ProductRequest request = new ProductRequest();
-        request.setActive(true);
-        request.setDescription("Description Updated");
-        request.setName("Product 1 - Updated");
-        request.setPrice(BigDecimal.valueOf(9L));
+  @Test
+  void updateProduct() throws Exception {
+    ProductRequest request = new ProductRequest();
+    request.setActive(true);
+    request.setDescription("Description Updated");
+    request.setName("Product 1 - Updated");
+    request.setPrice(BigDecimal.valueOf(9L));
 
-        Product updatedProduct = new Product();
-        updatedProduct.setActive(true);
-        updatedProduct.setDescription("Description Updated");
-        updatedProduct.setId(1L);
-        updatedProduct.setName("Product 1 - Updated");
-        updatedProduct.setPrice(BigDecimal.valueOf(9L));
-        updatedProduct.setRestaurant(restaurant);
+    Product updatedProduct = new Product();
+    updatedProduct.setActive(true);
+    updatedProduct.setDescription("Description Updated");
+    updatedProduct.setId(1L);
+    updatedProduct.setName("Product 1 - Updated");
+    updatedProduct.setPrice(BigDecimal.valueOf(9L));
+    updatedProduct.setRestaurant(restaurant);
 
-        ProductResponse productResponseUpdated = new ProductResponse();
-        productResponseUpdated.setId(1L);
-        productResponseUpdated.setActive(true);
-        productResponseUpdated.setDescription("Description Updated");
-        productResponseUpdated.setName("Product 1 - Updated");
+    ProductResponse productResponseUpdated = new ProductResponse();
+    productResponseUpdated.setId(1L);
+    productResponseUpdated.setActive(true);
+    productResponseUpdated.setDescription("Description Updated");
+    productResponseUpdated.setName("Product 1 - Updated");
 
-        String json = objectMapper.writeValueAsString(request);
+    String json = objectMapper.writeValueAsString(request);
 
-        when(productRegistrationService.findProductOrElseThrow(any(), any())).thenReturn(product);
-        doNothing().when(productRequestDisassembler).copyToDomainObject(request, product);
-        when(productRegistrationService.saveProduct(any(Product.class))).thenReturn(updatedProduct);
-        when(productModelAssembler.toModel(any(Product.class))).thenReturn(productResponseUpdated);
+    when(productRegistrationService.findProductOrElseThrow(any(), any())).thenReturn(product);
+    doNothing().when(productRequestDisassembler).copyToDomainObject(request, product);
+    when(productRegistrationService.saveProduct(any(Product.class))).thenReturn(updatedProduct);
+    when(productModelAssembler.toModel(any(Product.class))).thenReturn(productResponseUpdated);
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/restaurants/{restaurantId}/products/{productId}", 123L, 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
-        MockMvcBuilders.standaloneSetup(underTest).build().perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$.name", Matchers.is("Product 1 - Updated")))
-                .andExpect(jsonPath("$.description", Matchers.is("Description Updated")));
-    }
+    MockHttpServletRequestBuilder requestBuilder =
+        MockMvcRequestBuilders.put("/restaurants/{restaurantId}/products/{productId}", 123L, 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json);
+    MockMvcBuilders.standaloneSetup(underTest)
+        .build()
+        .perform(requestBuilder)
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+        .andExpect(jsonPath("$.name", Matchers.is("Product 1 - Updated")))
+        .andExpect(jsonPath("$.description", Matchers.is("Description Updated")));
+  }
 }
-
