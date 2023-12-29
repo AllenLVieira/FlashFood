@@ -10,9 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(repositoryBaseClass = CustomJpaRepositoryImpl.class)
 public class FlashfoodApiApplication {
 
-    public static void main(String[] args) {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        SpringApplication.run(FlashfoodApiApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    SpringApplication.run(FlashfoodApiApplication.class, args);
+  }
 }

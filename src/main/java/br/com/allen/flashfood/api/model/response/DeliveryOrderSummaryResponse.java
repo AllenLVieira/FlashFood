@@ -1,11 +1,10 @@
 package br.com.allen.flashfood.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @JsonFilter("orderFilter")
 @Getter

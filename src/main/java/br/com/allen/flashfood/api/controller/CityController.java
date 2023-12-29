@@ -9,13 +9,12 @@ import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)

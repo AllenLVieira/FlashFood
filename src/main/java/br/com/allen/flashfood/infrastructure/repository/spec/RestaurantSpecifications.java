@@ -5,17 +5,15 @@ import java.math.BigDecimal;
 import org.springframework.data.jpa.domain.Specification;
 
 public class RestaurantSpecifications {
-    private RestaurantSpecifications() {
-        throw new IllegalStateException("Utility class");
-    }
+  private RestaurantSpecifications() {
+    throw new IllegalStateException("Utility class");
+  }
 
-    public static Specification<Restaurant> withFreeShipping() {
-        return (root, query, builder) ->
-                builder.equal(root.get("freightRate"), BigDecimal.ZERO);
-    }
+  public static Specification<Restaurant> withFreeShipping() {
+    return (root, query, builder) -> builder.equal(root.get("freightRate"), BigDecimal.ZERO);
+  }
 
-    public static Specification<Restaurant> withSimilarName(String name) {
-        return (root, query, builder) ->
-                builder.like(root.get("name"), "%" + name + "%");
-    }
+  public static Specification<Restaurant> withSimilarName(String name) {
+    return (root, query, builder) -> builder.like(root.get("name"), "%" + name + "%");
+  }
 }

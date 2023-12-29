@@ -9,12 +9,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class DeliveryOrderFilter {
 
-    private Long clientId;
-    private Long restaurantId;
+  private Long clientId;
+  private Long restaurantId;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private OffsetDateTime initialRegistrationDate;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime initialRegistrationDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private OffsetDateTime endRegistrationDate;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime endRegistrationDate;
 }

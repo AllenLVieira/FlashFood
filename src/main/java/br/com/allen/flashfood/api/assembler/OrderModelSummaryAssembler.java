@@ -2,12 +2,11 @@ package br.com.allen.flashfood.api.assembler;
 
 import br.com.allen.flashfood.api.model.response.DeliveryOrderSummaryResponse;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

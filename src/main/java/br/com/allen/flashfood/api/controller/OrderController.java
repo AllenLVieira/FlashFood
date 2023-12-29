@@ -33,62 +33,64 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderRepository orderRepository;
-    private final OrderRegistrationService orderService;
-    private final OrderModelSummaryAssembler orderSummaryAssembler;
-    private final OrderModelAssembler orderAssembler;
-    private final DeliveryOrderRequestDisassembler orderDisassembler;
+  private final OrderRepository orderRepository;
+  private final OrderRegistrationService orderService;
+  private final OrderModelSummaryAssembler orderSummaryAssembler;
+  private final OrderModelAssembler orderAssembler;
+  private final DeliveryOrderRequestDisassembler orderDisassembler;
 
-    @GetMapping
-    public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
-        List<DeliveryOrder> allOrders = orderRepository.findAll();
-        List<DeliveryOrderSummaryResponse> deliveryOrderResponse = orderSummaryAssembler.toCollectionModel(allOrders);
+  @GetMapping
+  public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
+    List<DeliveryOrder> allOrders = orderRepository.findAll();
+    List<DeliveryOrderSummaryResponse> deliveryOrderResponse =
+        orderSummaryAssembler.toCollectionModel(allOrders);
 
-        MappingJacksonValue orderWrapper = new MappingJacksonValue(deliveryOrderResponse);
+    MappingJacksonValue orderWrapper = new MappingJacksonValue(deliveryOrderResponse);
 
-        SimpleFilterProvider filters = new SimpleFilterProvider()
-                .addFilter("orderFilter",
-                        SimpleBeanPropertyFilter.serializeAll());
+    SimpleFilterProvider filters =
+        new SimpleFilterProvider()
+            .addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
 
-        if (StringUtils.isNotBlank(fields)) {
-            filters.addFilter("orderFilter",
-                    SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
-        }
-
-        orderWrapper.setFilters(filters);
-        return orderWrapper;
+    if (StringUtils.isNotBlank(fields)) {
+      filters.addFilter(
+          "orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
     }
 
-    @GetMapping("/filters")
-    public Page<DeliveryOrderResponse> getAllOrdersWithFilters(DeliveryOrderFilter filter,
-                                                               @PageableDefault(size = 10) Pageable pageable) {
-        Page<DeliveryOrder> allOrdersPageable = orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter),
-                pageable);
-        List<DeliveryOrderResponse> deliveryOrderList = orderAssembler.toCollectionModel(allOrdersPageable.getContent());
-        return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
+    orderWrapper.setFilters(filters);
+    return orderWrapper;
+  }
+
+  @GetMapping("/filters")
+  public Page<DeliveryOrderResponse> getAllOrdersWithFilters(
+      DeliveryOrderFilter filter, @PageableDefault(size = 10) Pageable pageable) {
+    Page<DeliveryOrder> allOrdersPageable =
+        orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter), pageable);
+    List<DeliveryOrderResponse> deliveryOrderList =
+        orderAssembler.toCollectionModel(allOrdersPageable.getContent());
+    return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
+  }
+
+  @GetMapping("/{orderCode}")
+  public DeliveryOrderResponse getOrderById(@PathVariable String orderCode) {
+    DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
+
+    return orderAssembler.toModel(order);
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public DeliveryOrderResponse addNewDeliveryOrder(@RequestBody DeliveryOrderRequest request) {
+    try {
+      DeliveryOrder newOrder = orderDisassembler.toDomainObject(request);
+
+      // TODO: Adjust when there is user authentication
+      newOrder.setUser(new User());
+      newOrder.getUser().setId(1L);
+
+      newOrder = orderService.createOrder(newOrder);
+      return orderAssembler.toModel(newOrder);
+    } catch (EntityNotFoundedException e) {
+      throw new BusinessException(e.getMessage(), e);
     }
-
-    @GetMapping("/{orderCode}")
-    public DeliveryOrderResponse getOrderById(@PathVariable String orderCode) {
-        DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
-
-        return orderAssembler.toModel(order);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public DeliveryOrderResponse addNewDeliveryOrder(@RequestBody DeliveryOrderRequest request) {
-        try {
-            DeliveryOrder newOrder = orderDisassembler.toDomainObject(request);
-
-            //TODO: Adjust when there is user authentication
-            newOrder.setUser(new User());
-            newOrder.getUser().setId(1L);
-
-            newOrder = orderService.createOrder(newOrder);
-            return orderAssembler.toModel(newOrder);
-        } catch (EntityNotFoundedException e) {
-            throw new BusinessException(e.getMessage(), e);
-        }
-    }
+  }
 }

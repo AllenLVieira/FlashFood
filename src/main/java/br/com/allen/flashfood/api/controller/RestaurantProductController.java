@@ -9,13 +9,12 @@ import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.ProductRepository;
 import br.com.allen.flashfood.domain.service.ProductRegistrationService;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(

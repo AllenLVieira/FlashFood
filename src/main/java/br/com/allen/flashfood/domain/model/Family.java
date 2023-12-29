@@ -1,11 +1,10 @@
 package br.com.allen.flashfood.domain.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

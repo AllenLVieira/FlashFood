@@ -1,9 +1,8 @@
 package br.com.allen.flashfood.api.model.response;
 
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

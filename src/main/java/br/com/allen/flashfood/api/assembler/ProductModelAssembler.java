@@ -10,17 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductModelAssembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public ProductResponse toModel(Product product) {
-        return modelMapper.map(product, ProductResponse.class);
-    }
+  public ProductResponse toModel(Product product) {
+    return modelMapper.map(product, ProductResponse.class);
+  }
 
-    public List<ProductResponse> toCollectionModel(List<Product> products) {
-        return products.stream()
-                .map(product -> toModel(product))
-                .collect(Collectors.toList());
-    }
-
+  public List<ProductResponse> toCollectionModel(List<Product> products) {
+    return products.stream().map(product -> toModel(product)).collect(Collectors.toList());
+  }
 }
