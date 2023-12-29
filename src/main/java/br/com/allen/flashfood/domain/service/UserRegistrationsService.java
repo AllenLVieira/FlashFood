@@ -13,47 +13,47 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserRegistrationsService {
-    private final UserRepository userRepository;
-    private final FamilyRegistrationService familyService;
+  private final UserRepository userRepository;
+  private final FamilyRegistrationService familyService;
 
-    @Transactional
-    public User saveUser(User user) {
-        userRepository.detach(user);
-        Optional<User> existentUser = userRepository.findByEmail(user.getEmail());
-        if (existentUser.isPresent() && !existentUser.get().equals(user)) {
-            throw new BusinessException(
-                    String.format("There is already a user registration with the email: %s", user.getEmail()));
-        }
-        return userRepository.save(user);
+  @Transactional
+  public User saveUser(User user) {
+    userRepository.detach(user);
+    Optional<User> existentUser = userRepository.findByEmail(user.getEmail());
+    if (existentUser.isPresent() && !existentUser.get().equals(user)) {
+      throw new BusinessException(
+          String.format(
+              "There is already a user registration with the email: %s", user.getEmail()));
     }
+    return userRepository.save(user);
+  }
 
-    @Transactional
-    public void changePassword(Long userId, String actualPassword, String newPassword) {
-        User user = findUserOrElseThrow(userId);
-        if (user.passwordNotConfirmed(actualPassword)) {
-            throw new BusinessException("Current password reported does not match the user's password.");
-        }
-        user.setPassword(newPassword);
+  @Transactional
+  public void changePassword(Long userId, String actualPassword, String newPassword) {
+    User user = findUserOrElseThrow(userId);
+    if (user.passwordNotConfirmed(actualPassword)) {
+      throw new BusinessException("Current password reported does not match the user's password.");
     }
+    user.setPassword(newPassword);
+  }
 
-    @Transactional
-    public void unlinkGroup(Long userId, Long groupId) {
-        User user = findUserOrElseThrow(userId);
-        Family group = familyService.findFamilyOrElseThrow(groupId);
+  @Transactional
+  public void unlinkGroup(Long userId, Long groupId) {
+    User user = findUserOrElseThrow(userId);
+    Family group = familyService.findFamilyOrElseThrow(groupId);
 
-        user.removeGroup(group);
-    }
+    user.removeGroup(group);
+  }
 
-    @Transactional
-    public void linkGroup(Long userId, Long groupId) {
-        User user = findUserOrElseThrow(userId);
-        Family group = familyService.findFamilyOrElseThrow(groupId);
+  @Transactional
+  public void linkGroup(Long userId, Long groupId) {
+    User user = findUserOrElseThrow(userId);
+    Family group = familyService.findFamilyOrElseThrow(groupId);
 
-        user.addGroup(group);
-    }
+    user.addGroup(group);
+  }
 
-    public User findUserOrElseThrow(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-    }
+  public User findUserOrElseThrow(Long userId) {
+    return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+  }
 }

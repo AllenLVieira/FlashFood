@@ -2,10 +2,9 @@ package br.com.allen.flashfood.api.model.response;
 
 import br.com.allen.flashfood.api.model.view.RestaurantView;
 import com.fasterxml.jackson.annotation.JsonView;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

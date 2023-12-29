@@ -12,89 +12,92 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RestaurantRegistrationService {
 
-    private final RestaurantRepository restaurantRepository;
-    private final CuisineRegistrationService cuisineRegistration;
-    private final CityRegistrationService cityRegistration;
-    private final PaymentMethodRegistrationService paymentMethodRegistrationService;
-    private final UserRegistrationsService userService;
+  private final RestaurantRepository restaurantRepository;
+  private final CuisineRegistrationService cuisineRegistration;
+  private final CityRegistrationService cityRegistration;
+  private final PaymentMethodRegistrationService paymentMethodRegistrationService;
+  private final UserRegistrationsService userService;
 
-    @Transactional
-    public Restaurant saveRestaurant(Restaurant restaurant) {
-        Long cuisineId = restaurant.getCuisine().getId();
-        Long cityId = restaurant.getAddress().getCity().getId();
-        Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
-        City city = cityRegistration.findCityOrElseThrow(cityId);
-        restaurant.setCuisine(cuisine);
-        restaurant.getAddress().setCity(city);
-        return restaurantRepository.save(restaurant);
-    }
+  @Transactional
+  public Restaurant saveRestaurant(Restaurant restaurant) {
+    Long cuisineId = restaurant.getCuisine().getId();
+    Long cityId = restaurant.getAddress().getCity().getId();
+    Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
+    City city = cityRegistration.findCityOrElseThrow(cityId);
+    restaurant.setCuisine(cuisine);
+    restaurant.getAddress().setCity(city);
+    return restaurantRepository.save(restaurant);
+  }
 
-    @Transactional
-    public void activateRestaurant(Long restaurantId) {
-        Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
-        actualRestaurant.activate();
-    }
+  @Transactional
+  public void activateRestaurant(Long restaurantId) {
+    Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
+    actualRestaurant.activate();
+  }
 
-    @Transactional
-    public void disableRestaurant(Long restaurantId) {
-        Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
-        actualRestaurant.disable();
-    }
+  @Transactional
+  public void disableRestaurant(Long restaurantId) {
+    Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
+    actualRestaurant.disable();
+  }
 
-    @Transactional
-    public void massActivateRestaurant(List<Long> restaurantIds) {
-        restaurantIds.forEach(this::activateRestaurant);
-    }
+  @Transactional
+  public void massActivateRestaurant(List<Long> restaurantIds) {
+    restaurantIds.forEach(this::activateRestaurant);
+  }
 
-    @Transactional
-    public void massDisableRestaurant(List<Long> restaurantIds) {
-        restaurantIds.forEach(this::disableRestaurant);
-    }
+  @Transactional
+  public void massDisableRestaurant(List<Long> restaurantIds) {
+    restaurantIds.forEach(this::disableRestaurant);
+  }
 
-    @Transactional
-    public void removePaymentMethod(Long restaurantId, Long paymentMethodId) {
-        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
-        PaymentMethod paymentMethod = paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
-        restaurant.removePaymentMethod(paymentMethod);
-    }
+  @Transactional
+  public void removePaymentMethod(Long restaurantId, Long paymentMethodId) {
+    Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+    PaymentMethod paymentMethod =
+        paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
+    restaurant.removePaymentMethod(paymentMethod);
+  }
 
-    @Transactional
-    public void addPaymentMethod(Long restaurantId, Long paymentMethodId) {
-        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
-        PaymentMethod paymentMethod = paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
-        restaurant.addPaymentMethod(paymentMethod);
-    }
+  @Transactional
+  public void addPaymentMethod(Long restaurantId, Long paymentMethodId) {
+    Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+    PaymentMethod paymentMethod =
+        paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
+    restaurant.addPaymentMethod(paymentMethod);
+  }
 
-    @Transactional
-    public void openRestaurant(Long restaurantId) {
-        Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
-        actualRestaurant.openRestaurant();
-    }
+  @Transactional
+  public void openRestaurant(Long restaurantId) {
+    Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
+    actualRestaurant.openRestaurant();
+  }
 
-    @Transactional
-    public void closeRestaurant(Long restaurantId) {
-        Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
-        actualRestaurant.closeRestaurant();
-    }
+  @Transactional
+  public void closeRestaurant(Long restaurantId) {
+    Restaurant actualRestaurant = findRestaurantOrElseThrow(restaurantId);
+    actualRestaurant.closeRestaurant();
+  }
 
-    @Transactional
-    public void unlinkManager(Long restaurantId, Long userId) {
-        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
-        User user = userService.findUserOrElseThrow(userId);
+  @Transactional
+  public void unlinkManager(Long restaurantId, Long userId) {
+    Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+    User user = userService.findUserOrElseThrow(userId);
 
-        restaurant.removeManager(user);
-    }
+    restaurant.removeManager(user);
+  }
 
-    @Transactional
-    public void linkManager(Long restaurantId, Long userId) {
-        Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
-        User user = userService.findUserOrElseThrow(userId);
+  @Transactional
+  public void linkManager(Long restaurantId, Long userId) {
+    Restaurant restaurant = findRestaurantOrElseThrow(restaurantId);
+    User user = userService.findUserOrElseThrow(userId);
 
-        restaurant.addNewManager(user);
-    }
+    restaurant.addNewManager(user);
+  }
 
-    public Restaurant findRestaurantOrElseThrow(Long restaurantId) {
-        return restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
-    }
+  public Restaurant findRestaurantOrElseThrow(Long restaurantId) {
+    return restaurantRepository
+        .findById(restaurantId)
+        .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+  }
 }

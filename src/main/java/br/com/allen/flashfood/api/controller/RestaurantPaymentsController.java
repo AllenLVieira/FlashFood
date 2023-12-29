@@ -4,12 +4,11 @@ import br.com.allen.flashfood.api.assembler.PaymentMethodModelAssembler;
 import br.com.allen.flashfood.api.model.response.PaymentMethodResponse;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(

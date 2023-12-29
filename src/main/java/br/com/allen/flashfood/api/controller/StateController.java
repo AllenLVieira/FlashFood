@@ -7,13 +7,12 @@ import br.com.allen.flashfood.api.model.response.StateResponse;
 import br.com.allen.flashfood.domain.model.State;
 import br.com.allen.flashfood.domain.repository.StateRepository;
 import br.com.allen.flashfood.domain.service.StateRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/states", produces = MediaType.APPLICATION_JSON_VALUE)

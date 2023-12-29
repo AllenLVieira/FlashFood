@@ -11,21 +11,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepository
-        extends JpaRepository<Restaurant, Long>, RestaurantRepositoryQueries,
+    extends JpaRepository<Restaurant, Long>,
+        RestaurantRepositoryQueries,
         JpaSpecificationExecutor<Restaurant> {
 
-    /**
-     * To improve query performance with fetch
-     * If you need to do the same with ManyToMany, can do a LEFT JOIN FETCH
-     */
-    @Query("from Restaurant r join fetch r.cuisine")
-    List<Restaurant> findAll();
+  /**
+   * To improve query performance with fetch If you need to do the same with ManyToMany, can do a
+   * LEFT JOIN FETCH
+   */
+  @Query("from Restaurant r join fetch r.cuisine")
+  List<Restaurant> findAll();
 
-    List<Restaurant> consultByNameAndBetweenFee(String name, BigDecimal initialFee, BigDecimal finalFee);
+  List<Restaurant> consultByNameAndBetweenFee(
+      String name, BigDecimal initialFee, BigDecimal finalFee);
 
-    List<Restaurant> consultByNameAndCuisineId(String name, @Param("id") Long cuisineId);
+  List<Restaurant> consultByNameAndCuisineId(String name, @Param("id") Long cuisineId);
 
-    List<Restaurant> findByFreightRateBetween(BigDecimal initalFee, BigDecimal finalFee);
+  List<Restaurant> findByFreightRateBetween(BigDecimal initalFee, BigDecimal finalFee);
 
-    int countByCuisineId(Long cuisineId);
+  int countByCuisineId(Long cuisineId);
 }

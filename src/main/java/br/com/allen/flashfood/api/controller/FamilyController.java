@@ -7,13 +7,12 @@ import br.com.allen.flashfood.api.model.response.FamilyResponse;
 import br.com.allen.flashfood.domain.model.Family;
 import br.com.allen.flashfood.domain.repository.FamilyRepository;
 import br.com.allen.flashfood.domain.service.FamilyRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,11 +1,10 @@
 package br.com.allen.flashfood.api.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.OffsetDateTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder

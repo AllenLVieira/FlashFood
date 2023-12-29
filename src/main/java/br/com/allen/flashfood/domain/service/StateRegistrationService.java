@@ -13,32 +13,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class StateRegistrationService {
-    public static final String STATE_IN_USE = "State with %d code cannot be removed because it is in use.";
+  public static final String STATE_IN_USE =
+      "State with %d code cannot be removed because it is in use.";
 
-    private final StateRepository stateRepository;
+  private final StateRepository stateRepository;
 
-    @Transactional
-    public State saveState(State state) {
-        return stateRepository.save(state);
+  @Transactional
+  public State saveState(State state) {
+    return stateRepository.save(state);
+  }
+
+  @Transactional
+  public void deleteState(Long stateId) {
+    try {
+      stateRepository.deleteById(stateId);
+      stateRepository.flush();
+    } catch (EmptyResultDataAccessException e) {
+      throw new StateNotFoundException(stateId);
+    } catch (DataIntegrityViolationException e) {
+      throw new EntityInUseException(String.format(STATE_IN_USE, stateId));
     }
+  }
 
-    @Transactional
-    public void deleteState(Long stateId) {
-        try {
-            stateRepository.deleteById(stateId);
-            stateRepository.flush();
-        } catch (EmptyResultDataAccessException e) {
-            throw new StateNotFoundException(stateId);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format(STATE_IN_USE, stateId)
-            );
-        }
-    }
-
-    public State findStateOrElseThrow(Long stateId) {
-        return stateRepository.findById(stateId)
-                .orElseThrow(() -> new StateNotFoundException(stateId));
-    }
-
+  public State findStateOrElseThrow(Long stateId) {
+    return stateRepository.findById(stateId).orElseThrow(() -> new StateNotFoundException(stateId));
+  }
 }

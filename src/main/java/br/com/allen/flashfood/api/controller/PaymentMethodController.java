@@ -9,13 +9,12 @@ import br.com.allen.flashfood.domain.exception.PaymentMethodNotFoundException;
 import br.com.allen.flashfood.domain.model.PaymentMethod;
 import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
 import br.com.allen.flashfood.domain.service.PaymentMethodRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)

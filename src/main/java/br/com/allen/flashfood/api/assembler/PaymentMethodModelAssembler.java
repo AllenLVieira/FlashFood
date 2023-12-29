@@ -2,13 +2,12 @@ package br.com.allen.flashfood.api.assembler;
 
 import br.com.allen.flashfood.api.model.response.PaymentMethodResponse;
 import br.com.allen.flashfood.domain.model.PaymentMethod;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMethodModelAssembler {

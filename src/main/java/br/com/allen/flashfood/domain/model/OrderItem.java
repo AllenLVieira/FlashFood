@@ -1,10 +1,9 @@
 package br.com.allen.flashfood.domain.model;
 
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Data
 @Entity

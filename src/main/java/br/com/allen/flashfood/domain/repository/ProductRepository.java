@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("from Product where restaurant.id = :restaurant and id = :product")
-    Optional<Product> findById(@Param("restaurant") Long restaurantId,
-                               @Param("product") Long productId);
+  @Query("from Product where restaurant.id = :restaurant and id = :product")
+  Optional<Product> findById(
+      @Param("restaurant") Long restaurantId, @Param("product") Long productId);
 
-    List<Product> findByRestaurant(Restaurant restaurant);
+  List<Product> findByRestaurant(Restaurant restaurant);
 
-    @Query("from Product p where p.restaurant = :restaurant and p.active = true")
-    List<Product> findActiveProductsByRestaurant(Restaurant restaurant);
+  @Query("from Product p where p.restaurant = :restaurant and p.active = true")
+  List<Product> findActiveProductsByRestaurant(Restaurant restaurant);
 }

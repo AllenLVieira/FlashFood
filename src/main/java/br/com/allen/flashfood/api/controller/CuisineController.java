@@ -7,6 +7,8 @@ import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,9 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)

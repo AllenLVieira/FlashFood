@@ -1,13 +1,12 @@
 package br.com.allen.flashfood.api.model.request;
 
 import br.com.allen.flashfood.core.validation.FreightRate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
