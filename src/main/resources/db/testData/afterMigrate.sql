@@ -16,6 +16,7 @@ DELETE FROM user_group;
 DELETE FROM restaurant_user_manager;
 DELETE FROM order_item;
 DELETE FROM delivery_order;
+DELETE FROM photo_product;
 
 SET foreign_key_checks = 1;
 

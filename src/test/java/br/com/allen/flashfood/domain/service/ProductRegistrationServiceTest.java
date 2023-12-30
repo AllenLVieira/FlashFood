@@ -80,7 +80,7 @@ class ProductRegistrationServiceTest {
   /** Method under test: {@link ProductRegistrationService#saveProduct(Product)} */
   @Test
   void shouldSuccessfullySaveProduct() {
-    when(productRepository.save(any())).thenReturn(product);
+    when(productRepository.save((Product) any())).thenReturn(product);
 
     City city1 = new City();
     city1.setId(123L);
@@ -125,7 +125,7 @@ class ProductRegistrationServiceTest {
     assertSame(product, actualSaveProductResult);
     assertEquals("42", actualSaveProductResult.getPrice().toString());
     assertEquals("42", actualSaveProductResult.getRestaurant().getFreightRate().toString());
-    verify(productRepository).save(any());
+    verify(productRepository).save((Product) any());
   }
 
   /** Method under test: {@link ProductRegistrationService#findProductOrElseThrow(Long, Long)} */
