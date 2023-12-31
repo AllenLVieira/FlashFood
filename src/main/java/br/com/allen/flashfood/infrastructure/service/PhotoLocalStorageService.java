@@ -2,6 +2,7 @@ package br.com.allen.flashfood.infrastructure.service;
 
 import br.com.allen.flashfood.domain.service.PhotoStorageService;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,16 @@ public class PhotoLocalStorageService implements PhotoStorageService {
       Files.deleteIfExists(filepath);
     } catch (IOException e) {
       throw new StorageException("The file cannot be deleted.", e);
+    }
+  }
+
+  @Override
+  public InputStream retrieve(String filename) {
+    Path filepath = getFilePath(filename);
+    try {
+      return Files.newInputStream(filepath);
+    } catch (IOException e) {
+      throw new StorageException("Cannot retrieve the file.", e);
     }
   }
 

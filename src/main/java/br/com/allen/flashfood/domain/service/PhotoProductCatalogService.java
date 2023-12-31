@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.service;
 
+import br.com.allen.flashfood.domain.exception.PhotoProductNotFoundException;
 import br.com.allen.flashfood.domain.model.PhotoProduct;
 import br.com.allen.flashfood.domain.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -42,5 +43,11 @@ public class PhotoProductCatalogService {
     photoStorageService.replaceName(filenameExists, newPhoto);
 
     return save;
+  }
+
+  public PhotoProduct findOrElseThrow(Long restaurantId, Long productId) {
+    return productRepository
+        .findPhotoById(restaurantId, productId)
+        .orElseThrow(() -> new PhotoProductNotFoundException(restaurantId, productId));
   }
 }

@@ -45,4 +45,10 @@ public class RestaurantProductPhotoController {
 
     return photoProductModelAssembler.toModel(savedPhoto);
   }
+
+  @GetMapping
+  public PhotoProductResponse find(@PathVariable Long restaurantId, @PathVariable Long productId) {
+    PhotoProduct photo = photoProductCatalogService.findOrElseThrow(restaurantId, productId);
+    return photoProductModelAssembler.toModel(photo);
+  }
 }
