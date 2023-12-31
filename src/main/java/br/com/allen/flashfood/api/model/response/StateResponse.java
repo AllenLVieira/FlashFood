@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class StateResponse {
 
-    private Long id;
-    private String name;
+  private Long id;
+  private String name;
 }

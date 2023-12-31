@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FamilyRequestDisassembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public Family toDomainObject(FamilyRequest groupRequest) {
-        return modelMapper.map(groupRequest, Family.class);
-    }
+  public Family toDomainObject(FamilyRequest groupRequest) {
+    return modelMapper.map(groupRequest, Family.class);
+  }
 
-    public void copyToDomainObject(FamilyRequest groupRequest, Family group) {
-        modelMapper.map(groupRequest, group);
-    }
+  public void copyToDomainObject(FamilyRequest groupRequest, Family group) {
+    modelMapper.map(groupRequest, group);
+  }
 }

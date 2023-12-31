@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserRequestDisassembler {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public User toDomainObject(UserRequest userRequest) {
-        return modelMapper.map(userRequest, User.class);
-    }
+  public User toDomainObject(UserRequest userRequest) {
+    return modelMapper.map(userRequest, User.class);
+  }
 
-    public void copyToDomainObject(UserRequest userRequest, User user) {
-        modelMapper.map(userRequest, user);
-    }
+  public void copyToDomainObject(UserRequest userRequest, User user) {
+    modelMapper.map(userRequest, user);
+  }
 }

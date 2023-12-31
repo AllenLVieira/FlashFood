@@ -16,6 +16,7 @@ DELETE FROM user_group;
 DELETE FROM restaurant_user_manager;
 DELETE FROM order_item;
 DELETE FROM delivery_order;
+DELETE FROM photo_product;
 
 SET foreign_key_checks = 1;
 
@@ -40,6 +41,7 @@ INSERT INTO restaurant (id, freight_rate, name, registration_date, update_date, 
 -- Product
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (1, 1, 'Queijo coalho na chapa com melaço e pesto de cheiro-verde', 'Queijo coalho', 30.9, 2);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (2, 1, 'Bolinhos de risoto recheados com queijo mussarela', 'Arancini', 39.0, 1);
+INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (6, 0, 'Test Product - Disabled', 'Test Product', 99.9, 1);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (3, 1, 'Polpettone recheado de mussarela, coberto com molho de tomates e queijo parmesão, servido com linguine na manteiga', 'Polpettone alla parmigiana com linguine', 125.0, 1);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (4, 1, 'Camarão frito no azeito e alho', 'Camarão alho e óleo', 85.0, 3);
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (5, 1, 'Molho de tomate, mussarela, catupiry, provolone e parmesão', 'Quattro Formaggi', 74.0, 3);
@@ -94,22 +96,22 @@ INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (1, 1);
 INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (2, 1);
 
 -- Order
-INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                            address_complement, address_district, address_number, address_street, address_zipcode,
                            address_city_id, status, registration_date)
-VALUES (1, 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
+VALUES (1, '59493c0a-96d0-4b30-aa9d-60dc84cd0464', 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
         1, 'CREATED', utc_timestamp);
 
-INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                            address_complement, address_district, address_number, address_street, address_zipcode,
                            address_city_id, status, registration_date)
-VALUES (2, 39, 14.9, 53.9, 2, 2, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+VALUES (2, '90ad7810-a1ed-4993-b839-9ffc75860400', 39, 14.9, 53.9, 2, 2, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
         1, 'CREATED', utc_timestamp);
         
-INSERT INTO delivery_order (id, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
+INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                             address_complement, address_district, address_number, address_street, address_zipcode,
                             address_city_id, status, registration_date, cancellation_date)
-VALUES (3, 203, 14.9, 217.9, 1, 4, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+VALUES (3, '993135e8-3695-4596-b776-848727c5320a', 203, 14.9, 217.9, 1, 4, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
         1, 'CANCELED', utc_timestamp, utc_timestamp + INTERVAL 5 MINUTE);
 
 

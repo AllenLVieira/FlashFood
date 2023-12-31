@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CuisineRequest {
-    private String name;
+  private String name;
 }

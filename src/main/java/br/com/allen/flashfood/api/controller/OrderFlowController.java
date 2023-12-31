@@ -7,27 +7,27 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/orders/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/orders/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class OrderFlowController {
 
-    private final OrderFlowService orderFlowService;
+  private final OrderFlowService orderFlowService;
 
-    @PutMapping("/confirmation")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmOrder(@PathVariable Long orderId) {
-        orderFlowService.confirmOrder(orderId);
-    }
+  @PutMapping("/confirmation")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void confirmOrder(@PathVariable String orderCode) {
+    orderFlowService.confirmOrder(orderCode);
+  }
 
-    @PutMapping("/delivered")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliverOrder(@PathVariable Long orderId) {
-        orderFlowService.deliverOrder(orderId);
-    }
+  @PutMapping("/delivered")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deliverOrder(@PathVariable String orderCode) {
+    orderFlowService.deliverOrder(orderCode);
+  }
 
-    @PutMapping("/cancellation")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelOrder(@PathVariable Long orderId) {
-        orderFlowService.cancelOrder(orderId);
-    }
+  @PutMapping("/cancellation")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void cancelOrder(@PathVariable String orderCode) {
+    orderFlowService.cancelOrder(orderCode);
+  }
 }

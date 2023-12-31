@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class PaymentMethodResponse {
 
-    private Long id;
+  private Long id;
 
-    private String description;
+  private String description;
 }
