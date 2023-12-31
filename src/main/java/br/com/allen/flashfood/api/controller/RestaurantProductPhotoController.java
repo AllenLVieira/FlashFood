@@ -84,6 +84,12 @@ public class RestaurantProductPhotoController {
     }
   }
 
+  @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void remove(@PathVariable Long restaurantId, @PathVariable Long productId) {
+    photoProductCatalogService.remove(restaurantId, productId);
+  }
+
   /**
    * Ensures that the given MediaType is compatible with any of the acceptable MediaTypes.
    *
