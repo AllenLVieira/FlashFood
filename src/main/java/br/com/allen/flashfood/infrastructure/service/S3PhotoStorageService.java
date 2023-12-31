@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import java.io.InputStream;
+import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +53,11 @@ public class S3PhotoStorageService implements PhotoStorageService {
   }
 
   @Override
-  public InputStream retrieve(String filename) {
-    return null;
+  public RetrievedPhoto retrieve(String filename) {
+    String filePath = getFilePath(filename);
+    URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(), filePath);
+
+    return RetrievedPhoto.builder().url(url.toString()).build();
   }
 
   private String getFilePath(String filename) {

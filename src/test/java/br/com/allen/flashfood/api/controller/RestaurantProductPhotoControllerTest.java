@@ -2,7 +2,6 @@ package br.com.allen.flashfood.api.controller;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.*;
 
 import br.com.allen.flashfood.api.assembler.PhotoProductModelAssembler;
@@ -20,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -84,21 +83,28 @@ class RestaurantProductPhotoControllerTest {
 
   @Test
   void testGetPhoto() throws Exception {
-    // Mock the dependencies
+    // Arrange
+    Long restaurantId = 1L;
+    Long productId = 1L;
     PhotoProduct photo = new PhotoProduct();
     photo.setContentType("image/jpeg");
     photo.setFilename("test.jpg");
+
     ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[0]);
+    PhotoStorageService.RetrievedPhoto retrievedPhoto =
+        mock(PhotoStorageService.RetrievedPhoto.class);
+    when(retrievedPhoto.getInputStream()).thenReturn(inputStream);
+    when(retrievedPhoto.urlExists()).thenReturn(false); // Assuming the URL does not exist
 
-    when(photoProductCatalogService.findOrElseThrow(anyLong(), anyLong())).thenReturn(photo);
-    when(photoStorageService.retrieve(anyString())).thenReturn(inputStream);
+    when(photoProductCatalogService.findOrElseThrow(restaurantId, productId)).thenReturn(photo);
+    when(photoStorageService.retrieve(photo.getFilename())).thenReturn(retrievedPhoto);
 
-    // Call the method to test
-    ResponseEntity<InputStreamResource> response = controller.getPhoto(1L, 1L, "image/jpeg");
+    // Act
+    ResponseEntity<?> response = controller.getPhoto(restaurantId, productId, "image/jpeg");
 
-    // Assertions
+    // Assert
     assertNotNull(response);
-    assertEquals(OK, response.getStatusCode());
+    assertEquals(HttpStatus.OK, response.getStatusCode());
     verify(photoStorageService).retrieve("test.jpg");
   }
 
@@ -113,8 +119,7 @@ class RestaurantProductPhotoControllerTest {
         .thenThrow(new PhotoProductNotFoundException("Entity not found"));
 
     // Act
-    ResponseEntity<InputStreamResource> response =
-        controller.getPhoto(restaurantId, productId, acceptHeader);
+    ResponseEntity<?> response = controller.getPhoto(restaurantId, productId, acceptHeader);
 
     // Assert
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -128,10 +133,11 @@ class RestaurantProductPhotoControllerTest {
     PhotoProduct photo = new PhotoProduct();
     photo.setContentType("image/png"); // Set a content type that is not compatible
     photo.setFilename("test.png");
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[0]);
 
+    PhotoStorageService.RetrievedPhoto retrievedPhoto =
+        mock(PhotoStorageService.RetrievedPhoto.class);
     when(photoProductCatalogService.findOrElseThrow(restaurantId, productId)).thenReturn(photo);
-    when(photoStorageService.retrieve(anyString())).thenReturn(inputStream);
+    when(photoStorageService.retrieve(anyString())).thenReturn(retrievedPhoto);
 
     String acceptHeader =
         "image/jpeg"; // Accept header that is not compatible with photo's content type
@@ -146,5 +152,45 @@ class RestaurantProductPhotoControllerTest {
     String expectedMessage =
         "MediaType image/png is not acceptable. Acceptable types: [image/jpeg]";
     assertTrue(exception.getMessage().contains(expectedMessage));
+  }
+
+  @Test
+  void testGetPhoto_UrlExists() throws HttpMediaTypeNotAcceptableException {
+    // Arrange
+    Long restaurantId = 1L;
+    Long productId = 1L;
+    PhotoProduct photo = new PhotoProduct();
+    photo.setContentType("image/jpeg");
+    photo.setFilename("test.jpg");
+
+    PhotoStorageService.RetrievedPhoto retrievedPhoto =
+        mock(PhotoStorageService.RetrievedPhoto.class);
+    when(retrievedPhoto.urlExists()).thenReturn(true);
+    when(retrievedPhoto.getUrl()).thenReturn("http://example.com/photo.jpg");
+
+    when(photoProductCatalogService.findOrElseThrow(restaurantId, productId)).thenReturn(photo);
+    when(photoStorageService.retrieve(photo.getFilename())).thenReturn(retrievedPhoto);
+
+    // Act
+    ResponseEntity<?> response = controller.getPhoto(restaurantId, productId, "image/jpeg");
+
+    // Assert
+    assertEquals(HttpStatus.FOUND, response.getStatusCode());
+    assertEquals(
+        "http://example.com/photo.jpg", response.getHeaders().getFirst(HttpHeaders.LOCATION));
+  }
+
+  @Test
+  void remove_ShouldCallService() {
+    // Arrange
+    Long restaurantId = 1L;
+    Long productId = 1L;
+    doNothing().when(photoProductCatalogService).remove(restaurantId, productId);
+
+    // Act
+    controller.remove(restaurantId, productId);
+
+    // Assert
+    verify(photoProductCatalogService).remove(restaurantId, productId);
   }
 }

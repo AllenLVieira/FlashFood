@@ -11,12 +11,12 @@ import br.com.allen.flashfood.domain.service.PhotoStorageService;
 import br.com.allen.flashfood.domain.service.ProductRegistrationService;
 import jakarta.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +62,7 @@ public class RestaurantProductPhotoController {
   }
 
   @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
-  public ResponseEntity<InputStreamResource> getPhoto(
+  public ResponseEntity<?> getPhoto(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,
       @RequestHeader(name = "Accept") String acceptHeader)
@@ -75,11 +75,19 @@ public class RestaurantProductPhotoController {
       MediaType mediaTypePhoto = MediaType.parseMediaType(photo.getContentType());
       ensureMediaTypeCompatibility(mediaTypePhoto, acceptableMediaTypes);
 
-      InputStream inputStream = photoStorageService.retrieve(photo.getFilename());
+      PhotoStorageService.RetrievedPhoto inputStream =
+          photoStorageService.retrieve(photo.getFilename());
 
-      return ResponseEntity.ok()
-          .contentType(MediaType.IMAGE_JPEG)
-          .body(new InputStreamResource(inputStream));
+      if (inputStream.urlExists()) {
+        return ResponseEntity.status(HttpStatus.FOUND)
+            .header(HttpHeaders.LOCATION, inputStream.getUrl())
+            .build();
+      } else {
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(new InputStreamResource(inputStream.getInputStream()));
+      }
+
     } catch (EntityNotFoundedException e) {
       return ResponseEntity.notFound().build();
     }

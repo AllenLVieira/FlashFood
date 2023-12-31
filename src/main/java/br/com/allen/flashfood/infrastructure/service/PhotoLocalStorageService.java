@@ -3,7 +3,6 @@ package br.com.allen.flashfood.infrastructure.service;
 import br.com.allen.flashfood.core.storage.StorageProperties;
 import br.com.allen.flashfood.domain.service.PhotoStorageService;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +35,10 @@ public class PhotoLocalStorageService implements PhotoStorageService {
   }
 
   @Override
-  public InputStream retrieve(String filename) {
+  public RetrievedPhoto retrieve(String filename) {
     Path filepath = getFilePath(filename);
     try {
-      return Files.newInputStream(filepath);
+      return RetrievedPhoto.builder().inputStream(Files.newInputStream(filepath)).build();
     } catch (IOException e) {
       throw new StorageException("Cannot retrieve the file.", e);
     }
