@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.service;
 
+import br.com.allen.flashfood.domain.exception.PhotoProductNotFoundException;
 import br.com.allen.flashfood.domain.model.PhotoProduct;
 import br.com.allen.flashfood.domain.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -20,10 +21,14 @@ public class PhotoProductCatalogService {
     Long restaurantId = photo.getRestaurantId();
     Long productId = photo.getProduct().getId();
     String newFileName = photoStorageService.generateFileName(photo.getFilename());
+    String filenameExists = null;
 
     Optional<PhotoProduct> existingPhotoProduct =
         productRepository.findPhotoById(restaurantId, productId);
-    existingPhotoProduct.ifPresent(productRepository::delete);
+    if (existingPhotoProduct.isPresent()) {
+      filenameExists = existingPhotoProduct.get().getFilename();
+      productRepository.delete(existingPhotoProduct.get());
+    }
 
     photo.setFilename(newFileName);
     PhotoProduct save = productRepository.save(photo);
@@ -32,10 +37,28 @@ public class PhotoProductCatalogService {
     PhotoStorageService.NewPhoto newPhoto =
         PhotoStorageService.NewPhoto.builder()
             .filename(photo.getFilename())
+            .contentType(photo.getContentType())
             .inputStream(fileData)
             .build();
-    photoStorageService.store(newPhoto);
+
+    photoStorageService.replaceName(filenameExists, newPhoto);
 
     return save;
+  }
+
+  @Transactional
+  public void remove(Long restaurantId, Long productId) {
+    PhotoProduct photo = findOrElseThrow(restaurantId, productId);
+
+    productRepository.delete(photo);
+    productRepository.flush();
+
+    photoStorageService.remove(photo.getFilename());
+  }
+
+  public PhotoProduct findOrElseThrow(Long restaurantId, Long productId) {
+    return productRepository
+        .findPhotoById(restaurantId, productId)
+        .orElseThrow(() -> new PhotoProductNotFoundException(restaurantId, productId));
   }
 }
