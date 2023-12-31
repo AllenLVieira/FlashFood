@@ -4,6 +4,7 @@ import br.com.allen.flashfood.core.storage.StorageProperties;
 import br.com.allen.flashfood.domain.service.PhotoStorageService;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.InputStream;
@@ -39,7 +40,17 @@ public class S3PhotoStorageService implements PhotoStorageService {
   }
 
   @Override
-  public void remove(String filename) {}
+  public void remove(String filename) {
+    try {
+      String filePath = getFilePath(filename);
+      var deleteObjectRequest =
+          new DeleteObjectRequest(storageProperties.getS3().getBucket(), filePath);
+
+      amazonS3.deleteObject(deleteObjectRequest);
+    } catch (Exception e) {
+      throw new StorageException("Cannot delete image on Amazon S3", e);
+    }
+  }
 
   @Override
   public InputStream retrieve(String filename) {
