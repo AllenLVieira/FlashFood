@@ -52,7 +52,7 @@ public class PhotoProductCatalogService {
     productRepository.delete(photo);
     productRepository.flush();
 
-    photoStorageService.remove(photo.getFilename);
+    photoStorageService.remove(photo.getFilename());
   }
 
   public PhotoProduct findOrElseThrow(Long restaurantId, Long productId) {
