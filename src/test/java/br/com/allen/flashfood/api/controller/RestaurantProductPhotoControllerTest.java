@@ -1,86 +1,150 @@
 package br.com.allen.flashfood.api.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.*;
 
-import java.nio.file.Path;
-import org.junit.jupiter.api.extension.ExtendWith;
+import br.com.allen.flashfood.api.assembler.PhotoProductModelAssembler;
+import br.com.allen.flashfood.api.model.request.ProductPhotoRequest;
+import br.com.allen.flashfood.api.model.response.PhotoProductResponse;
+import br.com.allen.flashfood.domain.exception.PhotoProductNotFoundException;
+import br.com.allen.flashfood.domain.model.PhotoProduct;
+import br.com.allen.flashfood.domain.model.Product;
+import br.com.allen.flashfood.domain.service.PhotoProductCatalogService;
+import br.com.allen.flashfood.domain.service.PhotoStorageService;
+import br.com.allen.flashfood.domain.service.ProductRegistrationService;
+import java.io.ByteArrayInputStream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.multipart.MultipartFile;
+import org.mockito.MockitoAnnotations;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
-@ExtendWith(MockitoExtension.class)
 class RestaurantProductPhotoControllerTest {
 
-  @Mock MultipartFile mockFile;
-  @Mock private Path mockFilePath;
+  @Mock private PhotoProductCatalogService photoProductCatalogService;
+
+  @Mock private ProductRegistrationService productRegistrationService;
+
+  @Mock private PhotoProductModelAssembler photoProductModelAssembler;
+
+  @Mock private PhotoStorageService photoStorageService;
 
   @InjectMocks private RestaurantProductPhotoController controller;
 
-  /*@Test
-  @Disabled
-  void shouldUpdatePhotoSuccessfully_whenGivenValidRequest() {
-    // Given
+  // Setup method to initialize mocks
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  void testUpdatePhoto() throws Exception {
+    // Mock the dependencies
     MockMultipartFile file =
-        new MockMultipartFile("file", "test.jpg", "image/jpeg", "some image data".getBytes());
-    ProductPhotoRequest request = new ProductPhotoRequest(file, "Test photo description");
+        new MockMultipartFile("file", "filename.jpg", "image/jpeg", "some-image".getBytes());
+    ProductPhotoRequest request = new ProductPhotoRequest(file, "description");
+    Product product = new Product(); // Assuming you have a Product class
+    PhotoProduct photo = new PhotoProduct();
 
-    // When
-    PhotoProductResponse response = controller.updatePhoto(1L, 2L, request);
+    // Define behavior of mocked services
+    when(productRegistrationService.findProductOrElseThrow(anyLong(), anyLong()))
+        .thenReturn(product);
+    when(photoProductCatalogService.save(any(PhotoProduct.class), any())).thenReturn(photo);
+    when(photoProductModelAssembler.toModel(photo)).thenReturn(new PhotoProductResponse());
 
-    // Then
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals("Photo updated successfully.", response.getBody());
+    // Call the method to test
+    PhotoProductResponse response = controller.updatePhoto(1L, 1L, request);
+
+    // Assertions to verify the expected behavior
+    assertNotNull(response);
+    verify(photoProductCatalogService).save(any(PhotoProduct.class), any());
   }
 
   @Test
-  @Disabled
-  void shouldReturnPayloadTooLargeError_whenFileSizeExceedsLimit() {
-    // Given
-    MultipartFile mockFile =
-        new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[12 * 1024 * 1024]);
-    ProductPhotoRequest request = new ProductPhotoRequest(mockFile, "Test photo description");
+  void testFind() {
+    // Mock the dependencies
+    PhotoProduct photo = new PhotoProduct();
+    when(photoProductCatalogService.findOrElseThrow(anyLong(), anyLong())).thenReturn(photo);
+    when(photoProductModelAssembler.toModel(photo)).thenReturn(new PhotoProductResponse());
 
-    // When
-    PhotoProductResponse response = controller.updatePhoto(1L, 2L, request);
+    // Call the method to test
+    PhotoProductResponse response = controller.find(1L, 1L);
 
-    // Then
-    assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, response.getStatusCode());
-    assertEquals("File size exceeds the allowed limit of 10 MB.", response.getBody());
-    verifyNoInteractions(mockFilePath);
+    // Assertions
+    assertNotNull(response);
+    verify(photoProductCatalogService).findOrElseThrow(1L, 1L);
   }
 
   @Test
-  @Disabled
-  void shouldReturnUnsupportedMediaTypeError_whenInvalidContentTypeIsProvided() {
-    // Given
-    MultipartFile mockFile =
-        new MockMultipartFile("file", "test.pdf", "application/pdf", new byte[1024]);
-    ProductPhotoRequest request = new ProductPhotoRequest(mockFile, "Test photo description");
+  void testGetPhoto() throws Exception {
+    // Mock the dependencies
+    PhotoProduct photo = new PhotoProduct();
+    photo.setContentType("image/jpeg");
+    photo.setFilename("test.jpg");
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[0]);
 
-    // When
-    PhotoProductResponse response = controller.updatePhoto(1L, 2L, request);
+    when(photoProductCatalogService.findOrElseThrow(anyLong(), anyLong())).thenReturn(photo);
+    when(photoStorageService.retrieve(anyString())).thenReturn(inputStream);
 
-    // Then
-    assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.getStatusCode());
-    assertEquals("Only image files are supported.", response.getBody());
-    verifyNoInteractions(mockFilePath);
+    // Call the method to test
+    ResponseEntity<InputStreamResource> response = controller.getPhoto(1L, 1L, "image/jpeg");
+
+    // Assertions
+    assertNotNull(response);
+    assertEquals(OK, response.getStatusCode());
+    verify(photoStorageService).retrieve("test.jpg");
   }
 
   @Test
-  @Disabled
-  void updatePhoto_badRequest_missingContentType() {
-    // Given
-    MockMultipartFile file =
-        new MockMultipartFile("file", "test.jpg", null, "some image data".getBytes());
-    ProductPhotoRequest request = new ProductPhotoRequest(file, "Test photo description");
+  void testGetPhoto_EntityNotFound() throws HttpMediaTypeNotAcceptableException {
+    // Arrange
+    Long restaurantId = 1L;
+    Long productId = 1L;
+    String acceptHeader = "image/jpeg";
 
-    // When
-    PhotoProductResponse response = controller.updatePhoto(1L, 2L, request);
+    when(photoProductCatalogService.findOrElseThrow(restaurantId, productId))
+        .thenThrow(new PhotoProductNotFoundException("Entity not found"));
 
-    // Then
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals("Missing or invalid content type.", response.getBody());
-  }*/
+    // Act
+    ResponseEntity<InputStreamResource> response =
+        controller.getPhoto(restaurantId, productId, acceptHeader);
+
+    // Assert
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+  }
+
+  @Test
+  void testGetPhoto_IncompatibleMediaType() {
+    // Arrange
+    Long restaurantId = 1L;
+    Long productId = 1L;
+    PhotoProduct photo = new PhotoProduct();
+    photo.setContentType("image/png"); // Set a content type that is not compatible
+    photo.setFilename("test.png");
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[0]);
+
+    when(photoProductCatalogService.findOrElseThrow(restaurantId, productId)).thenReturn(photo);
+    when(photoStorageService.retrieve(anyString())).thenReturn(inputStream);
+
+    String acceptHeader =
+        "image/jpeg"; // Accept header that is not compatible with photo's content type
+
+    // Act & Assert
+    Exception exception =
+        assertThrows(
+            HttpMediaTypeNotAcceptableException.class,
+            () -> controller.getPhoto(restaurantId, productId, acceptHeader));
+
+    // Verify that the exception message contains the expected content
+    String expectedMessage =
+        "MediaType image/png is not acceptable. Acceptable types: [image/jpeg]";
+    assertTrue(exception.getMessage().contains(expectedMessage));
+  }
 }
