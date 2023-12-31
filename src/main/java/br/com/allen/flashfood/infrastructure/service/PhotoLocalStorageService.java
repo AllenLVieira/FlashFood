@@ -7,10 +7,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class PhotoLocalStorageService implements PhotoStorageService {
 
