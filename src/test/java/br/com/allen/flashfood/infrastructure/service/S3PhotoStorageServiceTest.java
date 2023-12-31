@@ -20,6 +20,8 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -120,9 +122,11 @@ class S3PhotoStorageServiceTest {
   /** Method under test: {@link S3PhotoStorageService#retrieve(String)} */
   @Test
   void testRetrieve() throws MalformedURLException {
+    Path tempFilePath = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt");
+    URL expectedUrl = tempFilePath.toUri().toURL();
+
     // Arrange
-    when(amazonS3.getUrl(Mockito.<String>any(), Mockito.<String>any()))
-        .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toUri().toURL());
+    when(amazonS3.getUrl(Mockito.<String>any(), Mockito.<String>any())).thenReturn(expectedUrl);
 
     // Act
     PhotoStorageService.RetrievedPhoto actualRetrieveResult =
@@ -130,7 +134,7 @@ class S3PhotoStorageServiceTest {
 
     // Assert
     verify(amazonS3).getUrl(Mockito.<String>any(), Mockito.<String>any());
-    assertEquals("file:/C:/Users/allen/AppData/Local/Temp/test.txt", actualRetrieveResult.getUrl());
+    assertEquals(expectedUrl.toString(), actualRetrieveResult.getUrl());
     assertNull(actualRetrieveResult.getInputStream());
   }
 
