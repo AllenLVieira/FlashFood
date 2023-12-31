@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,13 +29,14 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   public static final String USER_MESSAGE =
       "An unexpected internal error has occurred in the system. "
           + "Try again and if the problem persists, contact your system administrator.";
 
-  @Autowired private MessageSource msgSource;
+  private final MessageSource msgSource;
 
   @ExceptionHandler(EntityNotFoundedException.class)
   public ResponseEntity<?> handleEntityNotFoundedException(
@@ -192,12 +192,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       HttpHeaders headers,
       HttpStatusCode status,
       WebRequest request) {
-    return handleInternalValidation(ex, headers, status, request, ex.getBindingResult());
-  }
-
-  @Override
-  protected ResponseEntity<Object> handleBindException(
-      BindException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     return handleInternalValidation(ex, headers, status, request, ex.getBindingResult());
   }
 
