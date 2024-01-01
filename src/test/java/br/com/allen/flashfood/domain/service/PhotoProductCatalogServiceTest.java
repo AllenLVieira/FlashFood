@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -149,10 +150,10 @@ class PhotoProductCatalogServiceTest {
     when(productRepository.findPhotoById(Mockito.<Long>any(), Mockito.<Long>any()))
         .thenReturn(ofResult);
     doNothing().when(productRepository).flush();
-    when(photoStorageService.generateFileName(Mockito.<String>any())).thenReturn("foo.txt");
+    when(photoStorageService.generateFileName(Mockito.any())).thenReturn("foo.txt");
     doNothing()
         .when(photoStorageService)
-        .replaceName(Mockito.<String>any(), Mockito.<PhotoStorageService.NewPhoto>any());
+        .replaceName(Mockito.any(), Mockito.any());
 
     Address address3 = new Address();
     address3.setCity(new City());
@@ -202,15 +203,15 @@ class PhotoProductCatalogServiceTest {
     // Act
     PhotoProduct actualSaveResult =
         photoProductCatalogService.save(
-            photo, new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")));
+            photo, new ByteArrayInputStream("AXAXAXAX".getBytes(StandardCharsets.UTF_8)));
 
     // Assert
     verify(productRepository).findPhotoById(Mockito.<Long>any(), Mockito.<Long>any());
     verify(productRepository).delete(Mockito.<PhotoProduct>any());
     verify(productRepository).save(Mockito.<PhotoProduct>any());
-    verify(photoStorageService).generateFileName(Mockito.<String>any());
+    verify(photoStorageService).generateFileName(Mockito.any());
     verify(photoStorageService)
-        .replaceName(Mockito.<String>any(), Mockito.<PhotoStorageService.NewPhoto>any());
+        .replaceName(Mockito.any(), Mockito.any());
     verify(productRepository).flush();
     assertEquals("foo.txt", photo.getFilename());
     assertSame(photoProduct, actualSaveResult);
@@ -220,7 +221,7 @@ class PhotoProductCatalogServiceTest {
   @Test
   void testSave2() throws UnsupportedEncodingException {
     // Arrange
-    when(photoStorageService.generateFileName(Mockito.<String>any()))
+    when(photoStorageService.generateFileName(Mockito.any()))
         .thenThrow(new PhotoProductNotFoundException("An error occurred"));
 
     Address address = new Address();
@@ -273,8 +274,8 @@ class PhotoProductCatalogServiceTest {
         PhotoProductNotFoundException.class,
         () ->
             photoProductCatalogService.save(
-                photo, new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-    verify(photoStorageService).generateFileName(Mockito.<String>any());
+                photo, new ByteArrayInputStream("AXAXAXAX".getBytes(StandardCharsets.UTF_8))));
+    verify(photoStorageService).generateFileName(Mockito.any());
   }
 
   /** Method under test: {@link PhotoProductCatalogService#remove(Long, Long)} */
@@ -330,7 +331,7 @@ class PhotoProductCatalogServiceTest {
     doNothing().when(productRepository).flush();
     when(productRepository.findPhotoById(Mockito.<Long>any(), Mockito.<Long>any()))
         .thenReturn(ofResult);
-    doNothing().when(photoStorageService).remove(Mockito.<String>any());
+    doNothing().when(photoStorageService).remove(Mockito.any());
 
     // Act
     photoProductCatalogService.remove(1L, 1L);
@@ -338,7 +339,7 @@ class PhotoProductCatalogServiceTest {
     // Assert that nothing has changed
     verify(productRepository).findPhotoById(Mockito.<Long>any(), Mockito.<Long>any());
     verify(productRepository).delete(Mockito.<PhotoProduct>any());
-    verify(photoStorageService).remove(Mockito.<String>any());
+    verify(photoStorageService).remove(Mockito.any());
     verify(productRepository).flush();
   }
 
@@ -397,14 +398,14 @@ class PhotoProductCatalogServiceTest {
         .thenReturn(ofResult);
     doThrow(new PhotoProductNotFoundException("An error occurred"))
         .when(photoStorageService)
-        .remove(Mockito.<String>any());
+        .remove(Mockito.any());
 
     // Act and Assert
     assertThrows(
         PhotoProductNotFoundException.class, () -> photoProductCatalogService.remove(1L, 1L));
     verify(productRepository).findPhotoById(Mockito.<Long>any(), Mockito.<Long>any());
     verify(productRepository).delete(Mockito.<PhotoProduct>any());
-    verify(photoStorageService).remove(Mockito.<String>any());
+    verify(photoStorageService).remove(Mockito.any());
     verify(productRepository).flush();
   }
 

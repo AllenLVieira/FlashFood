@@ -15,6 +15,7 @@ public interface EmailSenderService {
   class EmailMessage {
     @Singular("to")
     private Set<String> to;
+
     @NonNull private String subject;
     @NonNull private String body;
     @Singular private Map<String, Object> variables;

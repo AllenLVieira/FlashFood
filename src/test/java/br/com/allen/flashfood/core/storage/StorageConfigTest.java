@@ -1,8 +1,6 @@
 package br.com.allen.flashfood.core.storage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 import br.com.allen.flashfood.infrastructure.service.PhotoLocalStorageService;
@@ -46,9 +44,7 @@ class StorageConfigTest {
     StorageConfig storageConfig = new StorageConfig(new StorageProperties());
 
     // Act and Assert
-    assertTrue(
-        storageConfig.photoStorageService(new AmazonS3Client())
-            instanceof PhotoLocalStorageService);
+    assertInstanceOf(PhotoLocalStorageService.class, storageConfig.photoStorageService(new AmazonS3Client()));
   }
 
   /** Method under test: {@link StorageConfig#photoStorageService(AmazonS3)} */
@@ -56,8 +52,6 @@ class StorageConfigTest {
   void testPhotoStorageService2() {
 
     // Arrange, Act and Assert
-    assertTrue(
-        (new StorageConfig(new StorageProperties())).photoStorageService(mock(AmazonS3Client.class))
-            instanceof PhotoLocalStorageService);
+    assertInstanceOf(PhotoLocalStorageService.class, (new StorageConfig(new StorageProperties())).photoStorageService(mock(AmazonS3Client.class)));
   }
 }

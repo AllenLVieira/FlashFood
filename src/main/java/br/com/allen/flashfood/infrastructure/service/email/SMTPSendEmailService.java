@@ -4,6 +4,7 @@ import br.com.allen.flashfood.core.email.EmailProperties;
 import br.com.allen.flashfood.domain.service.EmailSenderService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,19 +23,24 @@ public class SMTPSendEmailService implements EmailSenderService {
   @Override
   public void send(EmailMessage message) {
     try {
-      String body = processTemplate(message);
-      MimeMessage mimeMessage = mailSender.createMimeMessage();
-      MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
-
-      mimeHelper.setFrom(emailProperties.getFrom());
-      mimeHelper.setSubject(message.getSubject());
-      mimeHelper.setText(body, true);
-      mimeHelper.setTo(message.getTo().toArray(new String[0]));
+      MimeMessage mimeMessage = getMimeMessage(message);
 
       mailSender.send(mimeMessage);
     } catch (Exception e) {
       throw new EmailException("Failed to send email.", e);
     }
+  }
+
+  private MimeMessage getMimeMessage(EmailMessage message) throws MessagingException {
+    String body = processTemplate(message);
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+    mimeHelper.setFrom(emailProperties.getFrom());
+    mimeHelper.setSubject(message.getSubject());
+    mimeHelper.setText(body, true);
+    mimeHelper.setTo(message.getTo().toArray(new String[0]));
+    return mimeMessage;
   }
 
   private String processTemplate(EmailMessage message) {

@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -60,28 +61,28 @@ class S3PhotoStorageServiceTest {
     putObjectResult.setSSECustomerAlgorithm("Algorithm");
     putObjectResult.setSSECustomerKeyMd5("27c7cf400229103e00c6d8830029e29b");
     putObjectResult.setVersionId("42");
-    when(amazonS3.putObject(Mockito.<PutObjectRequest>any())).thenReturn(putObjectResult);
+    when(amazonS3.putObject(Mockito.any())).thenReturn(putObjectResult);
     PhotoStorageService.NewPhoto.NewPhotoBuilder filenameResult =
         PhotoStorageService.NewPhoto.builder().contentType("text/plain").filename("foo.txt");
     PhotoStorageService.NewPhoto newPhoto =
-        filenameResult.inputStream(new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))).build();
+        filenameResult.inputStream(new ByteArrayInputStream("AXAXAXAX".getBytes(StandardCharsets.UTF_8))).build();
 
     // Act
     s3PhotoStorageService.store(newPhoto);
 
     // Assert
-    verify(amazonS3).putObject(Mockito.<PutObjectRequest>any());
+    verify(amazonS3).putObject(Mockito.any());
   }
 
   /** Method under test: {@link S3PhotoStorageService#store(PhotoStorageService.NewPhoto)} */
   @Test
   void testStore2() throws SdkClientException, UnsupportedEncodingException {
     // Arrange
-    when(amazonS3.putObject(Mockito.<PutObjectRequest>any()))
+    when(amazonS3.putObject(Mockito.any()))
         .thenThrow(new StorageException("An error occurred"));
     PhotoStorageService.NewPhoto newPhoto = mock(PhotoStorageService.NewPhoto.class);
     when(newPhoto.getInputStream())
-        .thenReturn(new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")));
+        .thenReturn(new ByteArrayInputStream("AXAXAXAX".getBytes(StandardCharsets.UTF_8)));
     when(newPhoto.getContentType()).thenReturn("text/plain");
     when(newPhoto.getFilename()).thenReturn("foo.txt");
 
@@ -90,20 +91,20 @@ class S3PhotoStorageServiceTest {
     verify(newPhoto).getContentType();
     verify(newPhoto).getFilename();
     verify(newPhoto).getInputStream();
-    verify(amazonS3).putObject(Mockito.<PutObjectRequest>any());
+    verify(amazonS3).putObject(Mockito.any());
   }
 
   /** Method under test: {@link S3PhotoStorageService#remove(String)} */
   @Test
   void testRemove() throws SdkClientException {
     // Arrange
-    doNothing().when(amazonS3).deleteObject(Mockito.<DeleteObjectRequest>any());
+    doNothing().when(amazonS3).deleteObject(Mockito.any());
 
     // Act
     s3PhotoStorageService.remove("foo.txt");
 
     // Assert
-    verify(amazonS3).deleteObject(Mockito.<DeleteObjectRequest>any());
+    verify(amazonS3).deleteObject(Mockito.any());
   }
 
   /** Method under test: {@link S3PhotoStorageService#remove(String)} */
@@ -112,11 +113,11 @@ class S3PhotoStorageServiceTest {
     // Arrange
     doThrow(new StorageException("An error occurred"))
         .when(amazonS3)
-        .deleteObject(Mockito.<DeleteObjectRequest>any());
+        .deleteObject(Mockito.any());
 
     // Act and Assert
     assertThrows(StorageException.class, () -> s3PhotoStorageService.remove("foo.txt"));
-    verify(amazonS3).deleteObject(Mockito.<DeleteObjectRequest>any());
+    verify(amazonS3).deleteObject(Mockito.any());
   }
 
   /** Method under test: {@link S3PhotoStorageService#retrieve(String)} */
@@ -126,14 +127,14 @@ class S3PhotoStorageServiceTest {
     URL expectedUrl = tempFilePath.toUri().toURL();
 
     // Arrange
-    when(amazonS3.getUrl(Mockito.<String>any(), Mockito.<String>any())).thenReturn(expectedUrl);
+    when(amazonS3.getUrl(Mockito.any(), Mockito.any())).thenReturn(expectedUrl);
 
     // Act
     PhotoStorageService.RetrievedPhoto actualRetrieveResult =
         s3PhotoStorageService.retrieve("foo.txt");
 
     // Assert
-    verify(amazonS3).getUrl(Mockito.<String>any(), Mockito.<String>any());
+    verify(amazonS3).getUrl(Mockito.any(), Mockito.any());
     assertEquals(expectedUrl.toString(), actualRetrieveResult.getUrl());
     assertNull(actualRetrieveResult.getInputStream());
   }
@@ -142,11 +143,11 @@ class S3PhotoStorageServiceTest {
   @Test
   void testRetrieve2() {
     // Arrange
-    when(amazonS3.getUrl(Mockito.<String>any(), Mockito.<String>any()))
+    when(amazonS3.getUrl(Mockito.any(), Mockito.any()))
         .thenThrow(new StorageException("An error occurred"));
 
     // Act and Assert
     assertThrows(StorageException.class, () -> s3PhotoStorageService.retrieve("foo.txt"));
-    verify(amazonS3).getUrl(Mockito.<String>any(), Mockito.<String>any());
+    verify(amazonS3).getUrl(Mockito.any(), Mockito.any());
   }
 }

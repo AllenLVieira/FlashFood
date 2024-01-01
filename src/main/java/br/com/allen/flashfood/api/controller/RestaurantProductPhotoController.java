@@ -109,10 +109,10 @@ public class RestaurantProductPhotoController {
   private void ensureMediaTypeCompatibility(
       MediaType mediaType, List<MediaType> acceptableMediaTypes)
       throws HttpMediaTypeNotAcceptableException {
-    boolean isCompatible  =
+    boolean isCompatible =
         acceptableMediaTypes.stream()
             .anyMatch(acceptMediaType -> acceptMediaType.isCompatibleWith(mediaType));
-    if (!isCompatible ) {
+    if (!isCompatible) {
       throw new HttpMediaTypeNotAcceptableException(
           "MediaType "
               + mediaType
