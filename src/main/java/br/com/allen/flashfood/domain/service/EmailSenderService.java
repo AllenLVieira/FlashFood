@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.service;
 
+import java.util.Map;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,9 +15,8 @@ public interface EmailSenderService {
   class EmailMessage {
     @Singular("to")
     private Set<String> to;
-
     @NonNull private String subject;
-
     @NonNull private String body;
+    @Singular private Map<String, Object> variables;
   }
 }
