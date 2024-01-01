@@ -10,11 +10,21 @@ import org.springframework.stereotype.Service;
 public class OrderFlowService {
 
   private final OrderRegistrationService orderService;
+  private final EmailSenderService emailService;
 
   @Transactional
   public void confirmOrder(String orderCode) {
     DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
     order.confirm();
+
+    var emailMessage =
+        EmailSenderService.EmailMessage.builder()
+            .subject(order.getRestaurant().getName() + " - Order confirmed")
+            .body("The order code <strong> " + order.getOrderCode() + "</strong> was confirmed!")
+            .to(order.getUser().getEmail())
+            .build();
+
+    emailService.send(emailMessage);
   }
 
   @Transactional
