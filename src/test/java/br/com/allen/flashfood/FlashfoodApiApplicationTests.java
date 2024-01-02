@@ -3,7 +3,7 @@ package br.com.allen.flashfood;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-//@SpringBootTest
+// @SpringBootTest
 class FlashfoodApiApplicationTests {
 
   @Test

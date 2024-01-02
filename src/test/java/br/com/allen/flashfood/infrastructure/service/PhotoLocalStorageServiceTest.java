@@ -67,7 +67,7 @@ class PhotoLocalStorageServiceTest {
 
     try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
       mockFiles
-          .when(() -> Files.newOutputStream(Mockito.<Path>any()))
+          .when(() -> Files.newOutputStream(Mockito.any()))
           .thenThrow(new IOException("Test exception"));
 
       // Act & Assert
@@ -101,7 +101,7 @@ class PhotoLocalStorageServiceTest {
   void testRemove2() throws IOException {
     try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
       mockFiles
-          .when(() -> Files.deleteIfExists(Mockito.<Path>any()))
+          .when(() -> Files.deleteIfExists(Mockito.any()))
           .thenThrow(new IOException("foo"));
       StorageProperties.Local local = mock(StorageProperties.Local.class);
       when(local.getPhotoPath()).thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), ""));
@@ -111,7 +111,7 @@ class PhotoLocalStorageServiceTest {
           StorageException.class,
           () -> (new PhotoLocalStorageService(storageProperties)).remove(""));
       verify(local).getPhotoPath();
-      mockFiles.verify(() -> Files.deleteIfExists(Mockito.<Path>any()));
+      mockFiles.verify(() -> Files.deleteIfExists(Mockito.any()));
     }
   }
 
@@ -120,7 +120,7 @@ class PhotoLocalStorageServiceTest {
   void testRemove3() throws IOException {
     try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
       mockFiles
-          .when(() -> Files.deleteIfExists(Mockito.<Path>any()))
+          .when(() -> Files.deleteIfExists(Mockito.any()))
           .thenThrow(new StorageException("An error occurred"));
       StorageProperties.Local local = mock(StorageProperties.Local.class);
       when(local.getPhotoPath()).thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), ""));
@@ -130,7 +130,7 @@ class PhotoLocalStorageServiceTest {
           StorageException.class,
           () -> (new PhotoLocalStorageService(storageProperties)).remove(""));
       verify(local).getPhotoPath();
-      mockFiles.verify(() -> Files.deleteIfExists(Mockito.<Path>any()));
+      mockFiles.verify(() -> Files.deleteIfExists(Mockito.any()));
     }
   }
 

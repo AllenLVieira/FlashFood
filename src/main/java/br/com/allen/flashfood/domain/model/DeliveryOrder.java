@@ -1,5 +1,7 @@
 package br.com.allen.flashfood.domain.model;
 
+import br.com.allen.flashfood.domain.event.CancelledOrderEvent;
+import br.com.allen.flashfood.domain.event.ConfirmedOrderEvent;
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -10,11 +12,12 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class DeliveryOrder {
+public class DeliveryOrder extends AbstractAggregateRoot<DeliveryOrder> {
   @Id
   @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +73,8 @@ public class DeliveryOrder {
   public void confirm() {
     setStatus(OrderStatus.CONFIRMED);
     setConfirmationDate(OffsetDateTime.now());
+
+    registerEvent(new ConfirmedOrderEvent(this));
   }
 
   public void deliver() {
@@ -80,6 +85,8 @@ public class DeliveryOrder {
   public void cancel() {
     setStatus(OrderStatus.CANCELED);
     setCancellationDate(OffsetDateTime.now());
+
+    registerEvent(new CancelledOrderEvent(this));
   }
 
   public void setStatus(OrderStatus newStatus) {

@@ -6,7 +6,7 @@
 
 ![license](https://img.shields.io/badge/license-MIT-%237159c1?style=for-the-badge&logo=ghost)
 ![version](https://img.shields.io/badge/version-2.1.0-blue?style=for-the-badge&logo=ghost)
-![springboot](https://img.shields.io/badge/spring_boot-2.5.7-green?style=for-the-badge&logo=ghost)
+![springboot](https://img.shields.io/badge/spring_boot-3.2.1-green?style=for-the-badge&logo=ghost)
 
 ## Design modeling view
 <a><img src="assets\FlashFood.png" alt="Project Modeling view" title="Project Modeling"></a>

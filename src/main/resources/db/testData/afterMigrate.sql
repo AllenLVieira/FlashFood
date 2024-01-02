@@ -99,13 +99,13 @@ INSERT INTO restaurant_user_manager (restaurant_id, user_id) VALUES (2, 1);
 INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                            address_complement, address_district, address_number, address_street, address_zipcode,
                            address_city_id, status, registration_date)
-VALUES (1, '59493c0a-96d0-4b30-aa9d-60dc84cd0464', 203, 14.9, 217.9, 1, 1, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
+VALUES (1, '59493c0a-96d0-4b30-aa9d-60dc84cd0464', 203, 14.9, 217.9, 1, 5, 1, 'Próximo ao Mackenzie', 'Higienópolis', '189', 'Rua Maria Antônia', '01222-010',
         1, 'CREATED', utc_timestamp);
 
 INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,
                            address_complement, address_district, address_number, address_street, address_zipcode,
                            address_city_id, status, registration_date)
-VALUES (2, '90ad7810-a1ed-4993-b839-9ffc75860400', 39, 14.9, 53.9, 2, 2, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
+VALUES (2, '90ad7810-a1ed-4993-b839-9ffc75860400', 39, 14.9, 53.9, 2, 5, 1, 'Próximo ao Mackenzie', 'Higienópolis', '186', 'Rua Dr. Vila Nova', '01222-020',
         1, 'CREATED', utc_timestamp);
         
 INSERT INTO delivery_order (id, order_code, subtotal, freight_rate, amount, restaurant_id, user_client_id, payment_method_id,

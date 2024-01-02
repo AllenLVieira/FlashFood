@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.domain.service;
 
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
+import br.com.allen.flashfood.domain.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,14 @@ import org.springframework.stereotype.Service;
 public class OrderFlowService {
 
   private final OrderRegistrationService orderService;
+  private final OrderRepository orderRepository;
 
   @Transactional
   public void confirmOrder(String orderCode) {
     DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
     order.confirm();
+
+    orderRepository.save(order);
   }
 
   @Transactional
@@ -27,5 +31,7 @@ public class OrderFlowService {
   public void cancelOrder(String orderCode) {
     DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
     order.cancel();
+
+    orderRepository.save(order);
   }
 }
