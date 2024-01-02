@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.domain.model;
 
+import br.com.allen.flashfood.domain.event.CancelledOrderEvent;
 import br.com.allen.flashfood.domain.event.ConfirmedOrderEvent;
 import br.com.allen.flashfood.domain.exception.BusinessException;
 import jakarta.persistence.*;
@@ -84,6 +85,8 @@ public class DeliveryOrder extends AbstractAggregateRoot<DeliveryOrder> {
   public void cancel() {
     setStatus(OrderStatus.CANCELED);
     setCancellationDate(OffsetDateTime.now());
+
+    registerEvent(new CancelledOrderEvent(this));
   }
 
   public void setStatus(OrderStatus newStatus) {
