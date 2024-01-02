@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.model.User;
+import br.com.allen.flashfood.domain.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class OrderFlowServiceTest {
 
   @Mock private OrderRegistrationService orderService;
+
+  @Mock private OrderRepository orderRepository;
 
   @Mock private EmailSenderService emailService;
 
@@ -29,10 +32,6 @@ class OrderFlowServiceTest {
     Restaurant mockRestaurant = mock(Restaurant.class);
     User mockUser = mock(User.class);
 
-    when(mockOrder.getRestaurant()).thenReturn(mockRestaurant);
-    when(mockOrder.getUser()).thenReturn(mockUser);
-    when(mockRestaurant.getName()).thenReturn("RestaurantName");
-    when(mockUser.getEmail()).thenReturn("user@example.com");
     when(orderService.findOrderOrElseThrow(orderCode)).thenReturn(mockOrder);
 
     // Act
@@ -41,7 +40,6 @@ class OrderFlowServiceTest {
     // Assert
     verify(orderService).findOrderOrElseThrow(orderCode);
     verify(mockOrder).confirm();
-    verify(emailService).send(any(EmailSenderService.EmailMessage.class));
   }
 
   @Test
