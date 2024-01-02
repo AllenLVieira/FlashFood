@@ -4,8 +4,9 @@ import br.com.allen.flashfood.domain.event.ConfirmedOrderEvent;
 import br.com.allen.flashfood.domain.model.DeliveryOrder;
 import br.com.allen.flashfood.domain.service.EmailSenderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
@@ -13,7 +14,7 @@ public class ConfirmedOrderNotificationListener {
 
   private final EmailSenderService emailService;
 
-  @EventListener
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void whenOrderConfirmed(ConfirmedOrderEvent event) {
     DeliveryOrder order = event.getOrder();
 
