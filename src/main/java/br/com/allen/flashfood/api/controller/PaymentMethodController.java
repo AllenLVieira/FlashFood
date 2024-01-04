@@ -11,9 +11,12 @@ import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
 import br.com.allen.flashfood.domain.service.PaymentMethodRegistrationService;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,16 +32,22 @@ public class PaymentMethodController {
   @Autowired private PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
   @GetMapping
-  public List<PaymentMethodResponse> getAllPaymentMethods() {
+  public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods() {
     List<PaymentMethod> allPaymentMethods = paymentMehodRepository.findAll();
-    return paymentMethodModelAssembler.toCollectionModel(allPaymentMethods);
+    List<PaymentMethodResponse> collectionModel =
+        paymentMethodModelAssembler.toCollectionModel(allPaymentMethods);
+    return ResponseEntity.ok()
+        .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
+        .body(collectionModel);
   }
 
   @GetMapping("/{paymentMethodId}")
-  public PaymentMethodResponse getPaymentMethodById(@PathVariable Long paymentMethodId) {
+  public ResponseEntity<PaymentMethodResponse> getPaymentMethodById(
+      @PathVariable Long paymentMethodId) {
     PaymentMethod paymentMethod =
         paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
-    return paymentMethodModelAssembler.toModel(paymentMethod);
+    PaymentMethodResponse model = paymentMethodModelAssembler.toModel(paymentMethod);
+    return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(model);
   }
 
   @PostMapping
