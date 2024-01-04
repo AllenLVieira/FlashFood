@@ -57,7 +57,19 @@ public class PaymentMethodController {
 
   @GetMapping("/{paymentMethodId}")
   public ResponseEntity<PaymentMethodResponse> getPaymentMethodById(
-      @PathVariable Long paymentMethodId) {
+      @PathVariable Long paymentMethodId, ServletWebRequest request) {
+    ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+    String eTag = "0";
+    OffsetDateTime lastModified =
+        paymentMehodRepository.getLastUpdatedOffsetDateById(paymentMethodId);
+
+    if (lastModified != null) {
+      eTag = String.valueOf(lastModified.toEpochSecond());
+    }
+
+    if (request.checkNotModified(eTag)) {
+      return null;
+    }
     PaymentMethod paymentMethod =
         paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
     PaymentMethodResponse model = paymentMethodModelAssembler.toModel(paymentMethod);
