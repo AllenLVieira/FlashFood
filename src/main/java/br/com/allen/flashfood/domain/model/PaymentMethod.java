@@ -1,8 +1,10 @@
 package br.com.allen.flashfood.domain.model;
 
 import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
@@ -15,4 +17,6 @@ public class PaymentMethod {
 
   @Column(nullable = false)
   private String description;
+
+  @UpdateTimestamp private OffsetDateTime updateDate;
 }

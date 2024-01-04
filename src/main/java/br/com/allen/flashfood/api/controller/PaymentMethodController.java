@@ -10,34 +10,48 @@ import br.com.allen.flashfood.domain.model.PaymentMethod;
 import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
 import br.com.allen.flashfood.domain.service.PaymentMethodRegistrationService;
 import jakarta.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentMethodController {
 
-  @Autowired private PaymentMehodRepository paymentMehodRepository;
-
-  @Autowired private PaymentMethodRegistrationService paymentMethodRegistrationService;
-
-  @Autowired private PaymentMethodModelAssembler paymentMethodModelAssembler;
-
-  @Autowired private PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
+  private final PaymentMehodRepository paymentMehodRepository;
+  private final PaymentMethodRegistrationService paymentMethodRegistrationService;
+  private final PaymentMethodModelAssembler paymentMethodModelAssembler;
+  private final PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
   @GetMapping
-  public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods() {
+  public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods(
+      ServletWebRequest request) {
+    ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+    String eTag = "0";
+    OffsetDateTime lastUpdateDate = paymentMehodRepository.getLastUpdatedOffsetDate();
+    if (lastUpdateDate != null) {
+      eTag = String.valueOf(lastUpdateDate.toEpochSecond());
+    }
+
+    if (request.checkNotModified(eTag)) {
+      return null;
+    }
+
     List<PaymentMethod> allPaymentMethods = paymentMehodRepository.findAll();
     List<PaymentMethodResponse> collectionModel =
         paymentMethodModelAssembler.toCollectionModel(allPaymentMethods);
     return ResponseEntity.ok()
         .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
+        .eTag(eTag)
         .body(collectionModel);
   }
 
