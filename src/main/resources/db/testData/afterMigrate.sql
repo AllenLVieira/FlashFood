@@ -47,10 +47,10 @@ INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES
 INSERT INTO product (id, active, description, name, price, restaurant_id) VALUES (5, 1, 'Molho de tomate, mussarela, catupiry, provolone e parmesão', 'Quattro Formaggi', 74.0, 3);
 
 -- Payment Methods
-INSERT INTO payment_method (id, description) VALUES (1, 'Dinheiro');
-INSERT INTO payment_method (id, description) VALUES (2, 'Pix');
-INSERT INTO payment_method (id, description) VALUES (3, 'Cartão de débito');
-INSERT INTO payment_method (id, description) VALUES (4, 'Cartão de crédito');
+INSERT INTO payment_method (id, description, update_date) VALUES (1, 'Dinheiro', utc_timestamp);
+INSERT INTO payment_method (id, description, update_date) VALUES (2, 'Pix', utc_timestamp);
+INSERT INTO payment_method (id, description, update_date) VALUES (3, 'Cartão de débito', utc_timestamp);
+INSERT INTO payment_method (id, description, update_date) VALUES (4, 'Cartão de crédito', utc_timestamp);
 
 -- Restaurant Payment Methods
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, '1');
