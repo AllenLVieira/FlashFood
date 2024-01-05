@@ -70,4 +70,5 @@ public class PaymentMethodController {
   public void deletePaymentMethodById(@PathVariable Long paymentMethodId) {
     paymentMethodRegistrationService.deletePaymentMethod(paymentMethodId);
   }
+
 }
