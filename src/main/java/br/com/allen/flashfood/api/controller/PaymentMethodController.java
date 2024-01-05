@@ -11,22 +11,20 @@ import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
 import br.com.allen.flashfood.domain.service.PaymentMethodRegistrationService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentMethodController {
 
-  @Autowired private PaymentMehodRepository paymentMehodRepository;
-
-  @Autowired private PaymentMethodRegistrationService paymentMethodRegistrationService;
-
-  @Autowired private PaymentMethodModelAssembler paymentMethodModelAssembler;
-
-  @Autowired private PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
+  private final PaymentMehodRepository paymentMehodRepository;
+  private final PaymentMethodRegistrationService paymentMethodRegistrationService;
+  private final PaymentMethodModelAssembler paymentMethodModelAssembler;
+  private final PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
   @GetMapping
   public List<PaymentMethodResponse> getAllPaymentMethods() {
