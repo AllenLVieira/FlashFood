@@ -2,6 +2,7 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.CityModelAssembler;
 import br.com.allen.flashfood.api.assembler.CityRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.CityControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.CityRequest;
 import br.com.allen.flashfood.api.model.response.CityResponse;
 import br.com.allen.flashfood.domain.exception.BusinessException;
@@ -19,26 +20,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class CityController {
+public class CityController implements CityControllerOpenApi {
 
   private final CityRepository cityRepository;
   private final CityRegistrationService cityRegistration;
   private final CityModelAssembler cityModelAssembler;
   private final CityRequestDisassembler cityRequestDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<CityResponse> getAllCity() {
     List<City> allCities = cityRepository.findAll();
     return cityModelAssembler.toCollectionModel(allCities);
   }
 
-  @GetMapping("/{cityId}")
+  @GetMapping(value = "/{cityId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public CityResponse getCityById(@PathVariable Long cityId) {
     City city = cityRegistration.findCityOrElseThrow(cityId);
     return cityModelAssembler.toModel(city);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public CityResponse addCity(@RequestBody @Valid CityRequest cityRequest) {
     try {
@@ -50,7 +51,7 @@ public class CityController {
     }
   }
 
-  @PutMapping("/{cityId}")
+  @PutMapping(value = "/{cityId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public CityResponse updateCity(
       @PathVariable Long cityId, @RequestBody @Valid CityRequest cityRequest) {
     try {

@@ -29,7 +29,7 @@ public class RestaurantProductController {
   private final ProductModelAssembler productAssembler;
   private final ProductRequestDisassembler productDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<ProductResponse> getAllProductsByRestaurant(
       @PathVariable Long restaurantId, @RequestParam(required = false) boolean includeInactive) {
     Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
@@ -42,14 +42,14 @@ public class RestaurantProductController {
     }
   }
 
-  @GetMapping("/{productId}")
+  @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ProductResponse getByRestaurantAndProduct(
       @PathVariable Long restaurantId, @PathVariable Long productId) {
     Product product = productService.findProductOrElseThrow(restaurantId, productId);
     return productAssembler.toModel(product);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public ProductResponse addProduct(
       @PathVariable Long restaurantId, @RequestBody @Valid ProductRequest productRequest) {
@@ -60,7 +60,7 @@ public class RestaurantProductController {
     return productAssembler.toModel(product);
   }
 
-  @PutMapping("/{productId}")
+  @PutMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ProductResponse updateProduct(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,

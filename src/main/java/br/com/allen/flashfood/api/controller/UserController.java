@@ -2,6 +2,7 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.UserModelAssembler;
 import br.com.allen.flashfood.api.assembler.UserRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.UserControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.PasswordRequest;
 import br.com.allen.flashfood.api.model.request.UserPasswordRequest;
 import br.com.allen.flashfood.api.model.request.UserRequest;
@@ -11,35 +12,33 @@ import br.com.allen.flashfood.domain.repository.UserRepository;
 import br.com.allen.flashfood.domain.service.UserRegistrationsService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController {
-  @Autowired private UserRepository userRepository;
+@RequiredArgsConstructor
+public class UserController implements UserControllerOpenApi {
+  private final UserRepository userRepository;
+  private final UserRegistrationsService userRegistrationsService;
+  private final UserModelAssembler userModelAssembler;
+  private final UserRequestDisassembler userRequestDisassembler;
 
-  @Autowired private UserRegistrationsService userRegistrationsService;
-
-  @Autowired private UserModelAssembler userModelAssembler;
-
-  @Autowired private UserRequestDisassembler userRequestDisassembler;
-
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<UserResponse> getAllUsers() {
     List<User> allUsers = userRepository.findAll();
     return userModelAssembler.toCollectionModel(allUsers);
   }
 
-  @GetMapping("/{userId}")
+  @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public UserResponse getUserById(@PathVariable Long userId) {
     User user = userRegistrationsService.findUserOrElseThrow(userId);
     return userModelAssembler.toModel(user);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public UserResponse addUser(@RequestBody @Valid UserPasswordRequest userPasswordRequest) {
     User user = userRequestDisassembler.toDomainObject(userPasswordRequest);
@@ -47,7 +46,7 @@ public class UserController {
     return userModelAssembler.toModel(user);
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public UserResponse updateUser(
       @PathVariable Long userId, @RequestBody @Valid UserRequest userRequest) {
     User actualUser = userRegistrationsService.findUserOrElseThrow(userId);

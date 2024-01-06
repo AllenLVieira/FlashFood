@@ -2,6 +2,7 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.PaymentMethodModelAssembler;
 import br.com.allen.flashfood.api.assembler.PaymentMethodRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.PaymentMethodControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.PaymentMethodRequest;
 import br.com.allen.flashfood.api.model.response.PaymentMethodResponse;
 import br.com.allen.flashfood.domain.exception.BusinessException;
@@ -25,14 +26,14 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PaymentMethodController {
+public class PaymentMethodController implements PaymentMethodControllerOpenApi {
 
   private final PaymentMehodRepository paymentMehodRepository;
   private final PaymentMethodRegistrationService paymentMethodRegistrationService;
   private final PaymentMethodModelAssembler paymentMethodModelAssembler;
   private final PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods(
       ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -55,7 +56,7 @@ public class PaymentMethodController {
         .body(collectionModel);
   }
 
-  @GetMapping("/{paymentMethodId}")
+  @GetMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PaymentMethodResponse> getPaymentMethodById(
       @PathVariable Long paymentMethodId, ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -76,7 +77,7 @@ public class PaymentMethodController {
     return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(model);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public PaymentMethodResponse addPaymentMethod(
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
@@ -86,7 +87,7 @@ public class PaymentMethodController {
     return paymentMethodModelAssembler.toModel(paymentMethod);
   }
 
-  @PutMapping("/{paymentMethodId}")
+  @PutMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public PaymentMethodResponse updatePaymentMethod(
       @PathVariable Long paymentMethodId,
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {

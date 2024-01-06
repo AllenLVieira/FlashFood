@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.UserModelAssembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantUserManagerControllerOpenApi;
 import br.com.allen.flashfood.api.model.response.UserResponse;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
     value = "/restaurants/{restaurantId}/managers",
     produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class RestaurantUserManagerController {
+public class RestaurantUserManagerController implements RestaurantUserManagerControllerOpenApi {
 
   private final RestaurantRegistrationService restaurantService;
   private final UserModelAssembler userAssembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
@@ -33,7 +34,7 @@ public class RestaurantUserManagerController {
     restaurantService.unlinkManager(restaurantId, userId);
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void linkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
     restaurantService.linkManager(restaurantId, userId);

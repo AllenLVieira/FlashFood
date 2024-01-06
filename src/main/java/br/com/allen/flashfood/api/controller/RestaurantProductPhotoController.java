@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.PhotoProductModelAssembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantProductPhotoControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.ProductPhotoRequest;
 import br.com.allen.flashfood.api.model.response.PhotoProductResponse;
 import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
@@ -24,14 +25,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
 @RequiredArgsConstructor
-public class RestaurantProductPhotoController {
+public class RestaurantProductPhotoController implements RestaurantProductPhotoControllerOpenApi {
 
   private final PhotoProductCatalogService photoProductCatalogService;
   private final ProductRegistrationService productRegistrationService;
   private final PhotoProductModelAssembler photoProductModelAssembler;
   private final PhotoStorageService photoStorageService;
 
-  @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PutMapping(
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public PhotoProductResponse updatePhoto(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,

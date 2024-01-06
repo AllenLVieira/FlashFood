@@ -1,11 +1,12 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.PaymentMethodModelAssembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantPaymentsControllerOpenApi;
 import br.com.allen.flashfood.api.model.response.PaymentMethodResponse;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(
     value = "/restaurants/{restaurantId}/payment-methods",
     produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestaurantPaymentsController {
+@RequiredArgsConstructor
+public class RestaurantPaymentsController implements RestaurantPaymentsControllerOpenApi {
 
-  @Autowired private RestaurantRegistrationService restaurantRegistration;
+  private final RestaurantRegistrationService restaurantRegistration;
+  private final PaymentMethodModelAssembler paymentMethodModelAssembler;
 
-  @Autowired private PaymentMethodModelAssembler paymentMethodModelAssembler;
-
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PaymentMethodResponse> getAllPaymentMethodsRestaurants(
       @PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
@@ -34,7 +35,7 @@ public class RestaurantPaymentsController {
     restaurantRegistration.removePaymentMethod(restaurantId, paymentMethodId);
   }
 
-  @PutMapping("/{paymentMethodId}")
+  @PutMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void addPaymentMethod(
       @PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {

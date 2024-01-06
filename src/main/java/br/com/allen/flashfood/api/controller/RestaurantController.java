@@ -2,6 +2,7 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.RestaurantModelAssembler;
 import br.com.allen.flashfood.api.assembler.RestaurantRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.RestaurantRequest;
 import br.com.allen.flashfood.api.model.response.RestaurantResponse;
 import br.com.allen.flashfood.api.model.view.RestaurantView;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi {
 
   private final RestaurantRepository restaurantRepository;
   private final RestaurantRegistrationService restaurantRegistration;
@@ -48,7 +49,7 @@ public class RestaurantController {
    * @param projection Define what fields will be returned to the response
    * @return List of all Restaurants
    */
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public MappingJacksonValue getAllRestaurants(@RequestParam(required = false) String projection) {
     List<Restaurant> restaurants = restaurantRepository.findAll();
     List<RestaurantResponse> restaurantResponse =
@@ -64,13 +65,13 @@ public class RestaurantController {
     return restaurantWrapper;
   }
 
-  @GetMapping("/{restaurantId}")
+  @GetMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public RestaurantResponse getRestaurantById(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
     return restaurantModelAssembler.toModel(restaurant);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public RestaurantResponse addRestaurant(@RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
@@ -81,7 +82,7 @@ public class RestaurantController {
     }
   }
 
-  @PutMapping("/{restaurantId}")
+  @PutMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public RestaurantResponse updateRestaurant(
       @PathVariable Long restaurantId, @RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
@@ -94,7 +95,7 @@ public class RestaurantController {
     }
   }
 
-  @PutMapping("/{restaurantId}/active")
+  @PutMapping(value = "/{restaurantId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void activateRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.activateRestaurant(restaurantId);
@@ -106,7 +107,7 @@ public class RestaurantController {
     restaurantRegistration.disableRestaurant(restaurantId);
   }
 
-  @PutMapping("/activations")
+  @PutMapping(value = "/activations", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void massActivateRestaurant(@RequestBody List<Long> restaurantIds) {
     try {

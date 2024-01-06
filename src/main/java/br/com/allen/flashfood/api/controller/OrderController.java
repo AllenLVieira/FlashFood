@@ -3,6 +3,7 @@ package br.com.allen.flashfood.api.controller;
 import br.com.allen.flashfood.api.assembler.DeliveryOrderRequestDisassembler;
 import br.com.allen.flashfood.api.assembler.OrderModelAssembler;
 import br.com.allen.flashfood.api.assembler.OrderModelSummaryAssembler;
+import br.com.allen.flashfood.api.controller.openapi.OrderControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.DeliveryOrderRequest;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderResponse;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderSummaryResponse;
@@ -31,15 +32,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class OrderController {
-
+public class OrderController implements OrderControllerOpenApi {
   private final OrderRepository orderRepository;
   private final OrderRegistrationService orderService;
   private final OrderModelSummaryAssembler orderSummaryAssembler;
   private final OrderModelAssembler orderAssembler;
   private final DeliveryOrderRequestDisassembler orderDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
     List<DeliveryOrder> allOrders = orderRepository.findAll();
     List<DeliveryOrderSummaryResponse> deliveryOrderResponse =
@@ -60,7 +60,7 @@ public class OrderController {
     return orderWrapper;
   }
 
-  @GetMapping("/filters")
+  @GetMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_VALUE)
   public Page<DeliveryOrderResponse> getAllOrdersWithFilters(
       DeliveryOrderFilter filter, @PageableDefault(size = 10) Pageable pageable) {
     Page<DeliveryOrder> allOrdersPageable =
@@ -70,14 +70,14 @@ public class OrderController {
     return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
   }
 
-  @GetMapping("/{orderCode}")
+  @GetMapping(value = "/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)
   public DeliveryOrderResponse getOrderById(@PathVariable String orderCode) {
     DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
 
     return orderAssembler.toModel(order);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public DeliveryOrderResponse addNewDeliveryOrder(@RequestBody DeliveryOrderRequest request) {
     try {
