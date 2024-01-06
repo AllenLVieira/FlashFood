@@ -2,6 +2,7 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.RestaurantModelAssembler;
 import br.com.allen.flashfood.api.assembler.RestaurantRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.RestaurantRequest;
 import br.com.allen.flashfood.api.model.response.RestaurantResponse;
 import br.com.allen.flashfood.api.model.view.RestaurantView;
@@ -12,8 +13,6 @@ import br.com.allen.flashfood.domain.exception.RestaurantNotFoundException;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.repository.RestaurantRepository;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-@Tag(
-    name = "Restaurant",
-    description =
-        "Manages all restaurant-related operations within the FlashFood"
-            + " application. This controller is involved in adding new restaurants, updating existing restaurant"
-            + " information, retrieving details about different restaurants, and handling restaurant deletions."
-            + " It's crucial for maintaining an up-to-date and diverse listing of restaurants, enhancing"
-            + " the user's dining options.")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi {
 
   private final RestaurantRepository restaurantRepository;
   private final RestaurantRegistrationService restaurantRegistration;
@@ -59,7 +50,6 @@ public class RestaurantController {
    * @return List of all Restaurants
    */
   @GetMapping
-  @Operation(description = "Get all the restaurants in the Flashfood application.")
   public MappingJacksonValue getAllRestaurants(@RequestParam(required = false) String projection) {
     List<Restaurant> restaurants = restaurantRepository.findAll();
     List<RestaurantResponse> restaurantResponse =
@@ -76,7 +66,6 @@ public class RestaurantController {
   }
 
   @GetMapping("/{restaurantId}")
-  @Operation(description = "Get a restaurant by Id in the Flashfood application.")
   public RestaurantResponse getRestaurantById(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
     return restaurantModelAssembler.toModel(restaurant);
@@ -84,7 +73,6 @@ public class RestaurantController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  @Operation(description = "Create a new restaurant in the Flashfood application.")
   public RestaurantResponse addRestaurant(@RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
       Restaurant restaurant = requestDisassembler.toDomainObject(restaurantRequest);
@@ -95,7 +83,6 @@ public class RestaurantController {
   }
 
   @PutMapping("/{restaurantId}")
-  @Operation(description = "Update a restaurant in the Flashfood application.")
   public RestaurantResponse updateRestaurant(
       @PathVariable Long restaurantId, @RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
@@ -110,21 +97,18 @@ public class RestaurantController {
 
   @PutMapping("/{restaurantId}/active")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Activate a restaurant by Id in the Flashfood application.")
   public void activateRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.activateRestaurant(restaurantId);
   }
 
   @DeleteMapping("/{restaurantId}/active")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Disable a restaurant by Id in the Flashfood application.")
   public void disableRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.disableRestaurant(restaurantId);
   }
 
   @PutMapping("/activations")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Activate multiple restaurants by Ids in the Flashfood application.")
   public void massActivateRestaurant(@RequestBody List<Long> restaurantIds) {
     try {
       restaurantRegistration.massActivateRestaurant(restaurantIds);
@@ -135,7 +119,6 @@ public class RestaurantController {
 
   @DeleteMapping("/activations")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "GDisable multiple restaurants by Ids in the Flashfood application.")
   public void massDisableRestaurant(@RequestBody List<Long> restaurantIds) {
     try {
       restaurantRegistration.massDisableRestaurant(restaurantIds);
@@ -146,14 +129,12 @@ public class RestaurantController {
 
   @PutMapping("/{restaurantId}/open")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Set restaurant status to open in the Flashfood application.")
   public void openRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.openRestaurant(restaurantId);
   }
 
   @PutMapping("/{restaurantId}/close")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Set restaurant status to closed in the Flashfood application.")
   public void closeRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.closeRestaurant(restaurantId);
   }

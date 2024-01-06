@@ -2,13 +2,13 @@ package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.CuisineModelAssembler;
 import br.com.allen.flashfood.api.assembler.CuisineRequestDisassembler;
+import br.com.allen.flashfood.api.controller.openapi.CuisineControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.CuisineRequest;
 import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-@Tag(
-    name = "Cuisine",
-    description =
-        "Handles all operations related to cuisines in the FlashFood application. This controller facilitates the"
-            + " creation, retrieval, updating, and deletion of cuisine information. It plays a key role in"
-            + " managing the diverse culinary categories and preferences associated with the food items offered"
-            + " by the application.")
-public class CuisineController {
+public class CuisineController implements CuisineControllerOpenApi {
   private final CuisineRepository cuisineRepository;
   private final CuisineRegistrationService cuisineRegistration;
   private final CuisineRequestDisassembler cuisineRequestDisassembler;

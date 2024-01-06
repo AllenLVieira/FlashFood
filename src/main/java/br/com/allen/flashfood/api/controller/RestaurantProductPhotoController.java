@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.api.controller;
 
 import br.com.allen.flashfood.api.assembler.PhotoProductModelAssembler;
+import br.com.allen.flashfood.api.controller.openapi.RestaurantProductPhotoControllerOpenApi;
 import br.com.allen.flashfood.api.model.request.ProductPhotoRequest;
 import br.com.allen.flashfood.api.model.response.PhotoProductResponse;
 import br.com.allen.flashfood.domain.exception.EntityNotFoundedException;
@@ -9,8 +10,6 @@ import br.com.allen.flashfood.domain.model.Product;
 import br.com.allen.flashfood.domain.service.PhotoProductCatalogService;
 import br.com.allen.flashfood.domain.service.PhotoStorageService;
 import br.com.allen.flashfood.domain.service.ProductRegistrationService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -26,14 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
 @RequiredArgsConstructor
-@Tag(
-    name = "Restaurant Product Photo",
-    description =
-        "Manages the photos of products for restaurants in the"
-            + " FlashFood application. This controller allows for the uploading, updating, retrieving, and deletion"
-            + " of product photos, enhancing the visual presentation of menu items. It plays a vital role in providing"
-            + " a visually appealing and accurate depiction of the culinary offerings available at different restaurants.")
-public class RestaurantProductPhotoController {
+public class RestaurantProductPhotoController implements RestaurantProductPhotoControllerOpenApi {
 
   private final PhotoProductCatalogService photoProductCatalogService;
   private final ProductRegistrationService productRegistrationService;
@@ -41,7 +33,6 @@ public class RestaurantProductPhotoController {
   private final PhotoStorageService photoStorageService;
 
   @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @Operation(description = "Upload product photo in the Flashfood application.")
   public PhotoProductResponse updatePhoto(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,
@@ -66,14 +57,12 @@ public class RestaurantProductPhotoController {
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(description = "Get photo details from product in the Flashfood application.")
   public PhotoProductResponse find(@PathVariable Long restaurantId, @PathVariable Long productId) {
     PhotoProduct photo = photoProductCatalogService.findOrElseThrow(restaurantId, productId);
     return photoProductModelAssembler.toModel(photo);
   }
 
   @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
-  @Operation(description = "Get product photo from restaurant in the Flashfood application.")
   public ResponseEntity<?> getPhoto(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,
@@ -107,7 +96,6 @@ public class RestaurantProductPhotoController {
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Remove product photo in the Flashfood application.")
   public void remove(@PathVariable Long restaurantId, @PathVariable Long productId) {
     photoProductCatalogService.remove(restaurantId, productId);
   }

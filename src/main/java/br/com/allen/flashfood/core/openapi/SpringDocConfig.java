@@ -26,8 +26,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SpringDocConfig {
-
-  // Constants or externalize these as properties
   private static final String API_TITLE = "Flashfood - Rest API";
   private static final String API_DESCRIPTION = "OpenAPI - Flashfood";
   private static final String API_VERSION = "1.0";
