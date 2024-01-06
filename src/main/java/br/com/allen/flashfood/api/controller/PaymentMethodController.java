@@ -33,7 +33,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
   private final PaymentMethodModelAssembler paymentMethodModelAssembler;
   private final PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods(
       ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -56,7 +56,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
         .body(collectionModel);
   }
 
-  @GetMapping("/{paymentMethodId}")
+  @GetMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PaymentMethodResponse> getPaymentMethodById(
       @PathVariable Long paymentMethodId, ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -77,7 +77,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(model);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public PaymentMethodResponse addPaymentMethod(
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
@@ -87,7 +87,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     return paymentMethodModelAssembler.toModel(paymentMethod);
   }
 
-  @PutMapping("/{paymentMethodId}")
+  @PutMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public PaymentMethodResponse updatePaymentMethod(
       @PathVariable Long paymentMethodId,
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {

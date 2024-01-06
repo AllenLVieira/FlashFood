@@ -21,7 +21,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
   private final RestaurantRegistrationService restaurantService;
   private final UserModelAssembler userAssembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
@@ -34,7 +34,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
     restaurantService.unlinkManager(restaurantId, userId);
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void linkManager(@PathVariable Long restaurantId, @PathVariable Long userId) {
     restaurantService.linkManager(restaurantId, userId);

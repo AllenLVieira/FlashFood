@@ -26,19 +26,19 @@ public class UserController implements UserControllerOpenApi {
   private final UserModelAssembler userModelAssembler;
   private final UserRequestDisassembler userRequestDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<UserResponse> getAllUsers() {
     List<User> allUsers = userRepository.findAll();
     return userModelAssembler.toCollectionModel(allUsers);
   }
 
-  @GetMapping("/{userId}")
+  @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public UserResponse getUserById(@PathVariable Long userId) {
     User user = userRegistrationsService.findUserOrElseThrow(userId);
     return userModelAssembler.toModel(user);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public UserResponse addUser(@RequestBody @Valid UserPasswordRequest userPasswordRequest) {
     User user = userRequestDisassembler.toDomainObject(userPasswordRequest);
@@ -46,7 +46,7 @@ public class UserController implements UserControllerOpenApi {
     return userModelAssembler.toModel(user);
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public UserResponse updateUser(
       @PathVariable Long userId, @RequestBody @Valid UserRequest userRequest) {
     User actualUser = userRegistrationsService.findUserOrElseThrow(userId);

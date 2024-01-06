@@ -14,19 +14,19 @@ public class OrderFlowController implements OrderFlowControllerOpenApi {
 
   private final OrderFlowService orderFlowService;
 
-  @PutMapping("/confirmation")
+  @PutMapping(value = "/confirmation", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void confirmOrder(@PathVariable String orderCode) {
     orderFlowService.confirmOrder(orderCode);
   }
 
-  @PutMapping("/delivered")
+  @PutMapping(value = "/delivered", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deliverOrder(@PathVariable String orderCode) {
     orderFlowService.deliverOrder(orderCode);
   }
 
-  @PutMapping("/cancellation")
+  @PutMapping(value = "/cancellation", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void cancelOrder(@PathVariable String orderCode) {
     orderFlowService.cancelOrder(orderCode);

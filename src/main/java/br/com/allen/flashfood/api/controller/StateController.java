@@ -20,26 +20,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StateController implements StateControllerOpenApi {
   private final StateRepository stateRepository;
-
   private final StateRegistrationService stateRegistration;
-
   private final StateModelAssembler stateModelAssembler;
-
   private final StateRequestDisassembler stateRequestDisassembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<StateResponse> getAllStates() {
     List<State> allStates = stateRepository.findAll();
     return stateModelAssembler.toCollectionModel(allStates);
   }
 
-  @GetMapping("/{stateId}")
+  @GetMapping(value = "/{stateId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public StateResponse getStateById(@PathVariable Long stateId) {
     State state = stateRegistration.findStateOrElseThrow(stateId);
     return stateModelAssembler.toModel(state);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public StateResponse addState(@RequestBody @Valid StateRequest stateRequest) {
     State state = stateRequestDisassembler.toDomainObject(stateRequest);
@@ -47,7 +44,7 @@ public class StateController implements StateControllerOpenApi {
     return stateModelAssembler.toModel(state);
   }
 
-  @PutMapping("/{stateId}")
+  @PutMapping(value = "/{stateId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public StateResponse updateRestaurant(
       @PathVariable Long stateId, @RequestBody @Valid StateRequest stateRequest) {
     State actualState = stateRegistration.findStateOrElseThrow(stateId);

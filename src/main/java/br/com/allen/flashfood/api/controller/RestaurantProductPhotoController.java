@@ -32,7 +32,9 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
   private final PhotoProductModelAssembler photoProductModelAssembler;
   private final PhotoStorageService photoStorageService;
 
-  @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PutMapping(
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public PhotoProductResponse updatePhoto(
       @PathVariable Long restaurantId,
       @PathVariable Long productId,

@@ -20,7 +20,7 @@ public class FamilyPermissionController implements FamilyPermissionControllerOpe
   private final FamilyRegistrationService familyService;
   private final PermissionModelAssembler permissionAssembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PermissionResponse> getAllPermissionsByFamilyId(@PathVariable Long familyId) {
     Family family = familyService.findFamilyOrElseThrow(familyId);
     return permissionAssembler.toCollectionModel(family.getPermissions());
@@ -32,7 +32,7 @@ public class FamilyPermissionController implements FamilyPermissionControllerOpe
     familyService.unlinkPermission(familyId, permissionId);
   }
 
-  @PutMapping("/{permissionId}")
+  @PutMapping(value = "/{permissionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void linkPermission(@PathVariable Long familyId, @PathVariable Long permissionId) {
     familyService.linkPermission(familyId, permissionId);

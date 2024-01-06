@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantPaymentsController implements RestaurantPaymentsControllerOpenApi {
 
   private final RestaurantRegistrationService restaurantRegistration;
-
   private final PaymentMethodModelAssembler paymentMethodModelAssembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PaymentMethodResponse> getAllPaymentMethodsRestaurants(
       @PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
@@ -36,7 +35,7 @@ public class RestaurantPaymentsController implements RestaurantPaymentsControlle
     restaurantRegistration.removePaymentMethod(restaurantId, paymentMethodId);
   }
 
-  @PutMapping("/{paymentMethodId}")
+  @PutMapping(value = "/{paymentMethodId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void addPaymentMethod(
       @PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {

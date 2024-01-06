@@ -24,19 +24,19 @@ public class FamilyController implements FamilyControllerOpenApi {
   private final FamilyModelAssembler familyModelAssembler;
   private final FamilyRequestDisassembler familyRequestDisassembler;
 
-  @GetMapping("/{groupId}")
+  @GetMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public FamilyResponse findFamilyById(@PathVariable Long groupId) {
     Family group = familyRegistrationService.findFamilyOrElseThrow(groupId);
     return familyModelAssembler.toModel(group);
   }
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<FamilyResponse> getAllGroups() {
     List<Family> allGroups = familyRepository.findAll();
     return familyModelAssembler.toCollectionModel(allGroups);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public FamilyResponse addFamily(@RequestBody @Valid FamilyRequest familyRequest) {
     Family group = familyRequestDisassembler.toDomainObject(familyRequest);
@@ -44,7 +44,7 @@ public class FamilyController implements FamilyControllerOpenApi {
     return familyModelAssembler.toModel(group);
   }
 
-  @PutMapping("/{groupId}")
+  @PutMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public FamilyResponse updateFamily(
       @PathVariable Long groupId, @RequestBody @Valid FamilyRequest familyRequest) {
     Family actualGroup = familyRegistrationService.findFamilyOrElseThrow(groupId);

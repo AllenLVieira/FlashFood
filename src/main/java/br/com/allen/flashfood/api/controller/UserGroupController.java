@@ -18,7 +18,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
   private final UserRegistrationsService userService;
   private final FamilyModelAssembler groupAssembler;
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<FamilyResponse> getAllGroups(@PathVariable Long userId) {
     User user = userService.findUserOrElseThrow(userId);
     return groupAssembler.toCollectionModel(user.getGroups());
@@ -30,7 +30,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
     userService.unlinkGroup(userId, groupId);
   }
 
-  @PutMapping("/{groupId}")
+  @PutMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void linkGroup(@PathVariable Long userId, @PathVariable Long groupId) {
     userService.linkGroup(userId, groupId);

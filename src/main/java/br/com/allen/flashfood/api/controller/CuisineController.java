@@ -34,7 +34,7 @@ public class CuisineController implements CuisineControllerOpenApi {
    * @param pageable can receive as query params "size", "page" and "sort"
    * @return a list of cuisines and information about pagination.
    */
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(description = "Get all the cuisines in the Flashfood application.")
   public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
     Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
@@ -43,14 +43,14 @@ public class CuisineController implements CuisineControllerOpenApi {
     return new PageImpl<>(cuisineResponse, pageable, cuisinePage.getTotalElements());
   }
 
-  @GetMapping("/{cuisineId}")
+  @GetMapping(value = "/{cuisineId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(description = "Get a cuisine by an Id in the Flashfood application.")
   public CuisineResponse getCuisineById(@PathVariable Long cuisineId) {
     Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
     return cuisineModelAssembler.toModel(cuisine);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   @Operation(description = "Add a new cuisine in the Flashfood application.")
   public CuisineResponse addCuisine(@RequestBody @Valid CuisineRequest cuisineRequest) {
@@ -59,7 +59,7 @@ public class CuisineController implements CuisineControllerOpenApi {
     return cuisineModelAssembler.toModel(cuisine);
   }
 
-  @PutMapping("/{cuisineId}")
+  @PutMapping(value = "/{cuisineId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(description = "Update a cuisine based in specific Id in the Flashfood application.")
   public CuisineResponse updateCuisine(
       @PathVariable Long cuisineId, @RequestBody @Valid CuisineRequest cuisineRequest) {

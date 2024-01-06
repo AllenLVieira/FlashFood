@@ -49,7 +49,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
    * @param projection Define what fields will be returned to the response
    * @return List of all Restaurants
    */
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public MappingJacksonValue getAllRestaurants(@RequestParam(required = false) String projection) {
     List<Restaurant> restaurants = restaurantRepository.findAll();
     List<RestaurantResponse> restaurantResponse =
@@ -65,13 +65,13 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     return restaurantWrapper;
   }
 
-  @GetMapping("/{restaurantId}")
+  @GetMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public RestaurantResponse getRestaurantById(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantRegistration.findRestaurantOrElseThrow(restaurantId);
     return restaurantModelAssembler.toModel(restaurant);
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public RestaurantResponse addRestaurant(@RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
@@ -82,7 +82,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     }
   }
 
-  @PutMapping("/{restaurantId}")
+  @PutMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public RestaurantResponse updateRestaurant(
       @PathVariable Long restaurantId, @RequestBody @Valid RestaurantRequest restaurantRequest) {
     try {
@@ -95,7 +95,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     }
   }
 
-  @PutMapping("/{restaurantId}/active")
+  @PutMapping(value = "/{restaurantId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void activateRestaurant(@PathVariable Long restaurantId) {
     restaurantRegistration.activateRestaurant(restaurantId);
@@ -107,7 +107,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     restaurantRegistration.disableRestaurant(restaurantId);
   }
 
-  @PutMapping("/activations")
+  @PutMapping(value = "/activations", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void massActivateRestaurant(@RequestBody List<Long> restaurantIds) {
     try {
