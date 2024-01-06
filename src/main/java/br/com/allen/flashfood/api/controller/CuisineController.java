@@ -8,7 +8,6 @@ import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ public class CuisineController implements CuisineControllerOpenApi {
    * @return a list of cuisines and information about pagination.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(description = "Get all the cuisines in the Flashfood application.")
   public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
     Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
     List<CuisineResponse> cuisineResponse =
@@ -44,7 +42,6 @@ public class CuisineController implements CuisineControllerOpenApi {
   }
 
   @GetMapping(value = "/{cuisineId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(description = "Get a cuisine by an Id in the Flashfood application.")
   public CuisineResponse getCuisineById(@PathVariable Long cuisineId) {
     Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
     return cuisineModelAssembler.toModel(cuisine);
@@ -52,7 +49,6 @@ public class CuisineController implements CuisineControllerOpenApi {
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  @Operation(description = "Add a new cuisine in the Flashfood application.")
   public CuisineResponse addCuisine(@RequestBody @Valid CuisineRequest cuisineRequest) {
     Cuisine cuisine = cuisineRequestDisassembler.toDomainObject(cuisineRequest);
     cuisine = cuisineRegistration.saveCuisine(cuisine);
@@ -60,7 +56,6 @@ public class CuisineController implements CuisineControllerOpenApi {
   }
 
   @PutMapping(value = "/{cuisineId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(description = "Update a cuisine based in specific Id in the Flashfood application.")
   public CuisineResponse updateCuisine(
       @PathVariable Long cuisineId, @RequestBody @Valid CuisineRequest cuisineRequest) {
     Cuisine actualCuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
@@ -71,7 +66,6 @@ public class CuisineController implements CuisineControllerOpenApi {
 
   @DeleteMapping("/{cuisineId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(description = "Delete a cuisine by an Id in the Flashfood application.")
   public void deleteCuisineById(@PathVariable Long cuisineId) {
     cuisineRegistration.deleteCuisine(cuisineId);
   }
