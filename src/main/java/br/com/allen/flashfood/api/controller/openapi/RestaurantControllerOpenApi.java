@@ -3,6 +3,8 @@ package br.com.allen.flashfood.api.controller.openapi;
 import br.com.allen.flashfood.api.model.request.RestaurantRequest;
 import br.com.allen.flashfood.api.model.response.RestaurantResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -19,8 +21,16 @@ import org.springframework.web.bind.annotation.PathVariable;
             + " the user's dining options.")
 public interface RestaurantControllerOpenApi {
 
-  @Operation(description = "Get all the restaurants in the Flashfood application.")
-  MappingJacksonValue getAllRestaurants(String projection);
+  @Operation(summary = "Get all restaurants with optional projections")
+  MappingJacksonValue getAllRestaurants(
+      @Parameter(
+              description =
+                  "Projection type for restaurant data. Options: 'only-name', 'full', or none for summary view.",
+              schema =
+                  @Schema(
+                      type = "string",
+                      allowableValues = {"only-name", "full", ""}))
+          String projection);
 
   @Operation(description = "Get a restaurant by Id in the Flashfood application.")
   RestaurantResponse getRestaurantById(@PathVariable Long restaurantId);
