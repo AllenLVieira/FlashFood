@@ -7,9 +7,11 @@ import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,14 +21,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
+@Tag(
+    name = "Cuisine",
+    description =
+        "Handles all operations related to cuisines in the FlashFood application. This controller facilitates the"
+            + " creation, retrieval, updating, and deletion of cuisine information. It plays a key role in"
+            + " managing the diverse culinary categories and preferences associated with the food items offered"
+            + " by the application.")
 public class CuisineController {
-  @Autowired private CuisineRepository cuisineRepository;
-
-  @Autowired private CuisineRegistrationService cuisineRegistration;
-
-  @Autowired private CuisineRequestDisassembler cuisineRequestDisassembler;
-
-  @Autowired private CuisineModelAssembler cuisineModelAssembler;
+  private final CuisineRepository cuisineRepository;
+  private final CuisineRegistrationService cuisineRegistration;
+  private final CuisineRequestDisassembler cuisineRequestDisassembler;
+  private final CuisineModelAssembler cuisineModelAssembler;
 
   /**
    * Returns a list of all registered cuisines.
@@ -35,6 +42,7 @@ public class CuisineController {
    * @return a list of cuisines and information about pagination.
    */
   @GetMapping
+  @Operation(description = "Get all the cuisines in the Flashfood application.")
   public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
     Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
     List<CuisineResponse> cuisineResponse =
@@ -43,6 +51,7 @@ public class CuisineController {
   }
 
   @GetMapping("/{cuisineId}")
+  @Operation(description = "Get a cuisine by an Id in the Flashfood application.")
   public CuisineResponse getCuisineById(@PathVariable Long cuisineId) {
     Cuisine cuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
     return cuisineModelAssembler.toModel(cuisine);
@@ -50,6 +59,7 @@ public class CuisineController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(description = "Add a new cuisine in the Flashfood application.")
   public CuisineResponse addCuisine(@RequestBody @Valid CuisineRequest cuisineRequest) {
     Cuisine cuisine = cuisineRequestDisassembler.toDomainObject(cuisineRequest);
     cuisine = cuisineRegistration.saveCuisine(cuisine);
@@ -57,6 +67,7 @@ public class CuisineController {
   }
 
   @PutMapping("/{cuisineId}")
+  @Operation(description = "Update a cuisine based in specific Id in the Flashfood application.")
   public CuisineResponse updateCuisine(
       @PathVariable Long cuisineId, @RequestBody @Valid CuisineRequest cuisineRequest) {
     Cuisine actualCuisine = cuisineRegistration.findCuisineOrElseThrow(cuisineId);
@@ -67,6 +78,7 @@ public class CuisineController {
 
   @DeleteMapping("/{cuisineId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(description = "Delete a cuisine by an Id in the Flashfood application.")
   public void deleteCuisineById(@PathVariable Long cuisineId) {
     cuisineRegistration.deleteCuisine(cuisineId);
   }

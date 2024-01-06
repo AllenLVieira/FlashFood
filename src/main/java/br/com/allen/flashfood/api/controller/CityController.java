@@ -9,6 +9,8 @@ import br.com.allen.flashfood.domain.exception.StateNotFoundException;
 import br.com.allen.flashfood.domain.model.City;
 import br.com.allen.flashfood.domain.repository.CityRepository;
 import br.com.allen.flashfood.domain.service.CityRegistrationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(
+    name = "City",
+    description =
+        "Operations related to cities in the FlashFood application. This controller handles the management of city"
+            + " data, including the creation of new city entries, retrieval of city details, updating existing"
+            + " city data, and deletion of cities. It's integral for managing geographical and locational"
+            + " information within the application.")
 public class CityController {
 
   private final CityRepository cityRepository;
@@ -27,12 +36,14 @@ public class CityController {
   private final CityRequestDisassembler cityRequestDisassembler;
 
   @GetMapping
+  @Operation(description = "Get all the cities in the Flashfood application.")
   public List<CityResponse> getAllCity() {
     List<City> allCities = cityRepository.findAll();
     return cityModelAssembler.toCollectionModel(allCities);
   }
 
   @GetMapping("/{cityId}")
+  @Operation(description = "Get a city by Id in the Flashfood application.")
   public CityResponse getCityById(@PathVariable Long cityId) {
     City city = cityRegistration.findCityOrElseThrow(cityId);
     return cityModelAssembler.toModel(city);
@@ -40,6 +51,7 @@ public class CityController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(description = "Add a new City to Flashfood application.")
   public CityResponse addCity(@RequestBody @Valid CityRequest cityRequest) {
     try {
       City city = cityRequestDisassembler.toDomainObject(cityRequest);
@@ -51,6 +63,7 @@ public class CityController {
   }
 
   @PutMapping("/{cityId}")
+  @Operation(description = "Update a city based on an Id in the Flashfood application.")
   public CityResponse updateCity(
       @PathVariable Long cityId, @RequestBody @Valid CityRequest cityRequest) {
     try {
@@ -65,6 +78,7 @@ public class CityController {
 
   @DeleteMapping("/{cityId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(description = "Delete a specific city by an Id in the Flashfood application.")
   public void deleteCity(@PathVariable Long cityId) {
     cityRegistration.deleteCity(cityId);
   }

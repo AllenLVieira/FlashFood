@@ -16,6 +16,8 @@ import br.com.allen.flashfood.domain.service.OrderRegistrationService;
 import br.com.allen.flashfood.infrastructure.repository.spec.DeliveryOrderSpecifications;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +33,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(
+    name = "Order",
+    description =
+        "Manages all aspects of food delivery orders in the FlashFood application. "
+            + "This controller facilitates operations such as placing new orders, tracking order status, and managing"
+            + " order details. It is a key component in the order processing system, ensuring a smooth user experience"
+            + " from order creation to delivery.")
 public class OrderController {
-
   private final OrderRepository orderRepository;
   private final OrderRegistrationService orderService;
   private final OrderModelSummaryAssembler orderSummaryAssembler;
@@ -40,6 +48,7 @@ public class OrderController {
   private final DeliveryOrderRequestDisassembler orderDisassembler;
 
   @GetMapping
+  @Operation(description = "Get all the orders in the Flashfood application.")
   public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
     List<DeliveryOrder> allOrders = orderRepository.findAll();
     List<DeliveryOrderSummaryResponse> deliveryOrderResponse =
@@ -61,6 +70,7 @@ public class OrderController {
   }
 
   @GetMapping("/filters")
+  @Operation(description = "Get all the orders using Filters in the Flashfood application.")
   public Page<DeliveryOrderResponse> getAllOrdersWithFilters(
       DeliveryOrderFilter filter, @PageableDefault(size = 10) Pageable pageable) {
     Page<DeliveryOrder> allOrdersPageable =
@@ -71,6 +81,7 @@ public class OrderController {
   }
 
   @GetMapping("/{orderCode}")
+  @Operation(description = "Get Order By Id Flashfood application.")
   public DeliveryOrderResponse getOrderById(@PathVariable String orderCode) {
     DeliveryOrder order = orderService.findOrderOrElseThrow(orderCode);
 
@@ -79,6 +90,7 @@ public class OrderController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(description = "Create a new Order in the Flashfood application.")
   public DeliveryOrderResponse addNewDeliveryOrder(@RequestBody DeliveryOrderRequest request) {
     try {
       DeliveryOrder newOrder = orderDisassembler.toDomainObject(request);

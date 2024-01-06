@@ -9,6 +9,8 @@ import br.com.allen.flashfood.domain.exception.PaymentMethodNotFoundException;
 import br.com.allen.flashfood.domain.model.PaymentMethod;
 import br.com.allen.flashfood.domain.repository.PaymentMehodRepository;
 import br.com.allen.flashfood.domain.service.PaymentMethodRegistrationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -25,6 +27,13 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(
+    name = "Payment Method",
+    description =
+        "Responsible for managing different payment methods in the FlashFood"
+            + " application. This controller enables the addition, update, retrieval, and deletion of payment methods,"
+            + " facilitating diverse payment options for users. It plays a vital role in ensuring a seamless and"
+            + " flexible payment experience, catering to various customer preferences.")
 public class PaymentMethodController {
 
   private final PaymentMehodRepository paymentMehodRepository;
@@ -33,6 +42,7 @@ public class PaymentMethodController {
   private final PaymentMethodRequestDisassembler paymentMethodRequestDisassembler;
 
   @GetMapping
+  @Operation(description = "Get all the payment methods in the Flashfood application.")
   public ResponseEntity<List<PaymentMethodResponse>> getAllPaymentMethods(
       ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -56,6 +66,7 @@ public class PaymentMethodController {
   }
 
   @GetMapping("/{paymentMethodId}")
+  @Operation(description = "Get a payment method by Id in the Flashfood application.")
   public ResponseEntity<PaymentMethodResponse> getPaymentMethodById(
       @PathVariable Long paymentMethodId, ServletWebRequest request) {
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -78,6 +89,7 @@ public class PaymentMethodController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(description = "Add a new payment method in the Flashfood application.")
   public PaymentMethodResponse addPaymentMethod(
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
     PaymentMethod paymentMethod =
@@ -87,6 +99,7 @@ public class PaymentMethodController {
   }
 
   @PutMapping("/{paymentMethodId}")
+  @Operation(description = "Update a payment method by Id in the Flashfood application.")
   public PaymentMethodResponse updatePaymentMethod(
       @PathVariable Long paymentMethodId,
       @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
@@ -104,6 +117,7 @@ public class PaymentMethodController {
 
   @DeleteMapping("/{paymentMethodId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(description = "Delete a payment method by Id in the Flashfood application.")
   public void deletePaymentMethodById(@PathVariable Long paymentMethodId) {
     paymentMethodRegistrationService.deletePaymentMethod(paymentMethodId);
   }
