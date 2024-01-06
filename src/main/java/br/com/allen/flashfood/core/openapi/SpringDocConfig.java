@@ -7,6 +7,7 @@ import io.swagger.v3.core.converter.ResolvedSchema;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -36,6 +37,7 @@ public class SpringDocConfig {
   private static final String EXTERNAL_DOC_URL = "https://www.linkedin.com/in/allen-vieira/";
   private static final String CONTACT_NAME = "Allen Vieira";
   private static final String CONTACT_MAIL = "allenvieira96@gmail.com";
+  private static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
 
   @Bean
   public OpenAPI openAPI() {
@@ -59,15 +61,14 @@ public class SpringDocConfig {
 
   @Bean
   public OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser() {
-    return openApi ->
-        openApi
-            .getPaths()
-            .forEach(
-                (path, pathItem) -> {
-                  applyCustomResponsesForGet(pathItem.getGet());
-                  applyCustomResponsesForPostAndPut(pathItem.getPost());
-                  applyCustomResponsesForDelete(pathItem.getDelete());
-                });
+    return openApi -> openApi.getPaths().forEach(this::applyCustomResponses);
+  }
+
+  private void applyCustomResponses(String path, PathItem pathItem) {
+    if (pathItem.getGet() != null) applyCustomResponsesForGet(pathItem.getGet());
+    if (pathItem.getPost() != null) applyCustomResponsesForPostAndPut(pathItem.getPost());
+    if (pathItem.getPut() != null) applyCustomResponsesForPostAndPut(pathItem.getPut());
+    if (pathItem.getDelete() != null) applyCustomResponsesForDelete(pathItem.getDelete());
   }
 
   @Bean
@@ -97,8 +98,9 @@ public class SpringDocConfig {
       apiResponses.addApiResponse(
           "406",
           createApiResponse(
-              "The resource doesn't have a representation that could be accepted by the consumer"));
-      apiResponses.addApiResponse("500", createApiResponse("Internal Server Error", true));
+              "The resource doesn't have a representation that could be accepted by the consumer",
+              false));
+      apiResponses.addApiResponse("500", createApiResponse(INTERNAL_SERVER_ERROR, true));
     }
   }
 
@@ -106,11 +108,12 @@ public class SpringDocConfig {
     if (operation != null) {
       ApiResponses apiResponses = operation.getResponses();
       apiResponses.addApiResponse("400", createApiResponse("Invalid request (client error)", true));
-      apiResponses.addApiResponse("500", createApiResponse("Internal Server Error", true));
+      apiResponses.addApiResponse("500", createApiResponse(INTERNAL_SERVER_ERROR, true));
       apiResponses.addApiResponse(
           "406",
           createApiResponse(
-              "The resource doesn't have a representation that could be accepted by the consumer"));
+              "The resource doesn't have a representation that could be accepted by the consumer",
+              false));
       apiResponses.addApiResponse(
           "415",
           createApiResponse("Request refused because the body is in an unsupported format", true));
@@ -121,27 +124,17 @@ public class SpringDocConfig {
     if (operation != null) {
       ApiResponses apiResponses = operation.getResponses();
       apiResponses.addApiResponse("400", createApiResponse("Invalid request (client error)", true));
-      apiResponses.addApiResponse("500", createApiResponse("Internal Server Error", true));
+      apiResponses.addApiResponse("500", createApiResponse(INTERNAL_SERVER_ERROR, true));
     }
   }
 
-  private ApiResponse createApiResponse(String description) {
-    return new ApiResponse()
-        .description(description)
-        .content(
-            new Content()
-                .addMediaType(
-                    org.springframework.http.MediaType.APPLICATION_JSON_VALUE, new MediaType()));
-  }
-
-  private ApiResponse createApiResponse(String description, boolean isErrorResponse) {
+  private ApiResponse createApiResponse(String description, boolean isErrorResponseRepresented) {
     ApiResponse apiResponse = new ApiResponse().description(description);
     Content content = new Content();
     MediaType mediaType = new MediaType();
 
-    if (isErrorResponse) {
-      Schema<?> errorSchema = new Schema<>().$ref("API Error");
-      mediaType.setSchema(errorSchema);
+    if (isErrorResponseRepresented) {
+      mediaType.setSchema(new Schema<>().$ref("API Error"));
     }
 
     content.addMediaType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE, mediaType);
