@@ -4,6 +4,9 @@ import br.com.allen.flashfood.api.model.request.DeliveryOrderRequest;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderResponse;
 import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,13 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 public interface OrderControllerOpenApi {
 
   @Operation(description = "Get all the orders in the Flashfood application.")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content =
+          @Content(
+              mediaType = "application/json",
+              schema = @Schema(implementation = DeliveryOrderResponse.class)))
   MappingJacksonValue getAllOrders(String fields);
 
   @Operation(description = "Get all the orders using Filters in the Flashfood application.")

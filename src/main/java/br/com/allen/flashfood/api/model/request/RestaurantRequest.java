@@ -1,6 +1,7 @@
 package br.com.allen.flashfood.api.model.request;
 
 import br.com.allen.flashfood.core.validation.FreightRate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,9 +13,14 @@ import lombok.Setter;
 @Setter
 public class RestaurantRequest {
 
-  @NotBlank private String name;
+  @Schema(example = "Almanara", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank
+  private String name;
 
-  @FreightRate @NotNull private BigDecimal freightRate;
+  @Schema(example = "10.9", requiredMode = Schema.RequiredMode.REQUIRED)
+  @FreightRate
+  @NotNull
+  private BigDecimal freightRate;
 
   @Valid @NotNull private CuisineIDRequest cuisine;
 
