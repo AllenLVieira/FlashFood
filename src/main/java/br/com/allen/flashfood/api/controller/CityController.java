@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.api.controller;
 
+import br.com.allen.flashfood.api.ResourceUriUtils;
 import br.com.allen.flashfood.api.assembler.CityModelAssembler;
 import br.com.allen.flashfood.api.assembler.CityRequestDisassembler;
 import br.com.allen.flashfood.api.controller.openapi.CityControllerOpenApi;
@@ -45,7 +46,9 @@ public class CityController implements CityControllerOpenApi {
     try {
       City city = cityRequestDisassembler.toDomainObject(cityRequest);
       city = cityRegistration.saveCity(city);
-      return cityModelAssembler.toModel(city);
+      CityResponse response = cityModelAssembler.toModel(city);
+      ResourceUriUtils.addUriToResponseHeader(response.getId());
+      return response;
     } catch (StateNotFoundException e) {
       throw new BusinessException(e.getMessage(), e);
     }
