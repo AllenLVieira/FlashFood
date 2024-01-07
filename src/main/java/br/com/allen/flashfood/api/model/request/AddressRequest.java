@@ -1,5 +1,6 @@
 package br.com.allen.flashfood.api.model.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,14 +11,23 @@ import lombok.Setter;
 @Setter
 public class AddressRequest {
 
-  @NotBlank private String zipCode;
+  @Schema(example = "38400-000", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank
+  private String zipCode;
 
-  @NotBlank private String street;
+  @Schema(example = "Rua Aleatoria", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank
+  private String street;
 
-  @NotBlank private String number;
+  @Schema(example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank
+  private String number;
 
-  @NotBlank private String district;
+  @Schema(example = "Sé", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank
+  private String district;
 
+  @Schema(example = "Apt. 01", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   private String complement;
 
   @Valid @NotNull private CityIdRequest city;
