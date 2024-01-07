@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Tag(
     name = "City",
@@ -20,7 +20,7 @@ import java.util.List;
 public interface CityControllerOpenApi {
 
   @Operation(description = "Get all the cities in the Flashfood application.")
-  List<CityResponse> getAllCity();
+  CollectionModel<CityResponse> getAllCity();
 
   @Operation(description = "Get a city by Id in the Flashfood application.")
   @ApiResponse(
