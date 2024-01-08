@@ -6,7 +6,7 @@ import br.com.allen.flashfood.api.model.request.UserRequest;
 import br.com.allen.flashfood.api.model.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Tag(
     name = "User",
@@ -17,7 +17,7 @@ import java.util.List;
             + " security, and ensuring a seamless user experience across the application.")
 public interface UserControllerOpenApi {
   @Operation(description = "Get all the users in the Flashfood application.")
-  List<UserResponse> getAllUsers();
+  CollectionModel<UserResponse> getAllUsers();
 
   @Operation(description = "Get a user by Id in the Flashfood application.")
   UserResponse getUserById(Long userId);

@@ -1,23 +1,40 @@
 package br.com.allen.flashfood.api.assembler;
 
+import br.com.allen.flashfood.api.controller.UserController;
+import br.com.allen.flashfood.api.controller.UserGroupController;
 import br.com.allen.flashfood.api.model.response.UserResponse;
 import br.com.allen.flashfood.domain.model.User;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserModelAssembler {
-  @Autowired private ModelMapper modelMapper;
+public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserResponse> {
+  private final ModelMapper modelMapper;
 
-  public UserResponse toModel(User user) {
-    return modelMapper.map(user, UserResponse.class);
+  public UserModelAssembler(ModelMapper modelMapper) {
+    super(UserController.class, UserResponse.class);
+    this.modelMapper = modelMapper;
   }
 
-  public List<UserResponse> toCollectionModel(Collection<User> userList) {
-    return userList.stream().map(user -> toModel(user)).collect(Collectors.toList());
+  @Override
+  public UserResponse toModel(User user) {
+    UserResponse response = createModelWithId(user.getId(), user);
+    modelMapper.map(user, response);
+
+    response.add(WebMvcLinkBuilder.linkTo(UserModelAssembler.class).withRel("users"));
+    response.add(
+        (WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(UserGroupController.class).getAllGroups(user.getId())))
+            .withRel("users-groups"));
+    return response;
+  }
+
+  @Override
+  public CollectionModel<UserResponse> toCollectionModel(Iterable<? extends User> entities) {
+    return super.toCollectionModel(entities)
+        .add(WebMvcLinkBuilder.linkTo(UserController.class).withSelfRel());
   }
 }

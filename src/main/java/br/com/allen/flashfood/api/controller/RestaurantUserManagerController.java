@@ -5,8 +5,8 @@ import br.com.allen.flashfood.api.controller.openapi.RestaurantUserManagerContro
 import br.com.allen.flashfood.api.model.response.UserResponse;
 import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
   private final UserModelAssembler userAssembler;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
+  public CollectionModel<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
     return userAssembler.toCollectionModel(restaurant.getManagers());

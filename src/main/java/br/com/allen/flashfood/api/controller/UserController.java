@@ -13,6 +13,7 @@ import br.com.allen.flashfood.domain.service.UserRegistrationsService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class UserController implements UserControllerOpenApi {
   private final UserRequestDisassembler userRequestDisassembler;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<UserResponse> getAllUsers() {
+  public CollectionModel<UserResponse> getAllUsers() {
     List<User> allUsers = userRepository.findAll();
     return userModelAssembler.toCollectionModel(allUsers);
   }
