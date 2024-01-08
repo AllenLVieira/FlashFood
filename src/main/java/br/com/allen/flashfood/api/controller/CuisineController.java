@@ -9,11 +9,11 @@ import br.com.allen.flashfood.domain.model.Cuisine;
 import br.com.allen.flashfood.domain.repository.CuisineRepository;
 import br.com.allen.flashfood.domain.service.CuisineRegistrationService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +26,7 @@ public class CuisineController implements CuisineControllerOpenApi {
   private final CuisineRegistrationService cuisineRegistration;
   private final CuisineRequestDisassembler cuisineRequestDisassembler;
   private final CuisineModelAssembler cuisineModelAssembler;
+  private final PagedResourcesAssembler<Cuisine> pagedResourcesAssembler;
 
   /**
    * Returns a list of all registered cuisines.
@@ -34,11 +35,12 @@ public class CuisineController implements CuisineControllerOpenApi {
    * @return a list of cuisines and information about pagination.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Page<CuisineResponse> getAllCuisine(Pageable pageable) {
+  public PagedModel<CuisineResponse> getAllCuisine(Pageable pageable) {
     Page<Cuisine> cuisinePage = cuisineRepository.findAll(pageable);
-    List<CuisineResponse> cuisineResponse =
-        cuisineModelAssembler.toCollectionModel(cuisinePage.getContent());
-    return new PageImpl<>(cuisineResponse, pageable, cuisinePage.getTotalElements());
+    PagedModel<CuisineResponse> pagedResponse =
+        pagedResourcesAssembler.toModel(cuisinePage, cuisineModelAssembler);
+
+    return pagedResponse;
   }
 
   @GetMapping(value = "/{cuisineId}", produces = MediaType.APPLICATION_JSON_VALUE)

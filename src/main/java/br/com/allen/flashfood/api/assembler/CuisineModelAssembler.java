@@ -1,22 +1,35 @@
 package br.com.allen.flashfood.api.assembler;
 
+import br.com.allen.flashfood.api.controller.CuisineController;
 import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import br.com.allen.flashfood.domain.model.Cuisine;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CuisineModelAssembler {
-  @Autowired private ModelMapper modelMapper;
+public class CuisineModelAssembler
+    extends RepresentationModelAssemblerSupport<Cuisine, CuisineResponse> {
+  private final ModelMapper modelMapper;
 
-  public CuisineResponse toModel(Cuisine cuisine) {
-    return modelMapper.map(cuisine, CuisineResponse.class);
+  public CuisineModelAssembler(ModelMapper modelMapper) {
+    super(CuisineController.class, CuisineResponse.class);
+    this.modelMapper = modelMapper;
   }
 
-  public List<CuisineResponse> toCollectionModel(List<Cuisine> cuisines) {
-    return cuisines.stream().map(cuisine -> toModel(cuisine)).collect(Collectors.toList());
+  @Override
+  public CuisineResponse toModel(Cuisine cuisine) {
+    CuisineResponse response = createModelWithId(cuisine.getId(), cuisine);
+    modelMapper.map(cuisine, response);
+
+    response.add(WebMvcLinkBuilder.linkTo(CuisineController.class).withRel("cuisines"));
+    return response;
+  }
+
+  @Override
+  public CollectionModel<CuisineResponse> toCollectionModel(Iterable<? extends Cuisine> entities) {
+    return super.toCollectionModel(entities);
   }
 }

@@ -4,8 +4,8 @@ import br.com.allen.flashfood.api.model.request.CuisineRequest;
 import br.com.allen.flashfood.api.model.response.CuisineResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 @Tag(
     name = "Cuisine",
@@ -17,8 +17,8 @@ import org.springframework.data.domain.Pageable;
 public interface CuisineControllerOpenApi {
 
   @Operation(description = "Get all the cuisines in the Flashfood application.")
-  Page<CuisineResponse> getAllCuisine(Pageable pageable);
-  
+  PagedModel<CuisineResponse> getAllCuisine(Pageable pageable);
+
   @Operation(description = "Get a cuisine by an Id in the Flashfood application.")
   CuisineResponse getCuisineById(Long cuisineId);
   
