@@ -1,22 +1,35 @@
 package br.com.allen.flashfood.api.assembler;
 
+import br.com.allen.flashfood.api.controller.StateController;
 import br.com.allen.flashfood.api.model.response.StateResponse;
 import br.com.allen.flashfood.domain.model.State;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StateModelAssembler {
-  @Autowired private ModelMapper modelMapper;
+public class StateModelAssembler extends RepresentationModelAssemblerSupport<State, StateResponse> {
+  private final ModelMapper modelMapper;
 
-  public StateResponse toModel(State state) {
-    return modelMapper.map(state, StateResponse.class);
+  public StateModelAssembler(ModelMapper modelMapper) {
+    super(StateController.class, StateResponse.class);
+    this.modelMapper = modelMapper;
   }
 
-  public List<StateResponse> toCollectionModel(List<State> states) {
-    return states.stream().map(state -> toModel(state)).collect(Collectors.toList());
+  @Override
+  public StateResponse toModel(State state) {
+    StateResponse response = createModelWithId(state.getId(), state);
+    modelMapper.map(state, response);
+
+    response.add(WebMvcLinkBuilder.linkTo(StateController.class).withRel("states"));
+    return response;
+  }
+
+  @Override
+  public CollectionModel<StateResponse> toCollectionModel(Iterable<? extends State> entities) {
+    return super.toCollectionModel(entities)
+        .add(WebMvcLinkBuilder.linkTo(StateController.class).withSelfRel());
   }
 }

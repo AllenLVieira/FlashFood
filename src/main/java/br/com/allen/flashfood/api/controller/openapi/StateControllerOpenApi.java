@@ -4,7 +4,7 @@ import br.com.allen.flashfood.api.model.request.StateRequest;
 import br.com.allen.flashfood.api.model.response.StateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Tag(
     name = "State",
@@ -15,7 +15,7 @@ import java.util.List;
             + " in managing geographical data, essential for location-based functionalities and user preferences.")
 public interface StateControllerOpenApi {
   @Operation(description = "Get all the states in the Flashfood application.")
-  List<StateResponse> getAllStates();
+  CollectionModel<StateResponse> getAllStates();
 
   @Operation(description = "Get a state by Id in the Flashfood application.")
   StateResponse getStateById(Long stateId);

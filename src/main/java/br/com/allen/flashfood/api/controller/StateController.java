@@ -11,6 +11,7 @@ import br.com.allen.flashfood.domain.service.StateRegistrationService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class StateController implements StateControllerOpenApi {
   private final StateRequestDisassembler stateRequestDisassembler;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<StateResponse> getAllStates() {
+  public CollectionModel<StateResponse> getAllStates() {
     List<State> allStates = stateRepository.findAll();
     return stateModelAssembler.toCollectionModel(allStates);
   }

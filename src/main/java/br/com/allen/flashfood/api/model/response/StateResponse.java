@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 @Getter
 @Setter
+@Relation(collectionRelation = "states")
 public class StateResponse extends RepresentationModel<StateResponse> {
 
   @Schema(example = "1")
