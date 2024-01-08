@@ -15,7 +15,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -33,54 +32,13 @@ public class CityController implements CityControllerOpenApi {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public CollectionModel<CityResponse> getAllCity() {
     List<City> allCities = cityRepository.findAll();
-    List<CityResponse> citiesResponse = cityModelAssembler.toCollectionModel(allCities);
-    citiesResponse.forEach(
-        response ->  {
-          response.add(
-              WebMvcLinkBuilder.linkTo(
-                      WebMvcLinkBuilder.methodOn(CityController.class)
-                          .getCityById(response.getId()))
-                  .withSelfRel());
-          response.add(
-              WebMvcLinkBuilder.linkTo(
-                      WebMvcLinkBuilder.methodOn(CityController.class).getAllCity())
-                  .withRel("cities"));
-          response
-              .getState()
-              .add(
-                  WebMvcLinkBuilder.linkTo(
-                          WebMvcLinkBuilder.methodOn(StateController.class)
-                              .getStateById(response.getState().getId()))
-                      .withSelfRel());
-        });
-
-    CollectionModel<CityResponse> cityResponses = CollectionModel.of(citiesResponse);
-    cityResponses.add(WebMvcLinkBuilder.linkTo(CityController.class).withSelfRel());
-
-    return cityResponses;
+    return cityModelAssembler.toCollectionModel(allCities);
   }
 
   @GetMapping(value = "/{cityId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public CityResponse getCityById(@PathVariable Long cityId) {
     City city = cityRegistration.findCityOrElseThrow(cityId);
-    CityResponse response = cityModelAssembler.toModel(city);
-
-    response.add(
-        WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(CityController.class).getCityById(response.getId()))
-            .withSelfRel());
-    response.add(
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCity())
-            .withRel("cities"));
-    response
-        .getState()
-        .add(
-            WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(StateController.class)
-                        .getStateById(response.getState().getId()))
-                .withSelfRel());
-
-    return response;
+    return cityModelAssembler.toModel(city);
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -115,4 +73,6 @@ public class CityController implements CityControllerOpenApi {
   public void deleteCity(@PathVariable Long cityId) {
     cityRegistration.deleteCity(cityId);
   }
+
+  
 }

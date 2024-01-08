@@ -1,22 +1,46 @@
 package br.com.allen.flashfood.api.assembler;
 
+import br.com.allen.flashfood.api.controller.CityController;
+import br.com.allen.flashfood.api.controller.StateController;
 import br.com.allen.flashfood.api.model.response.CityResponse;
 import br.com.allen.flashfood.domain.model.City;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CityModelAssembler {
-  @Autowired private ModelMapper modelMapper;
+public class CityModelAssembler extends RepresentationModelAssemblerSupport<City, CityResponse> {
+  private final ModelMapper modelMapper;
 
-  public CityResponse toModel(City city) {
-    return modelMapper.map(city, CityResponse.class);
+  public CityModelAssembler(ModelMapper modelMapper) {
+    super(CityController.class, CityResponse.class);
+    this.modelMapper = modelMapper;
   }
 
-  public List<CityResponse> toCollectionModel(List<City> cities) {
-    return cities.stream().map(city -> toModel(city)).collect(Collectors.toList());
+  @Override
+  public CityResponse toModel(City city) {
+    CityResponse response = createModelWithId(city.getId(), city);
+    modelMapper.map(city, response);
+
+    response.add(
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CityController.class).getAllCity())
+            .withRel("cities"));
+    response
+        .getState()
+        .add(
+            WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(StateController.class)
+                        .getStateById(response.getState().getId()))
+                .withSelfRel());
+
+    return response;
+  }
+
+  @Override
+  public CollectionModel<CityResponse> toCollectionModel(Iterable<? extends City> entities) {
+    return super.toCollectionModel(entities)
+        .add(WebMvcLinkBuilder.linkTo(CityController.class).withSelfRel());
   }
 }
