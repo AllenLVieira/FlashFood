@@ -15,17 +15,18 @@ import br.com.allen.flashfood.domain.repository.OrderRepository;
 import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
 import br.com.allen.flashfood.domain.service.OrderRegistrationService;
 import br.com.allen.flashfood.infrastructure.repository.spec.DeliveryOrderSpecifications;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,9 @@ public class OrderController implements OrderControllerOpenApi {
   private final OrderModelSummaryAssembler orderSummaryAssembler;
   private final OrderModelAssembler orderAssembler;
   private final DeliveryOrderRequestDisassembler orderDisassembler;
+  private final PagedResourcesAssembler<DeliveryOrder> pagedResourcesAssembler;
 
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  /*@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public MappingJacksonValue getAllOrders(@RequestParam(required = false) String fields) {
     List<DeliveryOrder> allOrders = orderRepository.findAll();
     List<DeliveryOrderSummaryResponse> deliveryOrderResponse =
@@ -58,16 +60,26 @@ public class OrderController implements OrderControllerOpenApi {
 
     orderWrapper.setFilters(filters);
     return orderWrapper;
-  }
+  }*/
 
-  @GetMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Page<DeliveryOrderResponse> getAllOrdersWithFilters(
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<MappingJacksonValue> getAllOrdersWithFilters(
       DeliveryOrderFilter filter, @PageableDefault(size = 10) Pageable pageable) {
+
     Page<DeliveryOrder> allOrdersPageable =
         orderRepository.findAll(DeliveryOrderSpecifications.usingFilters(filter), pageable);
-    List<DeliveryOrderResponse> deliveryOrderList =
-        orderAssembler.toCollectionModel(allOrdersPageable.getContent());
-    return new PageImpl<>(deliveryOrderList, pageable, allOrdersPageable.getTotalElements());
+    PagedModel<DeliveryOrderSummaryResponse> pagedModel =
+        pagedResourcesAssembler.toModel(allOrdersPageable, orderSummaryAssembler);
+
+    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(pagedModel);
+
+    FilterProvider filters =
+        new SimpleFilterProvider()
+            .addFilter(
+                "orderFilter", SimpleBeanPropertyFilter.serializeAllExcept("excludedProperty"));
+    mappingJacksonValue.setFilters(filters);
+
+    return ResponseEntity.ok(mappingJacksonValue);
   }
 
   @GetMapping(value = "/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)

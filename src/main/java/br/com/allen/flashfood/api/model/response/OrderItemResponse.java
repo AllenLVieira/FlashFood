@@ -4,10 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
-public class OrderItemResponse {
+public class OrderItemResponse extends RepresentationModel<OrderItemResponse> {
   @Schema(example = "1")
   private Long productId;
 

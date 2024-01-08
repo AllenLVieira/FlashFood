@@ -4,13 +4,9 @@ import br.com.allen.flashfood.api.model.request.DeliveryOrderRequest;
 import br.com.allen.flashfood.api.model.response.DeliveryOrderResponse;
 import br.com.allen.flashfood.domain.repository.filter.DeliveryOrderFilter;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 
 @Tag(
@@ -22,7 +18,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
             + " from order creation to delivery.")
 public interface OrderControllerOpenApi {
 
-  @Operation(description = "Get all the orders in the Flashfood application.")
+  /*@Operation(description = "Get all the orders in the Flashfood application.")
   @ApiResponse(
       responseCode = "200",
       description = "OK",
@@ -30,11 +26,11 @@ public interface OrderControllerOpenApi {
           @Content(
               mediaType = "application/json",
               schema = @Schema(implementation = DeliveryOrderResponse.class)))
-  MappingJacksonValue getAllOrders(String fields);
+  MappingJacksonValue getAllOrders(String fields);*/
 
   @Operation(description = "Get all the orders using Filters in the Flashfood application.")
-  Page<DeliveryOrderResponse> getAllOrdersWithFilters(
-      DeliveryOrderFilter filter, @PageableDefault(size = 10) Pageable pageable);
+  ResponseEntity<MappingJacksonValue> getAllOrdersWithFilters(
+      DeliveryOrderFilter filter, Pageable pageable);
 
   @Operation(description = "Get Order By Id Flashfood application.")
   DeliveryOrderResponse getOrderById(String orderCode);

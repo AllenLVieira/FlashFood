@@ -21,10 +21,10 @@ public class DeliveryOrderSpecifications {
       var predicates = new ArrayList<Predicate>();
 
       if (filter.getClientId() != null) {
-        predicates.add(builder.equal(root.get("user"), filter.getClientId()));
+        predicates.add(builder.equal(root.get("user").get("id"), filter.getClientId()));
       }
       if (filter.getRestaurantId() != null) {
-        predicates.add(builder.equal(root.get("restaurant"), filter.getRestaurantId()));
+        predicates.add(builder.equal(root.get("restaurant").get("id"), filter.getRestaurantId()));
       }
       if (filter.getInitialRegistrationDate() != null) {
         predicates.add(

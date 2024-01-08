@@ -6,11 +6,15 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 @JsonFilter("orderFilter")
 @Getter
 @Setter
-public class DeliveryOrderSummaryResponse {
+@Relation(collectionRelation = "orders")
+public class DeliveryOrderSummaryResponse
+    extends RepresentationModel<DeliveryOrderSummaryResponse> {
 
   @Schema(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
   private String orderCode;
