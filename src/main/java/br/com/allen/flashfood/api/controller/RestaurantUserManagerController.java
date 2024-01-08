@@ -7,6 +7,7 @@ import br.com.allen.flashfood.domain.model.Restaurant;
 import br.com.allen.flashfood.domain.service.RestaurantRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,14 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
   public CollectionModel<UserResponse> getAllManagers(@PathVariable Long restaurantId) {
     Restaurant restaurant = restaurantService.findRestaurantOrElseThrow(restaurantId);
 
-    return userAssembler.toCollectionModel(restaurant.getManagers());
+    return userAssembler
+        .toCollectionModel(restaurant.getManagers())
+        .removeLinks()
+        .add(
+            WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(RestaurantUserManagerController.class)
+                        .getAllManagers(restaurantId))
+                .withSelfRel());
   }
 
   @DeleteMapping("/{userId}")
