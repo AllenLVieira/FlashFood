@@ -44,7 +44,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     }
 
     if (request.checkNotModified(eTag)) {
-      return null;
+      return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
     }
 
     List<PaymentMethod> allPaymentMethods = paymentMehodRepository.findAll();
@@ -69,7 +69,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     }
 
     if (request.checkNotModified(eTag)) {
-      return null;
+      return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
     }
     PaymentMethod paymentMethod =
         paymentMethodRegistrationService.findPaymentMethodOrElseThrow(paymentMethodId);
